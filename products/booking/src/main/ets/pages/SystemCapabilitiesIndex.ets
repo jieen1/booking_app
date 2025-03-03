@@ -42,7 +42,7 @@ struct SystemCapabilitiesIndex {
       .position({ x: $r('app.float.system_capabilities_arrow_positionX') })
 
       Column() {
-        Image(this.locationCapability ? $r('app.media.ic_location_yes') : $r('app.media.ic_location_no'))
+        Image(this.locationCapability ? $r('app.media.ic_location_yes_cartoon_new') : $r('app.media.ic_location_no_cartoon_new'))
           .width(new BreakPointType({
             sm: $r('app.float.system_capabilities_img_sm_width'),
             md: $r('app.float.system_capabilities_img_md_width'),

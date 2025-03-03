@@ -128,7 +128,7 @@ struct AddRecord {
    */
   getCategoryIcon(icon: Resource | string | undefined): Resource {
     if (icon == null) {
-      return $r('app.media.ic_empty');
+      return $r('app.media.ic_empty_cartoon_new');
     }
     if (typeof icon !== 'string') {
       return icon;
@@ -167,7 +167,7 @@ struct AddRecord {
         // 顶部标题栏
         Row() {
           Button() {
-            Image($r('app.media.ic_back_cartoon'))
+            Image($r('app.media.ic_back_cartoon_new'))
               .width(30)
               .height(30)
           }
@@ -381,9 +381,10 @@ struct AddRecord {
                   .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
                   .layoutWeight(1)
                 
-                Image($r('app.media.ic_calendar_cartoon'))
+                Image($r('app.media.ic_calendar_cartoon_new'))
                   .width(24)
                   .height(24)
+                  .margin({ left: 8 })
               }
               .width('100%')
               .backgroundColor(Color.White)

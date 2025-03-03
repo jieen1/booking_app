@@ -106,6 +106,16 @@ export class DateUtils {
   }
 
   /**
+   * 获取当前月份的字符串表示
+   * @param date 可选的日期参数，默认为当前日期
+   * @returns 当前月份的字符串表示
+   */
+  static getCurrentMonthStr(date?: Date): string {
+    const targetDate = date || new Date();
+    return DateUtils.formatDate(targetDate.getTime(), 'yyyy年MM月');
+  }
+
+  /**
    * 获取当前月份的开始和结束时间戳
    * @returns 开始和结束时间戳
    */

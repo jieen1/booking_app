@@ -16,4 +16,4 @@ export interface SwipeAction {
    * 背景颜色
    */
   color: string;
-}
+};

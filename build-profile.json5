@@ -63,29 +63,5 @@
         }
       ]
     },
-    {
-      "name": "adaptiveLayout",
-      "srcPath": "./features/adaptiveLayout",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "responsiveLayout",
-      "srcPath": "./features/responsiveLayout",
-      "targets": [
-        {
-          "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
-        }
-      ]
-    }
   ]
 }

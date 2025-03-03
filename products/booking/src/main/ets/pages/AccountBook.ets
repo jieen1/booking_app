@@ -24,7 +24,8 @@ struct AccountBook {
   @State editDescription: string = '';
   @State editDate: Date = new Date();
   @State selectedCategoryId: number = 0;
-  @State currentRecord: RecordWithCategory = new RecordWithCategory();
+  @State currentRecord: RecordWithCategory = new RecordWithCategory(new RecordModel(0, 0, 0, '', 0, 0),
+    new CategoryModel(BookingConstants.EXPENSE_TYPE, "", DBHelper.getInstance().getResourceByKey(BookingConstants.ICON_MISC)));
 
   async aboutToAppear() {
     await this.loadData();
@@ -122,15 +123,14 @@ struct AccountBook {
         return;
       }
 
-      const updatedRecord: RecordModel = {
-        id: this.currentRecord.id,
-        type: this.currentRecord.type,
-        categoryId: this.selectedCategoryId,
-        amount: parseFloat(this.editAmount),
-        description: this.editDescription,
-        recordTime: this.editDate.getTime(),
-        createTime: 0
-      };
+      const updatedRecord: RecordModel = new RecordModel(
+        this.currentRecord.type,
+        this.selectedCategoryId,
+        parseFloat(this.editAmount),
+        this.editDescription,
+        this.editDate.getTime(),
+        this.currentRecord.id,
+      );
 
       await DBHelper.getInstance().updateRecord(updatedRecord);
       this.editDialogShow = false;
@@ -148,19 +148,11 @@ struct AccountBook {
     }
   }
 
-  getSwipeActions(record: RecordWithCategory): SwipeAction[] {
-    return [
-      {
-        icon: $r('app.media.ic_edit_cartoon'),
-        action: (): void => this.showEditDialog(record),
-        color: '#78BBFF' // 柔和的蓝色
-      },
-      {
-        icon: $r('app.media.ic_delete_cartoon'),
-        action: (): Promise<void> => this.deleteRecord(record),
-        color: '#FF9C92' // 柔和的红色
-      }
-    ];
+  @Builder itemEnd(record: RecordWithCategory) {
+    Row() {
+      Button("Delete").margin("4vp")
+      Button("Edit").margin("4vp").onClick((): Promise<void> => this.deleteRecord(record),)
+    }.padding("4vp").justifyContent(FlexAlign.SpaceEvenly)
   }
 
   build() {
@@ -313,7 +305,18 @@ struct AccountBook {
               .borderRadius(8)
               .margin({ bottom: 10 })
             }
-            .swipeAction({ end: this.getSwipeActions(record) })
+            .swipeAction({
+              end: {
+                builder: this.itemEnd(record),
+                onAction: () => {
+                  animateTo({ duration: 1000 }, () => {
+                    let index = this.records.indexOf(record)
+                    this.records.splice(index, 1)
+                  })
+                },
+                actionAreaDistance: 56
+              }
+            })
           })
         }
       }
@@ -324,7 +327,7 @@ struct AccountBook {
       Row() {
         Button() {
           Column() {
-            Image($r('app.media.ic_statistics_cartoon'))
+            Image($r('app.media.ic_statistics_cartoon_new'))
               .width(24)
               .height(24)
               .margin({ bottom: 4 })
@@ -342,7 +345,7 @@ struct AccountBook {
 
         Button() {
           Column() {
-            Image($r('app.media.ic_add_cartoon'))
+            Image($r('app.media.ic_add_cartoon_new'))
               .width(50)
               .height(50)
             Text($r('app.string.add_record'))
@@ -360,7 +363,7 @@ struct AccountBook {
 
         Button() {
           Column() {
-            Image($r('app.media.ic_mine_cartoon'))
+            Image($r('app.media.ic_profile_cartoon'))
               .width(24)
               .height(24)
               .margin({ bottom: 4 })
@@ -381,178 +384,6 @@ struct AccountBook {
     .width('100%')
     .height('100%')
     .backgroundColor(BookingConstants.BG_COLOR_WHITE)
-    
-    // 编辑弹窗
-    if (this.editDialogShow) {
-      CustomDialog() {
-        Column() {
-          // 弹窗标题
-          Text($r('app.string.edit_record'))
-            .fontSize(18)
-            .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
-            .margin({ top: 20, bottom: 16 })
-          
-          // 金额输入
-          Column() {
-            Text($r('app.string.amount'))
-              .fontSize(14)
-              .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
-              .alignSelf(ItemAlign.Start)
-              .margin({ bottom: 8 })
-            TextInput({ text: this.editAmount })
-              .type(InputType.Number)
-              .placeholderColor(BookingConstants.TEXT_HINT_COLOR)
-              .placeholderFont({ size: 16 })
-              .caretColor(BookingConstants.PRIMARY_COLOR)
-              .width('100%')
-              .height(48)
-              .fontSize(16)
-              .padding({ left: 16, right: 16 })
-              .backgroundColor('#F5F5F5')
-              .borderRadius(24)
-              .onChange((value: string) => {
-                this.editAmount = value;
-              })
-          }
-          .width('100%')
-          .padding({ left: 24, right: 24 })
-          .margin({ bottom: 16 })
-          
-          // 分类选择
-          Column() {
-            Text($r('app.string.category'))
-              .fontSize(14)
-              .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
-              .alignSelf(ItemAlign.Start)
-              .margin({ bottom: 8 })
-            
-            Row() {
-              List() {
-                ForEach(this.categories, (category: CategoryModel) => {
-                  ListItem() {
-                    Column() {
-                      Image(category.icon)
-                        .width(36)
-                        .height(36)
-                        .margin({ bottom: 4 })
-                      Text(category.name)
-                        .fontSize(12)
-                        .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
-                    }
-                    .width(56)
-                    .height(70)
-                    .padding(8)
-                    .margin({ right: 8 })
-                    .backgroundColor(this.selectedCategoryId === category.id ? BookingConstants.PRIMARY_LIGHT_COLOR : Color.White)
-                    .borderRadius(8)
-                  }
-                  .onClick(() => {
-                    this.selectedCategoryId = category.id;
-                  })
-                })
-              }
-              .width('100%')
-              .height(80)
-              .listDirection(Axis.Horizontal)
-            }
-            .width('100%')
-            .margin({ bottom: 16 })
-          }
-          .width('100%')
-          .padding({ left: 24, right: 24 })
-          
-          // 备注输入
-          Column() {
-            Text($r('app.string.description'))
-              .fontSize(14)
-              .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
-              .alignSelf(ItemAlign.Start)
-              .margin({ bottom: 8 })
-            TextInput({ text: this.editDescription })
-              .placeholder('添加备注')
-              .placeholderColor(BookingConstants.TEXT_HINT_COLOR)
-              .placeholderFont({ size: 16 })
-              .caretColor(BookingConstants.PRIMARY_COLOR)
-              .width('100%')
-              .height(48)
-              .fontSize(16)
-              .padding({ left: 16, right: 16 })
-              .backgroundColor('#F5F5F5')
-              .borderRadius(24)
-              .onChange((value: string) => {
-                this.editDescription = value;
-              })
-          }
-          .width('100%')
-          .padding({ left: 24, right: 24 })
-          .margin({ bottom: 16 })
-          
-          // 日期选择
-          Column() {
-            Text($r('app.string.date'))
-              .fontSize(14)
-              .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
-              .alignSelf(ItemAlign.Start)
-              .margin({ bottom: 8 })
-            Row() {
-              DatePicker({
-                start: new Date('2021-1-1'),
-                end: new Date(),
-                selected: this.editDate
-              })
-              .onDateChange((value: Date) => {
-                this.editDate = value;
-              })
-              .width('100%')
-              .height(48)
-            }
-            .width('100%')
-            .padding({ left: 16, right: 16 })
-            .backgroundColor('#F5F5F5')
-            .borderRadius(24)
-          }
-          .width('100%')
-          .padding({ left: 24, right: 24 })
-          .margin({ bottom: 24 })
-          
-          // 操作按钮
-          Row() {
-            Button($r('app.string.cancel'))
-              .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
-              .backgroundColor(Color.White)
-              .borderWidth(1)
-              .borderColor('#DDDDDD')
-              .width(120)
-              .height(40)
-              .borderRadius(20)
-              .margin({ right: 16 })
-              .onClick(() => {
-                this.editDialogShow = false;
-              })
-            
-            Button($r('app.string.save'))
-              .fontColor(Color.White)
-              .backgroundColor(BookingConstants.PRIMARY_COLOR)
-              .width(120)
-              .height(40)
-              .borderRadius(20)
-              .onClick(() => {
-                this.saveEditedRecord();
-              })
-          }
-          .width('100%')
-          .justifyContent(FlexAlign.Center)
-          .margin({ bottom: 24 })
-        }
-        .width('90%')
-        .padding({ top: 0, bottom: 0 })
-        .backgroundColor(Color.White)
-        .borderRadius(16)
-      }
-      .alignment(DialogAlignment.Center)
-      .offset({ dx: 0, dy: -20 })
-      .customStyle(true)
-      .open()
-    }
+
   }
 }

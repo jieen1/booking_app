@@ -18,27 +18,27 @@ struct Mine {
   }> = [
     {
       title: '我的账单',
-      icon: $r('app.media.ic_bill_cartoon'),
+      icon: $r('app.media.ic_bill_cartoon_new'),
       route: BookingConstants.STATISTICS_ROUTE
     },
     {
       title: '预算设置',
-      icon: $r('app.media.ic_budget_cartoon'),
+      icon: $r('app.media.ic_budget_cartoon_new'),
       route: ''
     },
     {
       title: '个人信息',
-      icon: $r('app.media.ic_user_cartoon'),
+      icon: $r('app.media.ic_user_cartoon_new'),
       route: ''
     },
     {
       title: '设置',
-      icon: $r('app.media.ic_settings_cartoon'),
+      icon: $r('app.media.ic_settings_cartoon_new'),
       route: ''
     },
     {
       title: '关于',
-      icon: $r('app.media.ic_about_cartoon'),
+      icon: $r('app.media.ic_about_cartoon_new'),
       route: ''
     }
   ];

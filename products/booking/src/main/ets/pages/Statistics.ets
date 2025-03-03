@@ -134,7 +134,7 @@ struct Statistics {
       // 顶部标题栏
       Row() {
         Button() {
-          Image($r('app.media.ic_back_cartoon'))
+          Image($r('app.media.ic_back_cartoon_new'))
             .width(30)
             .height(30)
             .fillColor(BookingConstants.TEXT_PRIMARY_COLOR)
@@ -153,7 +153,7 @@ struct Statistics {
         
         // 留出右侧平衡空间，确保标题居中
         Button() {
-          Image($r('app.media.ic_back_cartoon'))
+          Image($r('app.media.ic_back_cartoon_new'))
             .width(30)
             .height(30)
             .opacity(0)
@@ -194,7 +194,7 @@ struct Statistics {
       // 时间选择器
       Row() {
         Button() {
-          Image($r('app.media.ic_left_cartoon'))
+          Image($r('app.media.ic_left_cartoon_new'))
             .width(30)
             .height(30)
             .fillColor(BookingConstants.TEXT_SECONDARY_COLOR)
@@ -216,7 +216,7 @@ struct Statistics {
           .textAlign(TextAlign.Center)
         
         Button() {
-          Image($r('app.media.ic_right_cartoon'))
+          Image($r('app.media.ic_right_cartoon_new'))
             .width(30)
             .height(30)
             .fillColor(BookingConstants.TEXT_SECONDARY_COLOR)
