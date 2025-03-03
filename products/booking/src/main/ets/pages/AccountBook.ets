@@ -1,4 +1,4 @@
-import router from '@ohos.router';
+import { router } from '@kit.ArkUI';
 import prompt from '@ohos.promptAction';
 import { BookingConstants } from '../constants/BookingConstants';
 import { DateUtils } from '../utils/DateUtils';
@@ -6,7 +6,7 @@ import { DBHelper } from '../database/DBHelper';
 import { CategoryModel } from '../model/CategoryModel';
 import { RecordModel } from '../model/RecordModel';
 import { RecordWithCategory } from '../model/RecordWithCategory';
-import { SwipeAction } from '../components/SwipeAction';
+import { CustomAlertDialog } from '../components/CustomDialog';
 
 @Entry
 @Component
@@ -27,13 +27,45 @@ struct AccountBook {
   @State currentRecord: RecordWithCategory = new RecordWithCategory(new RecordModel(0, 0, 0, '', 0, 0),
     new CategoryModel(BookingConstants.EXPENSE_TYPE, "", DBHelper.getInstance().getResourceByKey(BookingConstants.ICON_MISC)));
 
+  // 控制返回行为
+  private allowBack: boolean = false;
+  
+  // 自定义对话框控制器
+  private deleteDialogController: CustomDialogController = new CustomDialogController({
+    builder: CustomAlertDialog({
+      title: '确认删除',
+      message: '确定要删除这条记录吗？',
+      cancelText: '取消',
+      confirmText: '删除',
+      onCancel: () => {
+        console.info('取消删除');
+      },
+      onConfirm: async () => {
+        if (this.currentRecord && this.currentRecord.id) {
+          await this.deleteRecord(this.currentRecord);
+        }
+      }
+    }),
+    alignment: DialogAlignment.Center,
+    autoCancel: true,
+    customStyle: true
+  });
+
   async aboutToAppear() {
+    // 禁用页面返回手势
+    this.allowBack = false;
     await this.loadData();
   }
 
   onPageShow() {
     // 页面每次显示时重新加载数据，确保数据实时更新
     this.loadData();
+  }
+
+  // 控制返回按钮行为
+  onBackPress() {
+    // 不允许返回到加载页
+    return true;
   }
 
   async loadData() {
@@ -188,25 +220,10 @@ struct AccountBook {
       .height(70)
       .justifyContent(FlexAlign.Center)
       .onClick(() => {
-        AlertDialog.show({
-          title: '确认删除',
-          message: '确定要删除这条记录吗？',
-          primaryButton: {
-            value: '取消',
-            action: () => {
-              console.info('取消删除');
-            }
-          },
-          secondaryButton: {
-            value: '删除',
-            action: async () => {
-              await this.deleteRecord(record);
-            }
-          },
-          cancel: () => {
-            console.info('取消删除');
-          }
-        });
+        // 设置当前记录
+        this.currentRecord = record;
+        // 显示删除确认对话框
+        this.deleteDialogController.open();
       })
     }
     .width(120)
@@ -363,8 +380,15 @@ struct AccountBook {
               }
               .width('100%')
               .padding(16)
-              .backgroundColor(Color.White)
+              .backgroundColor(record.type === BookingConstants.RECORD_TYPE_INCOME ? 
+                BookingConstants.LIGHT_INCOME_BG_COLOR : BookingConstants.LIGHT_EXPENSE_BG_COLOR)
               .borderRadius(8)
+              .border({
+                width: 1,
+                color: record.type === BookingConstants.RECORD_TYPE_INCOME ? 
+                  '#E1F7F5' : '#FFE8E0',
+                style: BorderStyle.Solid
+              })
               .margin({ bottom: 10 })
             }
             .swipeAction({

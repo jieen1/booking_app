@@ -10,7 +10,7 @@ struct Index {
   aboutToAppear() {
     // 页面加载完成后直接跳转到记账本页面
     setTimeout(() => {
-      router.pushUrl({
+      router.replaceUrl({
         url: BookingConstants.ACCOUNT_BOOK_ROUTE
       });
     }, 500); // 短暂延迟确保页面已完全加载

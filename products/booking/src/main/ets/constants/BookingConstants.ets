@@ -117,6 +117,10 @@ export class BookingConstants {
   static readonly LIGHT_TEXT_INCOME_COLOR: string = '#5edfd0';  // 收入文字颜色（青色）
   static readonly LIGHT_TEXT_EXPENSE_COLOR: string = '#FF9E80';  // 支出文字颜色（橙色）
   
+  // 记录项背景色（淡化版，用于列表项）
+  static readonly LIGHT_INCOME_BG_COLOR: string = '#F0FFFE';  // 收入记录背景色（淡青色）
+  static readonly LIGHT_EXPENSE_BG_COLOR: string = '#FFF8F5';  // 支出记录背景色（淡橙色）
+  
   // 边框颜色
   static readonly LIGHT_BORDER_COLOR: string = '#E0E0E0';  // 边框颜色
   

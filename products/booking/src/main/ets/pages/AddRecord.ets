@@ -41,6 +41,13 @@ struct AddRecord {
       console.error('[aboutToAppear] 加载分类失败：', error);
     }
   }
+
+  // 控制返回按钮行为
+  onBackPress() {
+    // 返回到记账本页面
+    router.back();
+    return true;
+  }
   
   async switchType(type: number) {
     if (this.selectedType === type) {

@@ -60,6 +60,12 @@ struct Statistics {
     this.loadData();
   }
   
+  onBackPress() {
+    // 返回到记账本页面而不是加载页
+    router.back();
+    return true;
+  }
+  
   loadData() {
     this.isLoading = true;
     this.dbHelper.initDatabase().then(() => {
