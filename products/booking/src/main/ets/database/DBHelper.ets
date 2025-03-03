@@ -712,7 +712,7 @@ export class DBHelper {
       case BookingConstants.ICON_INVESTMENT:
         return $r('app.media.ic_investment' + BookingConstants.CARTOON_NEW_SUFFIX);
       case BookingConstants.ICON_PARTTIME:
-        return $r('app.media.ic_parttime' + BookingConstants.CARTOON_SUFFIX);
+        return $r('app.media.ic_parttime' + BookingConstants.CARTOON_NEW_SUFFIX);
       case BookingConstants.ICON_FOOD:
         return $r('app.media.ic_food' + BookingConstants.CARTOON_NEW_SUFFIX);
       case BookingConstants.ICON_TRANSPORT:

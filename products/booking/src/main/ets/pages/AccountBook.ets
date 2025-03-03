@@ -150,9 +150,66 @@ struct AccountBook {
 
   @Builder itemEnd(record: RecordWithCategory) {
     Row() {
-      Button("Delete").margin("4vp")
-      Button("Edit").margin("4vp").onClick((): Promise<void> => this.deleteRecord(record),)
-    }.padding("4vp").justifyContent(FlexAlign.SpaceEvenly)
+      Column() {
+        Image($r('app.media.ic_edit_cartoon_new'))
+          .width(28)
+          .height(28)
+          .margin({ bottom: 4 })
+        Text('编辑')
+          .fontSize(12)
+          .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
+      }
+      .backgroundColor('#F5F5F5')
+      .borderRadius(8)
+      .width(56)
+      .height(70)
+      .justifyContent(FlexAlign.Center)
+      .onClick(() => {
+        this.showEditDialog(record);
+      })
+
+      Column() {
+        Image($r('app.media.ic_delete_cartoon_new'))
+          .width(28)
+          .height(28)
+          .margin({ bottom: 4 })
+        Text('删除')
+          .fontSize(12)
+          .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
+      }
+      .backgroundColor('#F5F5F5')
+      .borderRadius(8)
+      .width(56)
+      .height(70)
+      .justifyContent(FlexAlign.Center)
+      .onClick(() => {
+        AlertDialog.show({
+          title: '确认删除',
+          message: '确定要删除这条记录吗？',
+          primaryButton: {
+            value: '取消',
+            action: () => {
+              console.info('取消删除');
+            }
+          },
+          secondaryButton: {
+            value: '删除',
+            action: async () => {
+              await this.deleteRecord(record);
+            }
+          },
+          cancel: () => {
+            console.info('取消删除');
+          }
+        });
+      })
+    }
+    .width(120)
+    .height(80)
+    .padding(4)
+    .backgroundColor('#F0F0F0')
+    .borderRadius(12)
+    .justifyContent(FlexAlign.SpaceEvenly)
   }
 
   build() {
@@ -309,12 +366,9 @@ struct AccountBook {
               end: {
                 builder: this.itemEnd(record),
                 onAction: () => {
-                  animateTo({ duration: 1000 }, () => {
-                    let index = this.records.indexOf(record)
-                    this.records.splice(index, 1)
-                  })
+                  // 删除该操作，使用按钮点击触发相应功能
                 },
-                actionAreaDistance: 56
+                actionAreaDistance: 120
               }
             })
           })
