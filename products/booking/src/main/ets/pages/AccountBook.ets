@@ -31,6 +31,11 @@ struct AccountBook {
     await this.loadData();
   }
 
+  onPageShow() {
+    // 页面每次显示时重新加载数据，确保数据实时更新
+    this.loadData();
+  }
+
   async loadData() {
     try {
       // 加载记录列表
