@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>工资图标-轻卡通</title>
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="salaryGradient">
+            <stop stop-color="#A5D6A7" offset="0%"></stop>
+            <stop stop-color="#4CAF50" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle fill="url(#salaryGradient)" cx="24" cy="24" r="20" filter="drop-shadow(0px 2px 4px rgba(0,0,0,0.1))"></circle>
+        <path d="M16,14 L32,14 C33.1045695,14 34,14.8954305 34,16 L34,32 C34,33.1045695 33.1045695,34 32,34 L16,34 C14.8954305,34 14,33.1045695 14,32 L14,16 C14,14.8954305 14.8954305,14 16,14 Z" fill="#FFFFFF"></path>
+        <path d="M24,19 C25.6568542,19 27,20.3431458 27,22 C27,23.6568542 25.6568542,25 24,25 C22.3431458,25 21,23.6568542 21,22 C21,20.3431458 22.3431458,19 24,19 Z M24,26 C27.3137085,26 30,27.790861 30,30 L30,32 L18,32 L18,30 C18,27.790861 20.6862915,26 24,26 Z" fill="#4CAF50"></path>
+    </g>
+</svg>

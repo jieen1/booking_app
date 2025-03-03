@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>教育图标</title>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M12,3 L22,8 L12,13 L2,8 L12,3 Z" fill="#673AB7"></path>
+        <path d="M5,10 L5,16 C5,16 8.5,19 12,19 C15.5,19 19,16 19,16 L19,10 L12,14 L5,10 Z" fill="#9575CD"></path>
+        <path d="M19,10 L21,9 L21,15 L19,16 L19,10 Z" fill="#673AB7"></path>
+    </g>
+</svg>

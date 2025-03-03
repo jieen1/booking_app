@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>用餐图标-轻卡通</title>
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="diningGradient">
+            <stop stop-color="#FF8A65" offset="0%"></stop>
+            <stop stop-color="#E64A19" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle fill="url(#diningGradient)" cx="24" cy="24" r="20" filter="drop-shadow(0px 2px 4px rgba(0,0,0,0.1))"></circle>
+        <path d="M16,13 C17.1045695,13 18,13.8954305 18,15 L18,33 C18,34.1045695 17.1045695,35 16,35 C14.8954305,35 14,34.1045695 14,33 L14,15 C14,13.8954305 14.8954305,13 16,13 Z M25,13 C25.5522847,13 26,13.4477153 26,14 L26,18 C26,19.6568542 27.3431458,21 29,21 C30.6568542,21 32,19.6568542 32,18 L32,14 C32,13.4477153 32.4477153,13 33,13 C33.5522847,13 34,13.4477153 34,14 L34,18 C34,20.7614237 31.7614237,23 29,23 L29,33 C29,34.1045695 28.1045695,35 27,35 C25.8954305,35 25,34.1045695 25,33 L25,23 C22.2385763,23 20,20.7614237 20,18 L20,14 C20,13.4477153 20.4477153,13 21,13 C21.5522847,13 22,13.4477153 22,14 L22,18 C22,19.6568542 23.3431458,21 25,21 L25,14 C25,13.4477153 25.4477153,13 25,13 Z" fill="#FFFFFF"></path>
+    </g>
+</svg>

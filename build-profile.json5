@@ -1,0 +1,91 @@
+{
+  "app": {
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "config1",
+        "compatibleSdkVersion": "5.0.1(13)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
+          }
+        }
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug"
+      },
+      {
+        "name": "release"
+      }
+    ],
+    "signingConfigs": [
+      {
+        "name": "config1",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\jieen\\.ohos\\config\\config1_MyBookingApp_5XW88gCDY8IRvFo7nVWgX5iStK72oNDnsBRGFoSBdZc=.cer",
+          "storePassword": "0000001B9EDF0651DECD8C7B05700560C3B3BE638880D4FBEDD8684E97AF9B6E8945DD624E852FA41EFDD6",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001BF37F78E624A7BE1AD0A16A9FFFBE669A240A6226BBAC4141FD82073BB60B9E010F55B87222FE3D",
+          "profile": "C:\\Users\\jieen\\.ohos\\config\\config1_MyBookingApp_5XW88gCDY8IRvFo7nVWgX5iStK72oNDnsBRGFoSBdZc=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\jieen\\.ohos\\config\\config1_MyBookingApp_5XW88gCDY8IRvFo7nVWgX5iStK72oNDnsBRGFoSBdZc=.p12"
+        }
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "booking",
+      "srcPath": "./products/booking",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "common",
+      "srcPath": "./common",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "adaptiveLayout",
+      "srcPath": "./features/adaptiveLayout",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "responsiveLayout",
+      "srcPath": "./features/responsiveLayout",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}

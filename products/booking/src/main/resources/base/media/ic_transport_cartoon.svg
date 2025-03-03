@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>交通图标-轻卡通</title>
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="transportGradient">
+            <stop stop-color="#90CAF9" offset="0%"></stop>
+            <stop stop-color="#42A5F5" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle fill="url(#transportGradient)" cx="24" cy="24" r="20" filter="drop-shadow(0px 2px 4px rgba(0,0,0,0.1))"></circle>
+        <path d="M12,20 L36,20 C37.1045695,20 38,20.8954305 38,22 L38,32 C38,33.1045695 37.1045695,34 36,34 L12,34 C10.8954305,34 10,33.1045695 10,32 L10,22 C10,20.8954305 10.8954305,20 12,20 Z" fill="#FFFFFF"></path>
+        <path d="M8,24 L40,24 L40,26 L8,26 L8,24 Z" fill="#42A5F5"></path>
+        <circle fill="#42A5F5" cx="16" cy="30" r="3"></circle>
+        <circle fill="#42A5F5" cx="32" cy="30" r="3"></circle>
+        <path d="M10,20 L12,16 L36,16 L38,20 L10,20 Z" fill="#90CAF9"></path>
+    </g>
+</svg>

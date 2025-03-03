@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>统计图标-轻卡通</title>
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="statisticsGradient">
+            <stop stop-color="#FFCC80" offset="0%"></stop>
+            <stop stop-color="#FFA726" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle fill="url(#statisticsGradient)" cx="24" cy="24" r="20" filter="drop-shadow(0px 2px 4px rgba(0,0,0,0.1))"></circle>
+        <rect fill="#FFFFFF" x="14" y="26" width="4" height="10" rx="2"></rect>
+        <rect fill="#FFFFFF" x="22" y="14" width="4" height="22" rx="2"></rect>
+        <rect fill="#FFFFFF" x="30" y="20" width="4" height="16" rx="2"></rect>
+    </g>
+</svg>

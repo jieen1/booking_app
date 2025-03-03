@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>住房图标-轻卡通</title>
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="housingGradient">
+            <stop stop-color="#81D4FA" offset="0%"></stop>
+            <stop stop-color="#4FC3F7" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M24,6 L6,20 L6,40 C6,41.1045695 6.8954305,42 8,42 L40,42 C41.1045695,42 42,41.1045695 42,40 L42,20 L24,6 Z" fill="url(#housingGradient)" filter="drop-shadow(0px 2px 4px rgba(0,0,0,0.1))"></path>
+        <path d="M24,6 L6,20 L42,20 L24,6 Z" fill="#81D4FA"></path>
+        <rect fill="#FFFFFF" x="18" y="28" width="12" height="14" rx="1"></rect>
+        <rect fill="#FFFFFF" x="30" y="24" width="6" height="6" rx="1"></rect>
+        <rect fill="#FFFFFF" x="12" y="24" width="6" height="6" rx="1"></rect>
+        <rect fill="#64B5F6" x="21" y="33" width="6" height="9" rx="1"></rect>
+    </g>
+</svg>

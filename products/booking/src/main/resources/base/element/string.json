@@ -1,0 +1,108 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "ability_desc",
+      "value": "description"
+    },
+    {
+      "name": "ability_label",
+      "value": "label"
+    },
+    {
+      "name": "grid_title_label",
+      "value": "title"
+    },
+    {
+      "name": "adaptive_layout",
+      "value": "adaptive layout"
+    },
+    {
+      "name": "system_cap",
+      "value": "system capabilities"
+    },
+    {
+      "name": "responsive_layout",
+      "value": "responsive layout"
+    },
+    {
+      "name": "location_cap_invalid",
+      "value": "This device does not have the system capability of location service"
+    },
+    {
+      "name": "location_cap_valid",
+      "value": "This device has the system capability of location service"
+    },
+    {
+      "name": "account_book_title",
+      "value": "记账本"
+    },
+    {
+      "name": "income",
+      "value": "收入"
+    },
+    {
+      "name": "expense",
+      "value": "支出"
+    },
+    {
+      "name": "balance",
+      "value": "结余"
+    },
+    {
+      "name": "add_record",
+      "value": "添加记录"
+    },
+    {
+      "name": "statistics",
+      "value": "统计分析"
+    },
+    {
+      "name": "category",
+      "value": "分类"
+    },
+    {
+      "name": "amount",
+      "value": "金额"
+    },
+    {
+      "name": "description",
+      "value": "备注"
+    },
+    {
+      "name": "date",
+      "value": "日期"
+    },
+    {
+      "name": "save",
+      "value": "保存"
+    },
+    {
+      "name": "cancel",
+      "value": "取消"
+    },
+    {
+      "name": "confirm",
+      "value": "确认"
+    },
+    {
+      "name": "no_records",
+      "value": "暂无记录"
+    },
+    {
+      "name": "loading",
+      "value": "加载中..."
+    },
+    {
+      "name": "please_select_category",
+      "value": "请选择分类"
+    },
+    {
+      "name": "mine",
+      "value": "我的"
+    }
+  ]
+}
