@@ -1,19 +1,79 @@
 {
   "color": [
     {
-      "name": "start_window_background",
-      "value": "#F1F3F5"
+      "name": "PRIMARY_COLOR",
+      "value": "#5edfd0"
     },
     {
-      "name": "income_color",
+      "name": "PRIMARY_LIGHT_COLOR",
+      "value": "#e1f7f5"
+    },
+    {
+      "name": "SECONDARY_COLOR",
+      "value": "#FFA07A"
+    },
+    {
+      "name": "TEXT_PRIMARY_COLOR",
+      "value": "#333333"
+    },
+    {
+      "name": "TEXT_SECONDARY_COLOR",
+      "value": "#666666"
+    },
+    {
+      "name": "TEXT_HINT_COLOR",
+      "value": "#999999"
+    },
+    {
+      "name": "TEXT_INCOME_COLOR",
+      "value": "#5edfd0"
+    },
+    {
+      "name": "TEXT_EXPENSE_COLOR",
+      "value": "#FF9E80"
+    },
+    {
+      "name": "BORDER_COLOR",
+      "value": "#E0E0E0"
+    },
+    {
+      "name": "BORDER_INCOME_COLOR",
+      "value": "#E1F7F5"
+    },
+    {
+      "name": "BORDER_EXPENSE_COLOR",
+      "value": "#FFE8E0"
+    },
+    {
+      "name": "BG_COLOR",
+      "value": "#e5f7f5"
+    },
+    {
+      "name": "BG_COLOR_SECONDARY",
+      "value": "#F0F8FF"
+    },
+    {
+      "name": "BG_INCOME_COLOR",
+      "value": "#F0FFFE"
+    },
+    {
+      "name": "BG_EXPENSE_COLOR",
+      "value": "#FFF8F5"
+    },
+    {
+      "name": "SUCCESS_COLOR",
       "value": "#4CAF50"
     },
     {
-      "name": "expense_color",
+      "name": "ERROR_COLOR",
       "value": "#F44336"
     },
     {
-      "name": "balance_color",
+      "name": "WARNING_COLOR",
+      "value": "#FFC107"
+    },
+    {
+      "name": "INFO_COLOR",
       "value": "#2196F3"
     }
   ]

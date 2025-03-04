@@ -1,8 +1,80 @@
 {
-    "color": [
-      {
-        "name": "start_window_background",
-        "value": "#000000"
-      }
-    ]
-  }
+  "color": [
+    {
+      "name": "PRIMARY_COLOR",
+      "value": "#1e7d71"
+    },
+    {
+      "name": "PRIMARY_LIGHT_COLOR",
+      "value": "#2a5851"
+    },
+    {
+      "name": "SECONDARY_COLOR",
+      "value": "#FF7043"
+    },
+    {
+      "name": "TEXT_PRIMARY_COLOR",
+      "value": "#E0E0E0"
+    },
+    {
+      "name": "TEXT_SECONDARY_COLOR",
+      "value": "#B0B0B0"
+    },
+    {
+      "name": "TEXT_HINT_COLOR",
+      "value": "#707070"
+    },
+    {
+      "name": "TEXT_INCOME_COLOR",
+      "value": "#5edfd0"
+    },
+    {
+      "name": "TEXT_EXPENSE_COLOR",
+      "value": "#FF9E80"
+    },
+    {
+      "name": "BORDER_COLOR",
+      "value": "#3E3E3E"
+    },
+    {
+      "name": "BORDER_INCOME_COLOR",
+      "value": "#E1F7F5"
+    },
+    {
+      "name": "BORDER_EXPENSE_COLOR",
+      "value": "#FFE8E0"
+    },
+    {
+      "name": "BG_COLOR",
+      "value": "#121212"
+    },
+    {
+      "name": "BG_COLOR_SECONDARY",
+      "value": "#323232"
+    },
+    {
+      "name": "BG_INCOME_COLOR",
+      "value": "#636363"
+    },
+    {
+      "name": "BG_EXPENSE_COLOR",
+      "value": "#aa6f40"
+    },
+    {
+      "name": "SUCCESS_COLOR",
+      "value": "#4CAF50"
+    },
+    {
+      "name": "ERROR_COLOR",
+      "value": "#F44336"
+    },
+    {
+      "name": "WARNING_COLOR",
+      "value": "#FFC107"
+    },
+    {
+      "name": "INFO_COLOR",
+      "value": "#2196F3"
+    }
+  ]
+}

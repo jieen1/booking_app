@@ -1,6 +1,7 @@
 import { BookingConstants } from '../constants/BookingConstants';
 import { CategoryModel } from '../model/CategoryModel';
 import { DBHelper } from '../database/DBHelper';
+import { IconUtils } from '../utils/IconUtils';
 
 /**
  * 自定义对话框组件
@@ -30,12 +31,12 @@ export struct CustomAlertDialog {
         .fontSize(18)
         .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
         .margin({ top: 24, bottom: 12 })
-        .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
+        .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
       
       // 消息内容
       Text(this.message)
         .fontSize(16)
-        .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
+        .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
         .margin({ bottom: 24 })
         .textAlign(TextAlign.Center)
         .padding({ left: 24, right: 24 })
@@ -44,15 +45,15 @@ export struct CustomAlertDialog {
       Divider()
         .width('100%')
         .height(1)
-        .color('#E0E0E0')
+        .color($r('sys.color.ohos_id_color_list_separator'))
       
       // 按钮容器
       Row() {
         // 取消按钮
         Button(this.cancelText)
           .fontSize(16)
-          .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
-          .backgroundColor(BookingConstants.BG_COLOR_WHITE)
+          .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
+          .backgroundColor($r('app.color.BG_COLOR'))
           .width('50%')
           .height(48)
           .onClick(() => {
@@ -67,13 +68,13 @@ export struct CustomAlertDialog {
           .width(1)
           .height(48)
           .vertical(true)
-          .color('#E0E0E0')
+          .color($r('sys.color.ohos_id_color_list_separator'))
         
         // 确认按钮
         Button(this.confirmText)
           .fontSize(16)
-          .fontColor('#FF5722')  // 使用橙色作为强调色
-          .backgroundColor(BookingConstants.BG_COLOR_WHITE)
+          .fontColor($r('app.color.WARNING_COLOR'))
+          .backgroundColor($r('app.color.BG_COLOR_SECONDARY'))
           .width('50%')
           .height(48)
           .onClick(() => {
@@ -87,7 +88,7 @@ export struct CustomAlertDialog {
       .height(48)
     }
     .width('80%')
-    .backgroundColor(BookingConstants.BG_COLOR_WHITE)
+    .backgroundColor($r('app.color.BG_COLOR'))
     .borderRadius(12)
     .padding({ top: 8, bottom: 0 })
   }
@@ -129,14 +130,6 @@ export struct EditRecordDialog {
     }
   }
 
-  // 获取分类图标
-  getCategoryIcon(icon: Resource): Resource {
-    if (icon) {
-      return icon;
-    }
-    return $r(BookingConstants.EMPTY_ICON);
-  }
-
   build() {
     Column() {
       // 标题栏
@@ -146,13 +139,13 @@ export struct EditRecordDialog {
         .width('100%')
         .textAlign(TextAlign.Center)
         .margin({ top: 24, bottom: 16 })
-        .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
+        .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
       
       // 金额输入
       Column() {
         Text('金额')
           .fontSize(16)
-          .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
+          .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
           .width('100%')
           .margin({ bottom: 8 })
           
@@ -161,14 +154,14 @@ export struct EditRecordDialog {
           .fontSize(16)
           .placeholderFont({ size: 16 })
           .padding(12)
-          .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
-          .placeholderColor(BookingConstants.TEXT_SECONDARY_COLOR)
+          .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
+          .placeholderColor($r('app.color.TEXT_SECONDARY_COLOR'))
           .border({
             width: 1,
-            color: BookingConstants.LIGHT_BORDER_COLOR,
+            color: $r('app.color.BORDER_COLOR'),
             radius: 8
           })
-          .backgroundColor(Color.White)
+          .backgroundColor($r('app.color.BG_COLOR'))
           .width('100%')
           .height(48)
           .onChange((value: string) => {
@@ -183,7 +176,7 @@ export struct EditRecordDialog {
       Column() {
         Text('描述')
           .fontSize(16)
-          .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
+          .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
           .width('100%')
           .margin({ bottom: 8 })
           
@@ -191,14 +184,14 @@ export struct EditRecordDialog {
           .fontSize(16)
           .placeholderFont({ size: 16 })
           .padding(12)
-          .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
-          .placeholderColor(BookingConstants.TEXT_SECONDARY_COLOR)
+          .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
+          .placeholderColor($r('app.color.TEXT_SECONDARY_COLOR'))
           .border({
             width: 1,
-            color: BookingConstants.LIGHT_BORDER_COLOR,
+            color: $r('app.color.BORDER_COLOR'),
             radius: 8
           })
-          .backgroundColor(BookingConstants.GLASS_BACKGROUND_COLOR)
+          .backgroundColor($r('app.color.BG_COLOR'))
           .width('100%')
           .height(48)
           .onChange((value: string) => {
@@ -213,7 +206,7 @@ export struct EditRecordDialog {
       Column() {
         Text('分类')
           .fontSize(16)
-          .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
+          .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
           .width('100%')
           .margin({ bottom: 8 })
           
@@ -223,15 +216,15 @@ export struct EditRecordDialog {
             ForEach(this.categories.filter(category => category.type === this.recordType), 
               (category: CategoryModel) => {
                 Column() {
-                  Image(this.getCategoryIcon(category.icon))
+                  Image(IconUtils.getCategoryIcon(category.icon))
                     .width(36)
                     .height(36)
                     .margin({ bottom: 4 })
                   
                   Text(category.name)
                     .fontSize(12)
-                    .fontColor(this.selectedCategoryId === category.id ? 
-                      BookingConstants.LIGHT_SECONDARY_COLOR : BookingConstants.TEXT_SECONDARY_COLOR)
+                    .fontColor(this.selectedCategoryId === category.id ?
+                    $r('app.color.TEXT_HINT_COLOR') : $r('app.color.TEXT_SECONDARY_COLOR'))
                     .maxLines(1)
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
                 }
@@ -240,11 +233,11 @@ export struct EditRecordDialog {
                 .margin(4)
                 .padding(4)
                 .borderRadius(8)
-                .backgroundColor(this.selectedCategoryId === category.id ? 
-                  '#FFF8F5' : Color.Transparent)
+                .backgroundColor(this.selectedCategoryId === category.id ?
+                $r('app.color.BG_COLOR_SECONDARY') : Color.Transparent)
                 .border({
                   width: this.selectedCategoryId === category.id ? 1 : 0,
-                  color: BookingConstants.LIGHT_SECONDARY_COLOR
+                  color: $r('app.color.BORDER_COLOR')
                 })
                 .onClick(() => {
                   if (category.id) {
@@ -268,15 +261,15 @@ export struct EditRecordDialog {
       Divider()
         .width('100%')
         .height(1)
-        .color('#E0E0E0')
+        .color($r('sys.color.ohos_id_color_list_separator'))
       
       // 按钮容器
       Row() {
         // 取消按钮
         Button('取消')
           .fontSize(16)
-          .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
-          .backgroundColor(BookingConstants.BG_COLOR_WHITE)
+          .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
+          .backgroundColor($r('app.color.BG_COLOR'))
           .width('50%')
           .height(48)
           .onClick(() => {
@@ -291,13 +284,13 @@ export struct EditRecordDialog {
           .width(1)
           .height(48)
           .vertical(true)
-          .color('#E0E0E0')
+          .color($r('sys.color.ohos_id_color_list_separator'))
         
         // 确认按钮
         Button('保存')
           .fontSize(16)
-          .fontColor('#FF5722')  // 使用橙色作为强调色
-          .backgroundColor(BookingConstants.BG_COLOR_WHITE)
+          .fontColor($r('app.color.WARNING_COLOR'))  // 使用橙色作为强调色
+          .backgroundColor($r('app.color.BG_COLOR'))
           .width('50%')
           .height(48)
           .onClick(() => {
@@ -310,7 +303,7 @@ export struct EditRecordDialog {
       .height(48)
     }
     .width('85%')
-    .backgroundColor(BookingConstants.BG_COLOR_WHITE)
+    .backgroundColor($r('app.color.BG_COLOR'))
     .borderRadius(12)
     .padding({ top: 8, bottom: 0 })
   }

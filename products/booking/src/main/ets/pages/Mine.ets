@@ -48,6 +48,8 @@ struct Mine {
   
   build() {
     Column() {
+      Row()
+        .height(20)
       // 用户信息区域
       Row() {
         Image(this.userAvatar)
@@ -60,20 +62,19 @@ struct Mine {
           Text(this.userName)
             .fontSize(18)
             .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
-            .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
+            .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
           
           Text('开启你的记账之旅')
             .fontSize(14)
-            .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
+            .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
             .margin({ top: 8 })
         }
         .alignItems(HorizontalAlign.Start)
         .layoutWeight(1)
       }
       .width('100%')
-      .height('30%')
       .padding(16)
-      .backgroundColor(Color.White)
+      .backgroundColor($r('app.color.BG_COLOR'))
       .borderRadius(10)
       .margin({ top: 16, left: 16, right: 16 })
       
@@ -91,17 +92,12 @@ struct Mine {
                   
                   Text(item.title)
                     .fontSize(16)
-                    .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
+                    .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
                 }
-                
-                Image($r('app.media.ic_right_cartoon_new'))
-                  .width(20)
-                  .height(20)
-                  .fillColor(BookingConstants.TEXT_HINT_COLOR)
               }
               .width('100%')
               .justifyContent(FlexAlign.SpaceBetween)
-              .padding({ top: 16, bottom: 16 })
+              .padding(16)
             }
             .onClick(() => {
               if (item.onClick) {
@@ -117,21 +113,21 @@ struct Mine {
         .width('100%')
         .divider({
           strokeWidth: 0.5,
-          color: BookingConstants.BORDER_COLOR,
+          color: $r('app.color.BORDER_COLOR'),
           startMargin: 52,
           endMargin: 16
         })
       }
       .width('100%')
-      .backgroundColor(Color.White)
+      .backgroundColor($r('app.color.BG_COLOR'))
       .borderRadius(10)
-      .margin({ top: 16, left: 16, right: 16 })
+      .margin({ top: 16, left: 25, right: 16 })
       
       // 底部版本信息
       Column() {
         Text('版本 1.0.0')
           .fontSize(14)
-          .fontColor(BookingConstants.TEXT_HINT_COLOR)
+          .fontColor($r('app.color.TEXT_HINT_COLOR'))
           .margin({ top: 32 })
       }
       .width('100%')
@@ -139,9 +135,12 @@ struct Mine {
       .layoutWeight(1)
       .justifyContent(FlexAlign.End)
       .padding({ bottom: 16 })
+
+      Row()
+        .height(15)
     }
     .width('100%')
     .height('100%')
-    .backgroundColor(BookingConstants.MINT_BG_COLOR_WHITE)
+    .backgroundColor($r('app.color.BG_COLOR'))
   }
 }

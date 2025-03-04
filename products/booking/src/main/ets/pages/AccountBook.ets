@@ -17,6 +17,7 @@ struct AccountBook {
   @State balance: number = 0;
   @State currentMonth: string = DateUtils.getCurrentMonthStr();
   @State categories: CategoryModel[] = [];
+  @StorageProp('currentBreakpoint') currentBreakpoint: string = 'sm';
   
   // 编辑弹窗相关状态
   @State editAmount: string = '';
@@ -216,8 +217,10 @@ struct AccountBook {
           .height(28)
         Text('编辑')
           .fontSize(12)
-          .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
+          .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
       }
+      .backgroundColor($r('app.color.BG_COLOR_SECONDARY'))
+      .borderRadius(12)
       .width(56)
       .height(60)
       .justifyContent(FlexAlign.Center)
@@ -231,10 +234,12 @@ struct AccountBook {
           .height(28)
         Text('删除')
           .fontSize(12)
-          .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
+          .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
       }
       .width(56)
       .height(60)
+      .borderRadius(12)
+      .backgroundColor($r('app.color.BG_COLOR_SECONDARY'))
       .justifyContent(FlexAlign.Center)
       .onClick(() => {
         // 设置当前记录
@@ -244,18 +249,21 @@ struct AccountBook {
       })
     }
     .width(120)
-    .height(80)
+    .height(200)
     .justifyContent(FlexAlign.SpaceEvenly)
+    .margin({bottom: 8})
   }
 
   build() {
     Column() {
+      Row()
+        .height(20)
       // 顶部导航栏
       Row() {
         Text(this.currentMonth)
           .fontSize(20)
           .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
-          .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
+          .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
       }
       .width('100%')
       .height(50)
@@ -267,12 +275,12 @@ struct AccountBook {
         Column() {
           Text($r('app.string.income'))
             .fontSize(14)
-            .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
+            .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
             .margin({ bottom: 4 })
           Text(`¥${this.income.toFixed(2)}`)
             .fontSize(20)
             .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
-            .fontColor(BookingConstants.TEXT_INCOME_COLOR)
+            .fontColor($r('app.color.TEXT_INCOME_COLOR'))
         }
         .layoutWeight(1)
         .alignItems(HorizontalAlign.Center)
@@ -280,17 +288,17 @@ struct AccountBook {
         Divider()
           .vertical(true)
           .height(40)
-          .color('#EEEEEE')
+          .color($r('sys.color.ohos_id_color_list_separator'))
 
         Column() {
           Text($r('app.string.expense'))
             .fontSize(14)
-            .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
+            .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
             .margin({ bottom: 4 })
           Text(`¥${this.expense.toFixed(2)}`)
             .fontSize(20)
             .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
-            .fontColor(BookingConstants.TEXT_EXPENSE_COLOR)
+            .fontColor($r('app.color.TEXT_EXPENSE_COLOR'))
         }
         .layoutWeight(1)
         .alignItems(HorizontalAlign.Center)
@@ -298,24 +306,24 @@ struct AccountBook {
         Divider()
           .vertical(true)
           .height(40)
-          .color('#EEEEEE')
+          .color($r('sys.color.ohos_id_color_list_separator'))
 
         Column() {
           Text($r('app.string.balance'))
             .fontSize(14)
-            .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
+            .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
             .margin({ bottom: 4 })
           Text(`¥${this.balance.toFixed(2)}`)
             .fontSize(20)
             .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
-            .fontColor(this.balance >= 0 ? BookingConstants.TEXT_INCOME_COLOR : BookingConstants.TEXT_EXPENSE_COLOR)
+            .fontColor(this.balance >= 0 ? $r('app.color.TEXT_INCOME_COLOR') : $r('app.color.TEXT_EXPENSE_COLOR'))
         }
         .layoutWeight(1)
         .alignItems(HorizontalAlign.Center)
       }
       .width('100%')
       .padding(16)
-      .backgroundColor(Color.White)
+      .backgroundColor($r('app.color.BG_COLOR'))
       .borderRadius(10)
       .margin({ top: 10, bottom: 10, left: 16, right: 16 })
 
@@ -330,7 +338,7 @@ struct AccountBook {
                 .margin({ bottom: 20 })
               Text($r('app.string.no_records'))
                 .fontSize(16)
-                .fontColor('#999999')
+                .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
             }
             .width('100%')
             .height(200)
@@ -355,9 +363,9 @@ struct AccountBook {
                     if (record.category && record.category.name) {
                       Text(record.category.name)
                         .fontSize(12)
-                        .fontColor(Color.White)
-                        .backgroundColor(record.type === BookingConstants.RECORD_TYPE_INCOME ? 
-                          BookingConstants.TEXT_INCOME_COLOR : BookingConstants.TEXT_EXPENSE_COLOR)
+                        .fontColor($r('app.color.BG_COLOR'))
+                        .backgroundColor(record.type === BookingConstants.RECORD_TYPE_INCOME ?
+                        $r('app.color.TEXT_INCOME_COLOR') : $r('app.color.TEXT_EXPENSE_COLOR'))
                         .borderRadius(4)
                         .padding({ left: 6, right: 6, top: 2, bottom: 2 })
                         .margin({ left: 8 })
@@ -366,26 +374,26 @@ struct AccountBook {
                     Text(record.type === BookingConstants.RECORD_TYPE_INCOME ? '+' : '-')
                       .fontSize(16)
                       .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
-                      .fontColor(record.type === BookingConstants.RECORD_TYPE_INCOME ? 
-                        BookingConstants.TEXT_INCOME_COLOR : BookingConstants.TEXT_EXPENSE_COLOR)
+                      .fontColor(record.type === BookingConstants.RECORD_TYPE_INCOME ?
+                      $r('app.color.TEXT_INCOME_COLOR') : $r('app.color.TEXT_EXPENSE_COLOR'))
                     Text(`${record.amount.toFixed(2)}`)
                       .fontSize(16)
                       .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
-                      .fontColor(record.type === BookingConstants.RECORD_TYPE_INCOME ? 
-                        BookingConstants.TEXT_INCOME_COLOR : BookingConstants.TEXT_EXPENSE_COLOR)
+                      .fontColor(record.type === BookingConstants.RECORD_TYPE_INCOME ?
+                      $r('app.color.TEXT_INCOME_COLOR') : $r('app.color.TEXT_EXPENSE_COLOR'))
                   }
                   .width('100%')
 
                   Row() {
                     Text(record.description || '')
                       .fontSize(14)
-                      .fontColor('#999999')
+                      .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
                       .maxLines(1)
                       .textOverflow({ overflow: TextOverflow.Ellipsis })
                     Blank()
                     Text(DateUtils.formatDate(record.recordTime))
                       .fontSize(14)
-                      .fontColor('#999999')
+                      .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
                   }
                   .width('100%')
                   .margin({ top: 4 })
@@ -393,17 +401,17 @@ struct AccountBook {
                 .layoutWeight(1)
               }
               .width('100%')
-              .padding(16)
-              .backgroundColor(record.type === BookingConstants.RECORD_TYPE_INCOME ? 
-                BookingConstants.LIGHT_INCOME_BG_COLOR : BookingConstants.LIGHT_EXPENSE_BG_COLOR)
+              .padding({ top: 12, bottom: 12, left: 16, right: 16})
+              .backgroundColor(record.type === BookingConstants.RECORD_TYPE_INCOME ?
+              $r('app.color.BG_INCOME_COLOR') : $r('app.color.BG_EXPENSE_COLOR'))
               .borderRadius(8)
               .border({
                 width: 1,
-                color: record.type === BookingConstants.RECORD_TYPE_INCOME ? 
-                  '#E1F7F5' : '#FFE8E0',
+                color: record.type === BookingConstants.RECORD_TYPE_INCOME ?
+                $r('app.color.BORDER_INCOME_COLOR') : $r('app.color.BORDER_EXPENSE_COLOR'),
                 style: BorderStyle.Solid
               })
-              .margin({ bottom: 10 })
+              .margin({ bottom: 6 })
             }
             .swipeAction({
               end: {
@@ -419,6 +427,7 @@ struct AccountBook {
       }
       .layoutWeight(1)
       .padding({ left: 16, right: 16 })
+      .lanes(this.currentBreakpoint === 'sm' ? 1 : 2)
 
       // 底部操作栏
       Row() {
@@ -430,7 +439,7 @@ struct AccountBook {
               .margin({ bottom: 4 })
             Text($r('app.string.statistics'))
               .fontSize(12)
-              .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
+              .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
           }
         }
         .backgroundColor(Color.Transparent)
@@ -447,7 +456,7 @@ struct AccountBook {
               .height(50)
             Text($r('app.string.add_record'))
               .fontSize(12)
-              .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
+              .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
               .margin({ top: 4 })
           }
         }
@@ -466,7 +475,7 @@ struct AccountBook {
               .margin({ bottom: 4 })
             Text($r('app.string.mine'))
               .fontSize(12)
-              .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
+              .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
           }
         }
         .backgroundColor(Color.Transparent)
@@ -477,12 +486,15 @@ struct AccountBook {
         })
       }
       .width('100%')
-      .backgroundColor(Color.White)
+      .backgroundColor($r('app.color.BG_COLOR'))
       .justifyContent(FlexAlign.SpaceAround)
       .shadow({ radius: 5, color: '#0D000000', offsetY: -2 })
+
+      Row()
+        .height(15)
     }
     .width('100%')
     .height('100%')
-    .backgroundColor(BookingConstants.BG_COLOR_WHITE)
+    .backgroundColor($r('app.color.BG_COLOR'))
   }
 }

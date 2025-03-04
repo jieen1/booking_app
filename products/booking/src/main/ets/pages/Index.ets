@@ -25,12 +25,12 @@ struct Index {
       
       Text('正在加载...')
         .fontSize(16)
-        .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
+        .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
         .margin({ top: 20 })
     }
     .width('100%')
     .height('100%')
     .justifyContent(FlexAlign.Center)
-    .backgroundColor(BookingConstants.BG_COLOR_WHITE)
+    .backgroundColor($r('app.color.BG_COLOR'))
   }
 }

@@ -2,6 +2,7 @@ import { router } from '@kit.ArkUI';
 import { BookingConstants } from '../constants/BookingConstants';
 import { DBHelper } from '../database/DBHelper';
 import { DateUtils } from '../utils/DateUtils';
+import { IconUtils } from '../utils/IconUtils';
 
 // 分类统计数据接口
 interface CategoryStatistic {
@@ -137,13 +138,14 @@ struct Statistics {
   
   build() {
     Column() {
+      Row()
+        .height(20)
       // 顶部标题栏
       Row() {
         Button() {
           Image($r('app.media.ic_left_cartoon_new'))
             .width(30)
             .height(30)
-            .fillColor(BookingConstants.TEXT_PRIMARY_COLOR)
         }
         .backgroundColor(Color.Transparent)
         .onClick(() => {
@@ -153,7 +155,7 @@ struct Statistics {
         Text('统计')
           .fontSize(20)
           .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
-          .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
+          .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
           .layoutWeight(1)
           .textAlign(TextAlign.Center)
         
@@ -177,8 +179,8 @@ struct Statistics {
             .fontSize(16)
             .fontWeight(this.currentTab === index ? 
               BookingConstants.FONT_WEIGHT_MEDIUM : BookingConstants.FONT_WEIGHT_NORMAL)
-            .fontColor(this.currentTab === index ? 
-              BookingConstants.PRIMARY_COLOR : BookingConstants.TEXT_SECONDARY_COLOR)
+            .fontColor(this.currentTab === index ?
+            $r('app.color.TEXT_PRIMARY_COLOR') : $r('app.color.TEXT_SECONDARY_COLOR'))
             .padding({ left: 16, right: 16, top: 12, bottom: 12 })
             .onClick(() => {
               this.currentTab = index;
@@ -189,7 +191,7 @@ struct Statistics {
             Divider()
               .vertical(true)
               .height(16)
-              .color(BookingConstants.TEXT_HINT_COLOR)
+              .color($r('app.color.TEXT_HINT_COLOR'))
           }
         })
       }
@@ -216,7 +218,7 @@ struct Statistics {
         Text(`${this.currentYear}年${this.currentMonth + 1}月`)
           .fontSize(18)
           .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
-          .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
+          .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
           .layoutWeight(1)
           .textAlign(TextAlign.Center)
         
@@ -242,13 +244,13 @@ struct Statistics {
         Column() {
           Text('收入')
             .fontSize(14)
-            .fontColor(this.isIncome ? BookingConstants.PRIMARY_COLOR : BookingConstants.TEXT_SECONDARY_COLOR)
+            .fontColor(this.isIncome ? $r('app.color.TEXT_PRIMARY_COLOR') : $r('app.color.TEXT_SECONDARY_COLOR'))
             .fontWeight(this.isIncome ? BookingConstants.FONT_WEIGHT_MEDIUM : BookingConstants.FONT_WEIGHT_NORMAL)
           
           Divider()
             .width(40)
             .height(2)
-            .color(this.isIncome ? BookingConstants.PRIMARY_COLOR : Color.Transparent)
+            .color(this.isIncome ? $r('app.color.TEXT_PRIMARY_COLOR') : Color.Transparent)
             .margin({ top: 4 })
         }
         .width('50%')
@@ -261,13 +263,13 @@ struct Statistics {
         Column() {
           Text('支出')
             .fontSize(14)
-            .fontColor(!this.isIncome ? BookingConstants.PRIMARY_COLOR : BookingConstants.TEXT_SECONDARY_COLOR)
+            .fontColor(!this.isIncome ? $r('app.color.TEXT_PRIMARY_COLOR') : $r('app.color.TEXT_SECONDARY_COLOR'))
             .fontWeight(!this.isIncome ? BookingConstants.FONT_WEIGHT_MEDIUM : BookingConstants.FONT_WEIGHT_NORMAL)
           
           Divider()
             .width(40)
             .height(2)
-            .color(!this.isIncome ? BookingConstants.PRIMARY_COLOR : Color.Transparent)
+            .color(!this.isIncome ? $r('app.color.TEXT_PRIMARY_COLOR') : Color.Transparent)
             .margin({ top: 4 })
         }
         .width('50%')
@@ -284,12 +286,12 @@ struct Statistics {
       Column() {
         Text(this.isIncome ? '总收入' : '总支出')
           .fontSize(14)
-          .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
+          .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
         
         Text(`${this.isIncome ? this.summary.income.toFixed(2) : this.summary.expense.toFixed(2)}`)
           .fontSize(24)
           .fontWeight(BookingConstants.FONT_WEIGHT_BOLD)
-          .fontColor(this.isIncome ? BookingConstants.SUCCESS_COLOR : BookingConstants.ERROR_COLOR)
+          .fontColor(this.isIncome ? $r('app.color.TEXT_INCOME_COLOR') : $r('app.color.TEXT_EXPENSE_COLOR'))
           .margin({ top: 4 })
       }
       .width('100%')
@@ -317,7 +319,7 @@ struct Statistics {
               Text("分类明细")
                 .fontSize(16)
                 .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
-                .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
+                .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
                 .width('100%')
                 .padding({ left: 16, top: 16, bottom: 8 })
               
@@ -332,14 +334,14 @@ struct Statistics {
               .width('100%')
               .divider({
                 strokeWidth: 0.5,
-                color: BookingConstants.BG_COLOR_GRAY,
+                color: $r('app.color.BORDER_COLOR'),
                 startMargin: 64,
                 endMargin: 16
               })
               .padding({ left: 16, right: 16, bottom: 16 })
             }
             .width('100%')
-            .backgroundColor(Color.White)
+            .backgroundColor($r('app.color.BG_COLOR_SECONDARY'))
             .borderRadius(8)
             .margin({ left: 16, right: 16, bottom: 16 })
           }
@@ -350,10 +352,13 @@ struct Statistics {
         .width('100%')
         .layoutWeight(1)
       }
+
+      Row()
+        .height(15)
     }
     .width('100%')
     .height('100%')
-    .backgroundColor(BookingConstants.BG_COLOR_WHITE)
+    .backgroundColor($r('app.color.BG_COLOR'))
   }
 
   /**
@@ -369,7 +374,7 @@ struct Statistics {
       
       Text('暂无记录')
         .fontSize(16)
-        .fontColor($r('sys.color.ohos_id_color_text_secondary'))
+        .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
     }
     .width('100%')
     .height('100%')
@@ -430,7 +435,7 @@ struct Statistics {
       }
       .width('100%')
       .height(BookingConstants.DEFAULT_CHART_HEIGHT)
-      .backgroundColor(Color.White)
+      .backgroundColor($r('app.color.BG_COLOR'))
       .borderRadius(8)
       .margin({ left: 16, right: 16, bottom: 16 })
     }
@@ -441,7 +446,7 @@ struct Statistics {
     Row() {
       Row() {
         // 获取并显示分类图标
-        Image(this.getCategoryIcon(item.icon))
+        Image(IconUtils.getCategoryIcon(item.icon))
           .width(40)
           .height(40)
           .margin({ right: 12 })
@@ -451,13 +456,13 @@ struct Statistics {
           Text(item.categoryName)
             .fontSize(16)
             .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
-            .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
+            .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
           
           // 显示百分比
           Row() {
             Text(`${this.calculatePercentage(item.amount, this.isIncome ? this.summary.income : this.summary.expense)}%`)
               .fontSize(14)
-              .fontColor(BookingConstants.TEXT_HINT_COLOR)
+              .fontColor($r('app.color.TEXT_HINT_COLOR'))
           }
           .margin({ top: 4 })
         }
@@ -470,14 +475,14 @@ struct Statistics {
         Text(`¥${item.amount.toFixed(2)}`)
           .fontSize(16)
           .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
-          .fontColor(this.isIncome ? BookingConstants.SUCCESS_COLOR : BookingConstants.ERROR_COLOR)
+          .fontColor(this.isIncome ? $r('app.color.TEXT_INCOME_COLOR') : $r('app.color.TEXT_EXPENSE_COLOR'))
       }
       .alignItems(HorizontalAlign.End)
     }
     .width('100%')
     .padding({ top: 12, bottom: 12 })
-    .backgroundColor(this.selectedPieIndex >= 0 && this.statistics[this.selectedPieIndex]?.categoryId === item.categoryId ? 
-      '#F5F5F5' : Color.White) // 高亮显示选中的分类
+    .backgroundColor(this.selectedPieIndex >= 0 && this.statistics[this.selectedPieIndex]?.categoryId === item.categoryId ?
+    $r('app.color.BG_COLOR') : $r('app.color.BG_COLOR_SECONDARY')) // 高亮显示选中的分类
     .borderRadius(4)
     .onClick(() => {
       // 找到当前点击项的索引
@@ -490,39 +495,6 @@ struct Statistics {
         }
       }
     })
-  }
-  
-  /**
-   * 获取分类图标资源
-   * @param iconKey 图标标识符
-   * @returns 图标资源
-   */
-  getCategoryIcon(icon: string): Resource {
-    switch (icon) {
-      case BookingConstants.ICON_SALARY:
-        return $r('app.media.ic_salary' + BookingConstants.CARTOON_NEW_SUFFIX);
-      case BookingConstants.ICON_BONUS:
-        return $r('app.media.ic_bonus' + BookingConstants.CARTOON_NEW_SUFFIX);
-      case BookingConstants.ICON_PARTTIME:
-        return $r('app.media.ic_parttime' + BookingConstants.CARTOON_NEW_SUFFIX);
-      case BookingConstants.ICON_INVESTMENT:
-        return $r('app.media.ic_investment' + BookingConstants.CARTOON_NEW_SUFFIX);
-      case BookingConstants.ICON_FOOD:
-        return $r('app.media.ic_food' + BookingConstants.CARTOON_NEW_SUFFIX);
-      case BookingConstants.ICON_TRANSPORT:
-        return $r('app.media.ic_transport' + BookingConstants.CARTOON_NEW_SUFFIX);
-      case BookingConstants.ICON_SHOPPING:
-        return $r('app.media.ic_shopping' + BookingConstants.CARTOON_NEW_SUFFIX);
-      case BookingConstants.ICON_MEDICAL:
-        return $r('app.media.ic_medical' + BookingConstants.CARTOON_NEW_SUFFIX);
-      case BookingConstants.ICON_HOUSING:
-        return $r('app.media.ic_housing' + BookingConstants.CARTOON_NEW_SUFFIX);
-      case BookingConstants.ICON_EDUCATION:
-        return $r('app.media.ic_education' + BookingConstants.CARTOON_NEW_SUFFIX);
-      case BookingConstants.ICON_MISC:
-      default:
-        return $r('app.media.ic_misc' + BookingConstants.CARTOON_NEW_SUFFIX);
-    }
   }
   
   drawPieChart(stats: CategoryStatistic[], total: number) {
@@ -641,7 +613,7 @@ struct Statistics {
       this.context.closePath();
       this.context.fill();
       
-      this.context.fillStyle = BookingConstants.TEXT_PRIMARY_COLOR;
+      this.context.fillStyle = '#333333';
       this.context.font = 'bold 20px sans-serif'; // 显著增大字体
       this.context.textAlign = 'center';
       this.context.textBaseline = 'middle';
