@@ -1,24 +1,27 @@
-import { router } from '@kit.ArkUI';
 import { BookingConstants } from '../constants/BookingConstants';
+import { router } from '@kit.ArkUI';
 
 /**
  * 我的页面
  */
+interface MenuItem {
+  title: string;
+  icon: Resource;
+  route?: string;
+  onClick?: () => void;
+}
+
 @Entry
 @Component
 struct Mine {
   @State userName: string = '用户名';
-  @State userAvatar: Resource = $r('app.media.ic_avatar_default');
+  @State userAvatar: Resource = $r('app.media.ic_user_cartoon_new'); 
+  @State themeCallbackId: number = -1;
   
-  private menuItems: Array<{
-    title: string,
-    icon: Resource,
-    route?: string,
-    onClick?: () => void
-  }> = [
+  private menuItems: Array<MenuItem> = [
     {
       title: '我的账单',
-      icon: $r('app.media.ic_bill_cartoon_new'),
+      icon: $r('app.media.ic_statistics_cartoon_new'),
       route: BookingConstants.STATISTICS_ROUTE
     },
     {
@@ -45,18 +48,6 @@ struct Mine {
   
   build() {
     Column() {
-      // 顶部导航栏
-      Row() {
-        Text('我的')
-          .fontSize(20)
-          .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
-          .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
-      }
-      .width('100%')
-      .height(50)
-      .padding({ left: 16, right: 16 })
-      .justifyContent(FlexAlign.Center)
-      
       // 用户信息区域
       Row() {
         Image(this.userAvatar)
@@ -80,57 +71,61 @@ struct Mine {
         .layoutWeight(1)
       }
       .width('100%')
+      .height('30%')
       .padding(16)
       .backgroundColor(Color.White)
-      .borderRadius(16)
+      .borderRadius(10)
       .margin({ top: 16, left: 16, right: 16 })
       
       // 菜单列表
-      List() {
-        ForEach(this.menuItems, (item) => {
-          ListItem() {
-            Row() {
+      Column() {
+        List() {
+          ForEach(this.menuItems, (item: MenuItem) => {
+            ListItem() {
               Row() {
-                Image(item.icon)
-                  .width(24)
-                  .height(24)
-                  .margin({ right: 12 })
+                Row() {
+                  Image(item.icon)
+                    .width(24)
+                    .height(24)
+                    .margin({ right: 12 })
+                  
+                  Text(item.title)
+                    .fontSize(16)
+                    .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
+                }
                 
-                Text(item.title)
-                  .fontSize(16)
-                  .fontColor(BookingConstants.TEXT_PRIMARY_COLOR)
+                Image($r('app.media.ic_right_cartoon_new'))
+                  .width(20)
+                  .height(20)
+                  .fillColor(BookingConstants.TEXT_HINT_COLOR)
               }
-              
-              Image($r('app.media.ic_right_cartoon'))
-                .width(20)
-                .height(20)
-                .fillColor(BookingConstants.TEXT_HINT_COLOR)
+              .width('100%')
+              .justifyContent(FlexAlign.SpaceBetween)
+              .padding({ top: 16, bottom: 16 })
             }
-            .width('100%')
-            .justifyContent(FlexAlign.SpaceBetween)
-            .padding({ top: 16, bottom: 16 })
-          }
-          .onClick(() => {
-            if (item.onClick) {
-              item.onClick();
-            } else if (item.route && item.route.length > 0) {
-              router.pushUrl({
-                url: item.route
-              });
-            }
+            .onClick(() => {
+              if (item.onClick) {
+                item.onClick();
+              } else if (item.route && item.route.length > 0) {
+                router.pushUrl({
+                  url: item.route
+                });
+              }
+            })
           })
+        }
+        .width('100%')
+        .divider({
+          strokeWidth: 0.5,
+          color: BookingConstants.BORDER_COLOR,
+          startMargin: 52,
+          endMargin: 16
         })
       }
       .width('100%')
       .backgroundColor(Color.White)
-      .borderRadius(16)
+      .borderRadius(10)
       .margin({ top: 16, left: 16, right: 16 })
-      .divider({
-        strokeWidth: 0.5,
-        color: BookingConstants.BG_COLOR_GRAY,
-        startMargin: 52,
-        endMargin: 16
-      })
       
       // 底部版本信息
       Column() {
@@ -147,6 +142,6 @@ struct Mine {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor(BookingConstants.BG_COLOR)
+    .backgroundColor(BookingConstants.MINT_BG_COLOR_WHITE)
   }
 }

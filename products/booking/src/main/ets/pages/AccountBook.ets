@@ -129,6 +129,12 @@ struct AccountBook {
     });
   }
 
+  goToMine() {
+    router.pushUrl({
+      url: BookingConstants.MINE_ROUTE
+    });
+  }
+
   async deleteRecord(record: RecordWithCategory) {
     try {
       if (record.id) {
@@ -466,6 +472,9 @@ struct AccountBook {
         .backgroundColor(Color.Transparent)
         .width(80)
         .height(80)
+        .onClick(() => {
+          this.goToMine();
+        })
       }
       .width('100%')
       .backgroundColor(Color.White)

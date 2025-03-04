@@ -4,6 +4,7 @@
     "pages/SystemCapabilitiesIndex",
     "pages/AccountBook",
     "pages/AddRecord",
-    "pages/Statistics"
+    "pages/Statistics",
+    "pages/Mine"
   ]
 }

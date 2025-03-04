@@ -174,7 +174,7 @@ struct AddRecord {
         // 顶部标题栏
         Row() {
           Button() {
-            Image($r('app.media.ic_back_cartoon_new'))
+            Image($r('app.media.ic_left_cartoon_new'))
               .width(30)
               .height(30)
           }

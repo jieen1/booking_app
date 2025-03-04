@@ -140,7 +140,7 @@ struct Statistics {
       // 顶部标题栏
       Row() {
         Button() {
-          Image($r('app.media.ic_back_cartoon_new'))
+          Image($r('app.media.ic_left_cartoon_new'))
             .width(30)
             .height(30)
             .fillColor(BookingConstants.TEXT_PRIMARY_COLOR)
@@ -159,7 +159,7 @@ struct Statistics {
         
         // 留出右侧平衡空间，确保标题居中
         Button() {
-          Image($r('app.media.ic_back_cartoon_new'))
+          Image($r('app.media.ic_left_cartoon_new'))
             .width(30)
             .height(30)
             .opacity(0)
@@ -203,7 +203,6 @@ struct Statistics {
           Image($r('app.media.ic_left_cartoon_new'))
             .width(30)
             .height(30)
-            .fillColor(BookingConstants.TEXT_SECONDARY_COLOR)
         }
         .backgroundColor(Color.Transparent)
         .onClick(() => {
@@ -225,7 +224,6 @@ struct Statistics {
           Image($r('app.media.ic_right_cartoon_new'))
             .width(30)
             .height(30)
-            .fillColor(BookingConstants.TEXT_SECONDARY_COLOR)
         }
         .backgroundColor(Color.Transparent)
         .onClick(() => {
@@ -237,7 +235,7 @@ struct Statistics {
         })
       }
       .width('100%')
-      .padding({ left: 16, right: 16, bottom: 12 })
+      .padding({ left: 20, right: 20, bottom: 12 })
       
       // 收入/支出切换
       Row() {

@@ -33,6 +33,11 @@ export class BookingConstants {
   static readonly STATISTICS_ROUTE: string = 'pages/Statistics';
 
   /**
+   * 我的页面路由路径
+   */
+  static readonly MINE_ROUTE: string = 'pages/Mine';
+
+  /**
    * 收入类型
    */
   static readonly INCOME_TYPE: number = 1;
