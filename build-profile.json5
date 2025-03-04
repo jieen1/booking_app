@@ -3,7 +3,7 @@
     "products": [
       {
         "name": "default",
-        "signingConfig": "config1",
+        "signingConfig": "config2",
         "compatibleSdkVersion": "5.0.1(13)",
         "runtimeOS": "HarmonyOS",
         "buildOption": {
@@ -34,6 +34,19 @@
           "profile": "C:\\Users\\jieen\\.ohos\\config\\config1_MyBookingApp_5XW88gCDY8IRvFo7nVWgX5iStK72oNDnsBRGFoSBdZc=.p7b",
           "signAlg": "SHA256withECDSA",
           "storeFile": "C:\\Users\\jieen\\.ohos\\config\\config1_MyBookingApp_5XW88gCDY8IRvFo7nVWgX5iStK72oNDnsBRGFoSBdZc=.p12"
+        }
+      },
+      {
+        "name": "config2",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\jieen\\.ohos\\config\\config2_booking_app_f5J30wnr0r-ko1hvFY_h9U2Jd9iWwysyGRciKrSTtdI=.cer",
+          "storePassword": "0000001BE25466A8EC8C3E121CF908CFCD3BFB1E4DBD46D6A062939FF381FCBC88EAE13FE613587F7F8C24",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001BF93293CE4816461678FB3187F0A4905608818E96243775391C0023623118717FF4B3F64F50CB4B",
+          "profile": "C:\\Users\\jieen\\.ohos\\config\\config2_booking_app_f5J30wnr0r-ko1hvFY_h9U2Jd9iWwysyGRciKrSTtdI=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\jieen\\.ohos\\config\\config2_booking_app_f5J30wnr0r-ko1hvFY_h9U2Jd9iWwysyGRciKrSTtdI=.p12"
         }
       }
     ]

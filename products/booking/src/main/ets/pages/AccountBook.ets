@@ -6,7 +6,7 @@ import { DBHelper } from '../database/DBHelper';
 import { CategoryModel } from '../model/CategoryModel';
 import { RecordModel } from '../model/RecordModel';
 import { RecordWithCategory } from '../model/RecordWithCategory';
-import { CustomAlertDialog } from '../components/CustomDialog';
+import { CustomAlertDialog, EditRecordDialog } from '../components/CustomDialog';
 
 @Entry
 @Component
@@ -19,17 +19,15 @@ struct AccountBook {
   @State categories: CategoryModel[] = [];
   
   // 编辑弹窗相关状态
-  @State editDialogShow: boolean = false;
   @State editAmount: string = '';
   @State editDescription: string = '';
   @State editDate: Date = new Date();
+  @State editDialogShow: boolean = false;
   @State selectedCategoryId: number = 0;
+  @State recordType: number = BookingConstants.RECORD_TYPE_EXPENSE;
   @State currentRecord: RecordWithCategory = new RecordWithCategory(new RecordModel(0, 0, 0, '', 0, 0),
     new CategoryModel(BookingConstants.EXPENSE_TYPE, "", DBHelper.getInstance().getResourceByKey(BookingConstants.ICON_MISC)));
 
-  // 控制返回行为
-  private allowBack: boolean = false;
-  
   // 自定义对话框控制器
   private deleteDialogController: CustomDialogController = new CustomDialogController({
     builder: CustomAlertDialog({
@@ -51,9 +49,26 @@ struct AccountBook {
     customStyle: true
   });
 
+  // 编辑对话框控制器
+  private editDialogController: CustomDialogController = new CustomDialogController({
+    builder: EditRecordDialog({
+      editAmount: this.editAmount,
+      editDescription: this.editDescription,
+      selectedCategoryId: this.selectedCategoryId,
+      recordType: this.recordType,
+      onConfirm: () => {
+        this.saveEditedRecord();
+      },
+      onCancel: () => {
+        console.info('取消编辑');
+      }
+    }),
+    alignment: DialogAlignment.Center,
+    autoCancel: true,
+    customStyle: true
+  });
+
   async aboutToAppear() {
-    // 禁用页面返回手势
-    this.allowBack = false;
     await this.loadData();
   }
 
@@ -139,7 +154,9 @@ struct AccountBook {
     this.editDescription = record.description || '';
     this.editDate = new Date(record.recordTime);
     this.selectedCategoryId = record.categoryId;
-    this.editDialogShow = true;
+    this.recordType = record.type;
+    
+    this.editDialogController.open();
   }
 
   async saveEditedRecord() {
@@ -161,7 +178,7 @@ struct AccountBook {
       }
 
       const updatedRecord: RecordModel = new RecordModel(
-        this.currentRecord.type,
+        this.recordType,
         this.selectedCategoryId,
         parseFloat(this.editAmount),
         this.editDescription,
@@ -170,7 +187,7 @@ struct AccountBook {
       );
 
       await DBHelper.getInstance().updateRecord(updatedRecord);
-      this.editDialogShow = false;
+      this.editDialogController.close();
       prompt.showToast({
         message: '更新成功',
         duration: 2000
@@ -191,15 +208,12 @@ struct AccountBook {
         Image($r('app.media.ic_edit_cartoon_new'))
           .width(28)
           .height(28)
-          .margin({ bottom: 4 })
         Text('编辑')
           .fontSize(12)
           .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
       }
-      .backgroundColor('#F5F5F5')
-      .borderRadius(8)
       .width(56)
-      .height(70)
+      .height(60)
       .justifyContent(FlexAlign.Center)
       .onClick(() => {
         this.showEditDialog(record);
@@ -209,15 +223,12 @@ struct AccountBook {
         Image($r('app.media.ic_delete_cartoon_new'))
           .width(28)
           .height(28)
-          .margin({ bottom: 4 })
         Text('删除')
           .fontSize(12)
           .fontColor(BookingConstants.TEXT_SECONDARY_COLOR)
       }
-      .backgroundColor('#F5F5F5')
-      .borderRadius(8)
       .width(56)
-      .height(70)
+      .height(60)
       .justifyContent(FlexAlign.Center)
       .onClick(() => {
         // 设置当前记录
@@ -228,9 +239,6 @@ struct AccountBook {
     }
     .width(120)
     .height(80)
-    .padding(4)
-    .backgroundColor('#F0F0F0')
-    .borderRadius(12)
     .justifyContent(FlexAlign.SpaceEvenly)
   }
 
@@ -467,6 +475,5 @@ struct AccountBook {
     .width('100%')
     .height('100%')
     .backgroundColor(BookingConstants.BG_COLOR_WHITE)
-
   }
 }
