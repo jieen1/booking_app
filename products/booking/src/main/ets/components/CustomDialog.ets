@@ -74,7 +74,7 @@ export struct CustomAlertDialog {
         Button(this.confirmText)
           .fontSize(16)
           .fontColor($r('app.color.WARNING_COLOR'))
-          .backgroundColor($r('app.color.BG_COLOR_SECONDARY'))
+          .backgroundColor($r('app.color.BG_COLOR'))
           .width('50%')
           .height(48)
           .onClick(() => {
@@ -117,14 +117,18 @@ export struct EditRecordDialog {
   // 取消回调
   onCancel?: () => void;
 
-  aboutToAppear() {
+  async aboutToAppear() {
     // 加载分类列表
-    this.loadCategories();
+    await this.loadCategories();
   }
 
   async loadCategories() {
     try {
-      this.categories = await DBHelper.getInstance().getAllCategories();
+      if (await DBHelper.getInstance().initDatabase()) {
+        this.categories = await DBHelper.getInstance().getAllCategories();
+      } else {
+        throw new Error("获取分类信息失败！");
+      }
     } catch (error) {
       console.error('加载分类失败:', error);
     }
@@ -150,7 +154,7 @@ export struct EditRecordDialog {
           .margin({ bottom: 8 })
           
         TextInput({ text: this.editAmount, placeholder: '请输入金额' })
-          .type(InputType.Number)
+          .type(InputType.NUMBER_DECIMAL)
           .fontSize(16)
           .placeholderFont({ size: 16 })
           .padding(12)
@@ -163,6 +167,7 @@ export struct EditRecordDialog {
           })
           .backgroundColor($r('app.color.BG_COLOR'))
           .width('100%')
+          .maxLength(14)
           .height(48)
           .onChange((value: string) => {
             this.editAmount = value;

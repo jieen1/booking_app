@@ -222,8 +222,8 @@ struct AddRecord {
               $r('app.color.TEXT_INCOME_COLOR') : $r('app.color.TEXT_EXPENSE_COLOR'))
               .fontWeight(BookingConstants.FONT_WEIGHT_BOLD)
               .backgroundColor(Color.Transparent)
-              .type(InputType.Number)
-              .maxLength(10)
+              .type(InputType.NUMBER_DECIMAL)
+              .maxLength(14)
               .onChange((value) => {
                 this.amount = value;
               })
