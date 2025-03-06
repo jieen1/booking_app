@@ -1,6 +1,6 @@
 import { BookingConstants } from '../constants/BookingConstants';
+import { CategoryDBHelper } from '../database/CategoryDBHelper';
 import { CategoryModel } from '../model/CategoryModel';
-import { DBHelper } from '../database/DBHelper';
 import { IconUtils } from '../utils/IconUtils';
 
 /**
@@ -124,8 +124,8 @@ export struct EditRecordDialog {
 
   async loadCategories() {
     try {
-      if (await DBHelper.getInstance().initDatabase()) {
-        this.categories = await DBHelper.getInstance().getAllCategories();
+      if (await CategoryDBHelper.getInstance().initDatabase()) {
+        this.categories = await CategoryDBHelper.getInstance().getAllCategories();
       } else {
         throw new Error("获取分类信息失败！");
       }

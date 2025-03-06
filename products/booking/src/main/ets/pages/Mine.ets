@@ -20,6 +20,11 @@ struct Mine {
   
   private menuItems: Array<MenuItem> = [
     {
+      title: '账本管理',
+      icon: $r('app.media.ic_misc_cartoon_new'),
+      route: BookingConstants.ACCOUNT_BOOK_LIST_ROUTE
+    },
+    {
       title: '我的账单',
       icon: $r('app.media.ic_statistics_cartoon_new'),
       route: BookingConstants.STATISTICS_ROUTE

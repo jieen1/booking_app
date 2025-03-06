@@ -13,7 +13,7 @@ export class AccountBookModel {
   name: string;
   
   /**
-   * 账本类型：1-现金账本, 2-银行卡, 3-支付宝, 4-微信, 5-其他
+   * 账本类型：1-现金账本, 2-银行卡, 3-支付宝, 4-微信, 5-股票  999-其他
    */
   type: number;
   

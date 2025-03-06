@@ -1,8 +1,11 @@
 import { router } from '@kit.ArkUI';
 import { BookingConstants } from '../constants/BookingConstants';
-import { DBHelper } from '../database/DBHelper';
+import { CategoryDBHelper } from '../database/CategoryDBHelper';
+import { RecordDBHelper } from '../database/RecordDBHelper';
+import { BookDBHelper } from '../database/BookDBHelper';
 import { DateUtils } from '../utils/DateUtils';
 import { IconUtils } from '../utils/IconUtils';
+import { AccountBookModel } from '../model/AccountBookModel';
 
 // 分类统计数据接口
 interface CategoryStatistic {
@@ -42,6 +45,9 @@ struct Statistics {
   @State isIncome: boolean = false;
   // 添加当前选中的分类索引
   @State selectedPieIndex: number = -1;
+  @State accountBooks: AccountBookModel[] = [];
+  @State selectedAccountId: number = 0;
+  @State showAccountSelector: boolean = false;
   
   private settings: RenderingContextSettings = new RenderingContextSettings(true)
   private context: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings)
@@ -49,16 +55,42 @@ struct Statistics {
   private colors: string[] = ['#FFA500', '#4CAF50', '#2196F3', '#9C27B0', '#E91E63', '#F44336', '#3F51B5', '#00BCD4'];
   private sectors: SectorInfo[] = [];
   
-  private dbHelper: DBHelper = DBHelper.getInstance();
+  private dbHelper: CategoryDBHelper = CategoryDBHelper.getInstance();
+  private bookDBHelper: BookDBHelper = BookDBHelper.getInstance();
   private tabs: string[] = ['月度统计', '年度统计'];
   
   aboutToAppear() {
-    this.loadData();
+    this.loadAccountBooks();
+  }
+  
+  async loadAccountBooks() {
+    try {
+      // 初始化账本数据库
+      await this.bookDBHelper.initDatabase();
+      
+      // 加载账本列表
+      this.accountBooks = await this.bookDBHelper.getAllAccountBooks();
+      
+      if (this.accountBooks.length > 0) {
+        // 默认选中第一个账本
+        const defaultAccount = this.accountBooks.find(account => account.isDefault === BookingConstants.ACCOUNT_IS_DEFAULT);
+        if (defaultAccount && defaultAccount.id !== undefined) {
+          this.selectedAccountId = defaultAccount.id;
+        } else if (this.accountBooks[0].id !== undefined) {
+          this.selectedAccountId = this.accountBooks[0].id;
+        }
+      }
+      
+      // 加载统计数据
+      this.loadData();
+    } catch (error) {
+      console.error('加载账本失败:', JSON.stringify(error));
+    }
   }
   
   onPageShow() {
     // 每次页面显示时重新加载数据
-    this.loadData();
+    this.loadAccountBooks();
   }
   
   onBackPress() {
@@ -77,12 +109,13 @@ struct Statistics {
         this.dbHelper.getStatisticsByCategory(
           this.isIncome ? BookingConstants.INCOME_TYPE : BookingConstants.EXPENSE_TYPE, 
           dateRange.startTime, 
-          dateRange.endTime
+          dateRange.endTime,
+          this.selectedAccountId
         ).then((stats) => {
           this.statistics = stats;
           
           // 加载收支统计
-          this.dbHelper.getSummary(dateRange.startTime, dateRange.endTime).then((summaryData) => {
+          RecordDBHelper.getInstance().getSummary(dateRange.startTime, dateRange.endTime, this.selectedAccountId).then((summaryData) => {
             this.summary = summaryData as SummaryData;
             this.isLoading = false;
           });
@@ -95,12 +128,13 @@ struct Statistics {
         this.dbHelper.getStatisticsByCategory(
           this.isIncome ? BookingConstants.INCOME_TYPE : BookingConstants.EXPENSE_TYPE, 
           startTime, 
-          endTime
+          endTime,
+          this.selectedAccountId
         ).then((stats) => {
           this.statistics = stats;
           
           // 加载收支统计
-          this.dbHelper.getSummary(startTime, endTime).then((summaryData) => {
+          RecordDBHelper.getInstance().getSummary(startTime, endTime, this.selectedAccountId).then((summaryData) => {
             this.summary = summaryData as SummaryData;
             this.isLoading = false;
           });
@@ -171,6 +205,29 @@ struct Statistics {
       }
       .width('100%')
       .padding({ left: 16, right: 16, top: 8, bottom: 8 })
+      
+      // 账本选择器
+      Row() {
+        if (this.accountBooks.length > 0) {
+          Row() {
+            Text(this.accountBooks.find(account => account.id === this.selectedAccountId)?.name || '默认账本')
+              .fontSize(16)
+              .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
+              .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
+            
+            Image($r('app.media.ic_left_cartoon_new'))
+              .width(20)
+              .height(20)
+              .margin({ left: 4 })
+          }
+          .onClick(() => {
+            this.showAccountBookSelector();
+          })
+        }
+      }
+      .width('100%')
+      .justifyContent(FlexAlign.Center)
+      .padding({ top: 8, bottom: 8 })
       
       // Tab选择
       Row() {
@@ -632,5 +689,17 @@ struct Statistics {
       return '0.0';
     }
     return (amount / total * 100).toFixed(1);
+  }
+  
+  // 显示账本选择器
+  showAccountBookSelector() {
+    this.showAccountSelector = true;
+  }
+  
+  // 选择账本
+  selectAccountBook(accountId: number) {
+    this.selectedAccountId = accountId;
+    this.showAccountSelector = false;
+    this.loadData();
   }
 }

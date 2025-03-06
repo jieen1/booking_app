@@ -13,7 +13,7 @@ struct Index {
       router.replaceUrl({
         url: BookingConstants.ACCOUNT_BOOK_ROUTE
       });
-    }, 500); // 短暂延迟确保页面已完全加载
+    }, 0); // 直接跳转，不再延迟
   }
 
   build() {

@@ -1,11 +1,14 @@
 import { router } from '@kit.ArkUI';
 import { BookingConstants } from '../constants/BookingConstants';
-import { DBHelper } from '../database/DBHelper';
 import { CategoryModel } from '../model/CategoryModel';
 import { RecordModel } from '../model/RecordModel';
 import { DateUtils } from '../utils/DateUtils';
 import prompt from '@ohos.promptAction';
 import { IconUtils } from '../utils/IconUtils';
+import { CategoryDBHelper } from '../database/CategoryDBHelper';
+import { RecordDBHelper } from '../database/RecordDBHelper';
+import { BookDBHelper } from '../database/BookDBHelper';
+import { AccountBookModel } from '../model/AccountBookModel';
 
 
 @Entry
@@ -18,13 +21,34 @@ struct AddRecord {
   @State description: string = '';
   @State recordDate: Date = new Date();
   @State showDatePicker: boolean = false;
-  private dbHelper: DBHelper = DBHelper.getInstance();
+  @State accountBooks: AccountBookModel[] = [];
+  @State selectedAccountId: number = 0;
+  @State showAccountBookSelector: boolean = false;
+  private dbHelper: CategoryDBHelper = CategoryDBHelper.getInstance();
+  private bookDBHelper: BookDBHelper = BookDBHelper.getInstance();
 
   async aboutToAppear() {
     console.info('[aboutToAppear] 页面即将显示，开始初始化');
 
     // 初始化数据库
     await this.dbHelper.initDatabase();
+    await this.bookDBHelper.initDatabase();
+
+    // 加载账本列表
+    try {
+      this.accountBooks = await this.bookDBHelper.getAllAccountBooks();
+      if (this.accountBooks.length > 0) {
+        // 默认选择默认账本
+        const defaultAccount = this.accountBooks.find(account => account.isDefault === BookingConstants.ACCOUNT_IS_DEFAULT);
+        if (defaultAccount && defaultAccount.id !== undefined) {
+          this.selectedAccountId = defaultAccount.id;
+        } else if (this.accountBooks[0].id !== undefined) {
+          this.selectedAccountId = this.accountBooks[0].id;
+        }
+      }
+    } catch (error) {
+      console.error('[aboutToAppear] 加载账本失败：', error);
+    }
 
     // 加载分类
     try {
@@ -105,19 +129,41 @@ struct AddRecord {
       return;
     }
 
+    if (this.selectedAccountId <= 0) {
+      AlertDialog.show({
+        title: '提示',
+        message: '请选择账本',
+        confirm: {
+          value: '确定',
+          action: () => {
+          }
+        }
+      });
+      return;
+    }
+
     // 创建记录对象
     const record = new RecordModel(
       this.selectedType,
       this.selectedCategory.id!,
       parseFloat(this.amount),
       this.description,
-      this.recordDate.getTime()
+      this.recordDate.getTime(),
+      this.selectedAccountId
     );
 
     // 保存记录
-    const result = await this.dbHelper.insertRecord(record);
+    const result = await RecordDBHelper.getInstance().insertRecord(record);
 
     if (result > 0) {
+      // 更新账本余额
+      const amount = parseFloat(this.amount);
+      if (this.selectedType === BookingConstants.INCOME_TYPE) {
+        await this.bookDBHelper.updateAccountBalance(this.selectedAccountId, amount);
+      } else {
+        await this.bookDBHelper.updateAccountBalance(this.selectedAccountId, -amount);
+      }
+      
       // 保存成功，返回上一页
       router.back();
     } else {
@@ -131,6 +177,15 @@ struct AddRecord {
         }
       });
     }
+  }
+
+  showAccountBookList() {
+    this.showAccountBookSelector = true;
+  }
+  
+  selectAccountBook(accountId: number): void {
+    this.selectedAccountId = accountId;
+    this.showAccountBookSelector = false;
   }
 
   build() {
@@ -234,6 +289,43 @@ struct AddRecord {
           .backgroundColor($r('app.color.BG_COLOR'))
           .margin({ left: 16, right: 16 })
           .borderRadius(8)
+
+          // 账本选择
+          Row() {
+            Text('账本')
+              .fontSize(16)
+              .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
+              .width(80)
+
+            if (this.accountBooks.length > 0) {
+              Row() {
+                Text(this.accountBooks.find(account => account.id === this.selectedAccountId)?.name)
+                  .fontSize(16)
+                  .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
+                  .layoutWeight(1)
+
+                Image($r('app.media.ic_left_cartoon_new'))
+                  .width(24)
+                  .height(24)
+                  .margin({ left: 8 })
+              }
+              .layoutWeight(1)
+            } else {
+              Text('请选择账本')
+                .fontSize(16)
+                .fontColor($r('app.color.TEXT_HINT_COLOR'))
+                .layoutWeight(1)
+            }
+          }
+          .width('100%')
+          .padding(16)
+          .backgroundColor($r('app.color.BG_COLOR'))
+          .margin({ left: 16, right: 16, top: 16 })
+          .borderRadius(8)
+          .onClick(() => {
+            // 显示账本选择弹窗
+            this.showAccountBookList();
+          })
 
           // 信息输入区域
           Column() {
@@ -429,6 +521,82 @@ struct AddRecord {
               .onClick(() => {
                 this.showDatePicker = false
               })
+          }
+          
+          // 账本选择弹窗
+          if (this.showAccountBookSelector) {
+            Column() {
+              // 遮罩层
+              Column()
+                .width('100%')
+                .height('100%')
+                .backgroundColor('#88000000')
+                .position({ x: 0, y: 0 })
+                .onClick(() => {
+                  this.showAccountBookSelector = false;
+                })
+              
+              // 选择器内容
+              Column() {
+                // 标题栏
+                Row() {
+                  Text('选择账本')
+                    .fontSize(18)
+                    .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
+                    .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
+                }
+                .width('100%')
+                .justifyContent(FlexAlign.Center)
+                .padding({ top: 16, bottom: 16 })
+                
+                // 账本列表
+                List() {
+                  ForEach(this.accountBooks, (account: AccountBookModel) => {
+                    ListItem() {
+                      Row() {
+                        Image(account.icon)
+                          .width(32)
+                          .height(32)
+                          .margin({ right: 16 })
+                        
+                        Text(account.name)
+                          .fontSize(16)
+                          .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
+                          .layoutWeight(1)
+                        
+                        if (account.id === this.selectedAccountId) {
+                          Image($r('app.media.ic_misc_cartoon_new'))
+                            .width(24)
+                            .height(24)
+                        }
+                      }
+                      .width('100%')
+                      .padding(16)
+                      .onClick(() => {
+                        if (account.id !== undefined) {
+                          this.selectAccountBook(account.id);
+                        }
+                      })
+                    }
+                  })
+                }
+                .divider({
+                  strokeWidth: 1,
+                  color: $r('app.color.BORDER_COLOR'),
+                  startMargin: 16,
+                  endMargin: 16
+                })
+                .layoutWeight(1)
+              }
+              .width('100%')
+              .height('50%')
+              .backgroundColor($r('app.color.BG_COLOR'))
+              .borderRadius({ topLeft: 16, topRight: 16 })
+              .position({ x: 0, y: '50%' })
+            }
+            .width('100%')
+            .height('100%')
+            .position({ x: 0, y: 0 })
           }
         }
         .width('100%')

@@ -5,6 +5,10 @@
     "pages/AccountBook",
     "pages/AddRecord",
     "pages/Statistics",
-    "pages/Mine"
+    "pages/Mine",
+    "pages/AccountBookListPage",
+    "pages/AccountBookEditPage",
+    "pages/AccountBookDetailPage",
+    "pages/TransferPage"
   ]
 }

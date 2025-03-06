@@ -21,31 +21,13 @@ export class BookingConstants {
    * 主路由路径
    */
   static readonly ACCOUNT_BOOK_ROUTE: string = 'pages/AccountBook';
-
-  /**
-   * 添加记录路由路径
-   */
   static readonly ADD_RECORD_ROUTE: string = 'pages/AddRecord';
-
-  /**
-   * 统计分析路由路径
-   */
   static readonly STATISTICS_ROUTE: string = 'pages/Statistics';
-
-  /**
-   * 我的页面路由路径
-   */
   static readonly MINE_ROUTE: string = 'pages/Mine';
-  
-  /**
-   * 账本管理页面路由路径
-   */
-  static readonly ACCOUNT_MANAGE_ROUTE: string = 'pages/AccountManage';
-  
-  /**
-   * 转账页面路由路径
-   */
-  static readonly TRANSFER_ROUTE: string = 'pages/Transfer';
+  static readonly ACCOUNT_BOOK_LIST_ROUTE: string = 'pages/AccountBookListPage';
+  static readonly ACCOUNT_BOOK_EDIT_ROUTE: string = 'pages/AccountBookEditPage';
+  static readonly ACCOUNT_BOOK_DETAIL_ROUTE: string = 'pages/AccountBookDetailPage';
+  static readonly TRANSFER_ROUTE: string = 'pages/TransferPage';
 
   /**
    * 收入类型
@@ -58,11 +40,17 @@ export class BookingConstants {
    */
   static readonly EXPENSE_TYPE: number = 2;
   static readonly RECORD_TYPE_EXPENSE: number = 2;
-  
+
   /**
    * 转账类型
    */
   static readonly TRANSFER_TYPE: number = 3;
+
+  /**
+   * 账本类型
+   */
+  static readonly BOOK_TYPE: number = 4;
+
 
   /**
    * 数据库名称
@@ -96,7 +84,8 @@ export class BookingConstants {
   static readonly ACCOUNT_TYPE_BANK_CARD: number = 2; // 银行卡
   static readonly ACCOUNT_TYPE_ALIPAY: number = 3;    // 支付宝
   static readonly ACCOUNT_TYPE_WECHAT: number = 4;    // 微信
-  static readonly ACCOUNT_TYPE_OTHER: number = 5;     // 其他
+  static readonly ACCOUNT_TYPE_STOCK: number = 5;    // 股票
+  static readonly ACCOUNT_TYPE_OTHER: number = 999;     // 其他
   
   /**
    * 账本状态
@@ -145,11 +134,5 @@ export class BookingConstants {
   static readonly ACCOUNT_BOOK_TYPE_ALIPAY: number = 3;   // 支付宝
   static readonly ACCOUNT_BOOK_TYPE_WECHAT: number = 4;   // 微信
   static readonly ACCOUNT_BOOK_TYPE_OTHER: number = 99;   // 其他
-  
-  /**
-   * 账本状态
-   */
-  static readonly ACCOUNT_IS_DEFAULT: number = 1;        // 默认账本
-  static readonly ACCOUNT_NOT_DEFAULT: number = 0;       // 非默认账本
 
 }

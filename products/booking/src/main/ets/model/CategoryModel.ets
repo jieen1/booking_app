@@ -35,3 +35,19 @@ export class CategoryModel {
     this.createTime = new Date().getTime();
   }
 }
+
+export interface DuplicateCategoryGroup {
+  keepId: number;
+  type: number;
+  name: string;
+  count: number;
+}
+
+/**
+ * 分类选项接口
+ */
+export interface CategoryOption {
+  type: number;
+  name: string;
+  icon: string;
+}

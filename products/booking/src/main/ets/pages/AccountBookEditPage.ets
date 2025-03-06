@@ -1,32 +1,25 @@
-/**
- * Copyright (c) 2023 Harmony OS App Project
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import router from '@ohos.router';
 import prompt from '@ohos.promptAction';
 import hilog from '@ohos.hilog';
-import { DBHelper } from '../database/DBHelper';
+import { BookDBHelper } from '../database/BookDBHelper';
 import { BookingConstants } from '../constants/BookingConstants';
 import { AccountBookModel } from '../model/AccountBookModel';
+import { RouteParam } from './AccountBookListPage';
+import { IconUtils } from '../utils/IconUtils';
+
+interface AccountTypeItem {
+  type: number;
+  name: string;
+  icon: Resource;
+}
 
 @Entry
 @Component
 export struct AccountBookEditPage {
-  @State accountBook: AccountBookModel = new AccountBookModel('', 0, 0, '');
+  @State accountBook: AccountBookModel = new AccountBookModel('', 0, 0, IconUtils.getResourceByKey(""));
   @State isNewAccount: boolean = true;
   @State isLoading: boolean = false;
-  @State accountTypes: Array<{ type: number, name: string, icon: Resource }> = [
+  @State accountTypes: Array<AccountTypeItem> = [
     { type: BookingConstants.ACCOUNT_BOOK_TYPE_CASH, name: '现金', icon: $r('app.media.ic_cash') },
     { type: BookingConstants.ACCOUNT_BOOK_TYPE_BANK, name: '银行卡', icon: $r('app.media.ic_bank') },
     { type: BookingConstants.ACCOUNT_BOOK_TYPE_ALIPAY, name: '支付宝', icon: $r('app.media.ic_alipay') },
@@ -34,11 +27,11 @@ export struct AccountBookEditPage {
     { type: BookingConstants.ACCOUNT_BOOK_TYPE_OTHER, name: '其他', icon: $r('app.media.ic_other') }
   ];
   @State selectedType: number = BookingConstants.ACCOUNT_BOOK_TYPE_CASH;
-  private dbHelper: DBHelper = DBHelper.getInstance();
+  private dbHelper: BookDBHelper = BookDBHelper.getInstance();
   
   aboutToAppear() {
     // 获取路由参数
-    const params = router.getParams();
+    const params = router.getParams() as RouteParam;
     const accountId = params?.accountId as number;
     
     if (accountId) {
@@ -139,6 +132,9 @@ export struct AccountBookEditPage {
   
   build() {
     Column() {
+
+      Row()
+        .height(20)
       // 标题栏
       TitleBar({ title: this.isNewAccount ? '添加账本' : '编辑账本' })
       
@@ -148,67 +144,104 @@ export struct AccountBookEditPage {
       } else {
         Column() {
           // 名称输入
-          FormItem({
-            label: '账本名称',
-            required: true,
-            content: TextInput({ text: this.accountBook.name })
+          Row() {
+            Text('账本名称')
+              .fontSize(16)
+              .fontWeight(FontWeight.Medium)
+              .width('30%')
+            
+            Text('*')
+              .fontSize(16)
+              .fontColor(Color.Red)
+              .margin({ left: 4 })
+            
+            TextInput({ text: this.accountBook.name })
               .height(50)
+              .width('65%')
               .backgroundColor(Color.White)
               .padding({ left: 8, right: 8 })
-              .onChange((value: string) => {
+              .onChange((value: string): void => {
                 this.accountBook.name = value;
               })
-          })
+          }
+          .width('90%')
+          .justifyContent(FlexAlign.SpaceBetween)
+          .alignItems(VerticalAlign.Center)
+          .padding({ top: 12, bottom: 12 })
           
           // 账本类型选择
-          FormItem({
-            label: '账本类型',
-            required: true,
-            content: Column() {
-              Grid() {
-                ForEach(this.accountTypes, (item) => {
-                  GridItem() {
-                    Column() {
-                      Image(item.icon)
-                        .width(40)
-                        .height(40)
-                      
-                      Text(item.name)
-                        .fontSize(14)
-                        .margin({ top: 8 })
-                        .fontColor(this.selectedType === item.type ? '#4CAF50' : '#333')
-                    }
-                    .width('100%')
-                    .height(80)
-                    .backgroundColor(this.selectedType === item.type ? '#E8F5E9' : Color.White)
-                    .borderRadius(8)
-                    .padding(8)
-                    .justifyContent(FlexAlign.Center)
-                    .onClick(() => {
-                      this.selectedType = item.type;
-                    })
-                  }
-                })
-              }
-              .columnsTemplate('1fr 1fr 1fr')
-              .rowsGap(10)
-              .columnsGap(10)
+          Column() {
+            Row() {
+              Text('账本类型')
+                .fontSize(16)
+                .fontWeight(FontWeight.Medium)
+              
+              Text('*')
+                .fontSize(16)
+                .fontColor(Color.Red)
+                .margin({ left: 4 })
             }
-          })
+            .width('90%')
+            .alignItems(VerticalAlign.Center)
+            .justifyContent(FlexAlign.Start)
+            .margin({ bottom: 8 })
+            
+            Grid() {
+              ForEach(this.accountTypes, (item: AccountTypeItem) => {
+                GridItem() {
+                  Column() {
+                    Image(item.icon)
+                      .width(40)
+                      .height(40)
+                    
+                    Text(item.name)
+                      .fontSize(14)
+                      .margin({ top: 8 })
+                      .fontColor(this.selectedType === item.type ? '#4CAF50' : '#333')
+                  }
+                  .width('100%')
+                  .height(80)
+                  .backgroundColor(this.selectedType === item.type ? '#E8F5E9' : Color.White)
+                  .borderRadius(8)
+                  .padding(8)
+                  .justifyContent(FlexAlign.Center)
+                  .onClick((): void => {
+                    this.selectedType = item.type;
+                  })
+                }
+              })
+            }
+            .columnsTemplate('1fr 1fr 1fr')
+            .rowsGap(10)
+            .columnsGap(10)
+            .width('90%')
+          }
+          .alignItems(HorizontalAlign.Start)
+          .width('100%')
+          .margin({ bottom: 16 })
           
           // 初始余额输入
           if (this.isNewAccount) {
-            FormItem({
-              label: '初始余额',
-              content: TextInput({ text: this.accountBook.balance.toString() })
+            Row() {
+              Text('初始余额')
+                .fontSize(16)
+                .fontWeight(FontWeight.Medium)
+                .width('30%')
+              
+              TextInput({ text: this.accountBook.balance.toString() })
                 .height(50)
+                .width('65%')
                 .backgroundColor(Color.White)
                 .padding({ left: 8, right: 8 })
                 .type(InputType.Number)
-                .onChange((value: string) => {
+                .onChange((value: string): void => {
                   this.accountBook.balance = parseFloat(value) || 0;
                 })
-            })
+            }
+            .width('90%')
+            .justifyContent(FlexAlign.SpaceBetween)
+            .alignItems(VerticalAlign.Center)
+            .padding({ top: 12, bottom: 12 })
           }
           
           // 提交按钮
@@ -225,6 +258,9 @@ export struct AccountBookEditPage {
         .padding(16)
         .layoutWeight(1)
       }
+
+      Row()
+        .height(15)
     }
     .width('100%')
     .height('100%')
@@ -260,38 +296,6 @@ struct TitleBar {
     .width('100%')
     .height(50)
     .padding({ left: 10, right: 10 })
-  }
-}
-
-@Component
-struct FormItem {
-  label: string;
-  required: boolean = false;
-  @BuilderParam content: () => void;
-  
-  build() {
-    Column() {
-      Row() {
-        if (this.required) {
-          Text('*')
-            .fontSize(16)
-            .fontColor(Color.Red)
-            .margin({ right: 4 })
-        }
-        
-        Text(this.label)
-          .fontSize(16)
-          .fontWeight(FontWeight.Medium)
-      }
-      .width('100%')
-      .alignItems(VerticalAlign.Center)
-      .margin({ bottom: 8 })
-      
-      this.content()
-    }
-    .alignItems(HorizontalAlign.Start)
-    .width('100%')
-    .margin({ bottom: 16 })
   }
 }
 
