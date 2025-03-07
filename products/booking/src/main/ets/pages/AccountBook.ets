@@ -11,6 +11,7 @@ import { RecordDBHelper } from '../database/RecordDBHelper';
 import { BookDBHelper } from '../database/BookDBHelper';
 import { IconUtils } from '../utils/IconUtils';
 import { AccountBookModel } from '../model/AccountBookModel';
+import { hilog } from '@kit.PerformanceAnalysisKit';
 
 @Entry
 @Component
@@ -227,24 +228,34 @@ struct AccountBook {
         return;
       }
 
+      // 创建更新后的记录对象
       const updatedRecord: RecordModel = new RecordModel(
         this.recordType,
         this.selectedCategoryId,
         parseFloat(this.editAmount),
         this.editDescription,
         this.editDate.getTime(),
-        this.currentRecord.id,
+        this.selectedAccountId,
+        Date.now(),
+        this.currentRecord.id
       );
 
-      await RecordDBHelper.getInstance().updateRecord(updatedRecord);
-      this.editDialogController.close();
-      prompt.showToast({
-        message: '更新成功',
-        duration: 2000
-      });
-      await this.loadData();
+      const result = await RecordDBHelper.getInstance().updateRecord(updatedRecord);
+      if (result > 0) {
+        this.editDialogController.close();
+        prompt.showToast({
+          message: '更新成功',
+          duration: 2000
+        });
+        await this.loadData();
+      } else {
+        prompt.showToast({
+          message: '更新失败',
+          duration: 2000
+        });
+      }
     } catch (error) {
-      console.error('saveEditedRecord error:', error);
+      hilog.error(0x0000, 'AccountBook', 'saveEditedRecord error: %{private}s', JSON.stringify(error));
       prompt.showToast({
         message: '更新失败',
         duration: 2000
@@ -533,24 +544,6 @@ struct AccountBook {
         .height(80)
         .onClick(() => {
           this.goToAddRecord();
-        })
-
-        Button() {
-          Column() {
-            Image($r('app.media.ic_account_book_cartoon'))
-              .width(24)
-              .height(24)
-              .margin({ bottom: 4 })
-            Text('账本')
-              .fontSize(12)
-              .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
-          }
-        }
-        .backgroundColor(Color.Transparent)
-        .width(80)
-        .height(80)
-        .onClick(() => {
-          this.goToAccountBookList();
         })
 
         Button() {

@@ -1,5 +1,5 @@
 import router from '@ohos.router';
-import prompt from '@ohos.promptAction';
+import promptAction from '@ohos.promptAction';
 import hilog from '@ohos.hilog';
 import { BookDBHelper } from '../database/BookDBHelper';
 import { BookingConstants } from '../constants/BookingConstants';
@@ -15,7 +15,7 @@ interface AccountTypeItem {
 
 @Entry
 @Component
-export struct AccountBookEditPage {
+struct AccountBookEditPage {
   @State accountBook: AccountBookModel = new AccountBookModel('', 0, 0, IconUtils.getResourceByKey(""));
   @State isNewAccount: boolean = true;
   @State isLoading: boolean = false;
@@ -32,7 +32,7 @@ export struct AccountBookEditPage {
   aboutToAppear() {
     // 获取路由参数
     const params = router.getParams() as RouteParam;
-    const accountId = params?.accountId as number;
+    const accountId = params?.accountId;
     
     if (accountId) {
       this.isNewAccount = false;
@@ -60,14 +60,14 @@ export struct AccountBookEditPage {
         this.accountBook = accountBook;
         this.selectedType = accountBook.type;
       } else {
-        prompt.showToast({
+        promptAction.showToast({
           message: '账本不存在'
         });
         setTimeout(() => router.back(), 2000);
       }
     } catch (err) {
       hilog.error(0x0000, 'AccountBookEditPage', 'Load account book failed: %{private}s', JSON.stringify(err));
-      prompt.showToast({
+      promptAction.showToast({
         message: '加载账本信息失败'
       });
     } finally {
@@ -81,7 +81,7 @@ export struct AccountBookEditPage {
   async saveAccountBook() {
     // 表单验证
     if (!this.accountBook.name || !this.accountBook.name.trim()) {
-      prompt.showToast({
+      promptAction.showToast({
         message: '请输入账本名称'
       });
       return;
@@ -106,23 +106,22 @@ export struct AccountBookEditPage {
         result = rowId > 0;
       } else {
         // 更新账本
-        // 这里需要实现更新账本的方法
-        result = true;
+        result = await this.dbHelper.updateAccountBook(this.accountBook);
       }
       
       if (result) {
-        prompt.showToast({
+        promptAction.showToast({
           message: this.isNewAccount ? '添加账本成功' : '修改账本成功'
         });
         setTimeout(() => router.back(), 1500);
       } else {
-        prompt.showToast({
+        promptAction.showToast({
           message: this.isNewAccount ? '添加账本失败' : '修改账本失败'
         });
       }
     } catch (err) {
       hilog.error(0x0000, 'AccountBookEditPage', 'Save account book failed: %{private}s', JSON.stringify(err));
-      prompt.showToast({
+      promptAction.showToast({
         message: this.isNewAccount ? '添加账本失败' : '修改账本失败'
       });
     } finally {
@@ -132,9 +131,9 @@ export struct AccountBookEditPage {
   
   build() {
     Column() {
-
       Row()
         .height(20)
+        
       // 标题栏
       TitleBar({ title: this.isNewAccount ? '添加账本' : '编辑账本' })
       
@@ -149,16 +148,21 @@ export struct AccountBookEditPage {
               .fontSize(16)
               .fontWeight(FontWeight.Medium)
               .width('30%')
-            
+
             Text('*')
               .fontSize(16)
               .fontColor(Color.Red)
               .margin({ left: 4 })
-            
+
             TextInput({ text: this.accountBook.name })
               .height(50)
               .width('65%')
-              .backgroundColor(Color.White)
+              .backgroundColor($r('app.color.BG_COLOR_SECONDARY'))
+              .border({
+                width: 1,
+                color: $r('app.color.BORDER_COLOR'),
+                radius: 8
+              })
               .padding({ left: 8, right: 8 })
               .onChange((value: string): void => {
                 this.accountBook.name = value;
@@ -168,14 +172,14 @@ export struct AccountBookEditPage {
           .justifyContent(FlexAlign.SpaceBetween)
           .alignItems(VerticalAlign.Center)
           .padding({ top: 12, bottom: 12 })
-          
+
           // 账本类型选择
           Column() {
             Row() {
               Text('账本类型')
                 .fontSize(16)
                 .fontWeight(FontWeight.Medium)
-              
+
               Text('*')
                 .fontSize(16)
                 .fontColor(Color.Red)
@@ -183,9 +187,8 @@ export struct AccountBookEditPage {
             }
             .width('90%')
             .alignItems(VerticalAlign.Center)
-            .justifyContent(FlexAlign.Start)
-            .margin({ bottom: 8 })
-            
+            .margin({ bottom: 8, left: 8 })
+
             Grid() {
               ForEach(this.accountTypes, (item: AccountTypeItem) => {
                 GridItem() {
@@ -193,15 +196,15 @@ export struct AccountBookEditPage {
                     Image(item.icon)
                       .width(40)
                       .height(40)
-                    
+
                     Text(item.name)
                       .fontSize(14)
                       .margin({ top: 8 })
-                      .fontColor(this.selectedType === item.type ? '#4CAF50' : '#333')
+                      .fontColor(this.selectedType === item.type ? $r('app.color.TEXT_PRIMARY_COLOR') : $r('app.color.TEXT_SECONDARY_COLOR'))
                   }
                   .width('100%')
                   .height(80)
-                  .backgroundColor(this.selectedType === item.type ? '#E8F5E9' : Color.White)
+                  .backgroundColor(this.selectedType === item.type ? $r('app.color.BG_COLOR_SECONDARY') : $r('app.color.BG_COLOR'))
                   .borderRadius(8)
                   .padding(8)
                   .justifyContent(FlexAlign.Center)
@@ -218,8 +221,9 @@ export struct AccountBookEditPage {
           }
           .alignItems(HorizontalAlign.Start)
           .width('100%')
+          .height('50%')
           .margin({ bottom: 16 })
-          
+
           // 初始余额输入
           if (this.isNewAccount) {
             Row() {
@@ -227,11 +231,11 @@ export struct AccountBookEditPage {
                 .fontSize(16)
                 .fontWeight(FontWeight.Medium)
                 .width('30%')
-              
+
               TextInput({ text: this.accountBook.balance.toString() })
                 .height(50)
                 .width('65%')
-                .backgroundColor(Color.White)
+                .backgroundColor($r('app.color.BG_COLOR'))
                 .padding({ left: 8, right: 8 })
                 .type(InputType.Number)
                 .onChange((value: string): void => {
@@ -243,28 +247,27 @@ export struct AccountBookEditPage {
             .alignItems(VerticalAlign.Center)
             .padding({ top: 12, bottom: 12 })
           }
-          
+
           // 提交按钮
           Button('保存')
-            .width('90%')
+            .width('50%')
             .height(50)
-            .backgroundColor('#4CAF50')
+            .backgroundColor($r('app.color.SUCCESS_COLOR'))
             .fontColor(Color.White)
             .borderRadius(8)
-            .margin({ top: 40 })
+            .margin({ top: 40, bottom: 20 })
+            .fontSize(16)
+            .fontWeight(FontWeight.Medium)
             .onClick(() => this.saveAccountBook())
         }
         .width('100%')
+        .height('100%')
         .padding(16)
-        .layoutWeight(1)
       }
-
-      Row()
-        .height(15)
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#F5F5F5')
+    .backgroundColor($r('app.color.BG_COLOR'))
   }
 }
 

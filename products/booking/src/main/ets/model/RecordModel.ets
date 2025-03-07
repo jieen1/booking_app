@@ -43,7 +43,8 @@ export class RecordModel {
   accountBookId: number = 1; // 默认为1，表示默认账本
   
   constructor(type: number, categoryId: number, amount: number, 
-              description: string, recordTime: number, accountBookId: number = 1, id?: number) {
+              description: string, recordTime: number, accountBookId: number = 1, 
+              createTime: number = new Date().getTime(), id?: number) {
     this.id = id;
     this.type = type;
     this.categoryId = categoryId;
@@ -51,6 +52,6 @@ export class RecordModel {
     this.description = description;
     this.recordTime = recordTime;
     this.accountBookId = accountBookId;
-    this.createTime = new Date().getTime();
+    this.createTime = createTime;
   }
 }

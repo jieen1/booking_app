@@ -573,4 +573,32 @@ export class BookDBHelper {
       return [];
     }
   }
+
+  /**
+   * 更新账本信息
+   * @param accountBook 账本数据
+   */
+  public async updateAccountBook(accountBook: AccountBookModel): Promise<boolean> {
+    if (!accountBook || accountBook.id === undefined) {
+      console.error('更新账本失败: 无效的账本数据');
+      return false;
+    }
+
+    try {
+      const valuesBucket: dataRdb.ValuesBucket = {
+        name: accountBook.name,
+        type: accountBook.type,
+        icon: IconUtils.getIconKeyByTypeAndName(BookingConstants.BOOK_TYPE, accountBook.type)
+      };
+      
+      const predicates = new dataRdb.RdbPredicates(BookingConstants.TABLE_ACCOUNT_BOOK);
+      predicates.equalTo('id', accountBook.id);
+      
+      const count = await this.connection?.update(valuesBucket, predicates);
+      return count !== undefined && count > 0;
+    } catch (err) {
+      console.error('更新账本信息失败: ' + JSON.stringify(err));
+      return false;
+    }
+  }
 }

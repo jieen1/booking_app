@@ -23,7 +23,8 @@ export class RecordWithCategory extends RecordModel {
   
   constructor(record: RecordModel, category: CategoryModel) {
     super(record.type, record.categoryId, record.amount, 
-      record.description, record.recordTime, record.id);
+      record.description, record.recordTime, record.accountBookId,
+      record.createTime, record.id);
     this.category = category;
     
     if (category) {

@@ -212,10 +212,8 @@ export class RecordDBHelper {
 
           // 创建记录对象
           const record = new RecordModel(
-            type, categoryId, amount, description, recordTime, accountBookId
+            type, categoryId, amount, description, recordTime, accountBookId, createTime, id
           );
-          record.id = id;
-          record.createTime = createTime;
 
           // 创建类别对象
           const category = new CategoryModel(

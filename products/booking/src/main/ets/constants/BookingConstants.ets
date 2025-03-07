@@ -126,6 +126,11 @@ export class BookingConstants {
   static readonly EMPTY_ICON: string = 'app.media.ic_empty' + BookingConstants.CARTOON_NEW_SUFFIX; // 空图标资源
 
   /**
+   * 下拉图标
+   */
+  static readonly ICON_DOWN: string = 'app.media.ic_down_cartoon_new';
+
+  /**
    * 账本类型
    */
   static readonly ACCOUNT_BOOK_TYPE_DEFAULT: number = 0;  // 默认账本
