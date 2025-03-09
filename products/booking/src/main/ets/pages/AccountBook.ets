@@ -15,7 +15,7 @@ import { hilog } from '@kit.PerformanceAnalysisKit';
 
 @Entry
 @Component
-struct AccountBook {
+export default struct AccountBook {
   @State records: RecordWithCategory[] = [];
   @State income: number = 0;
   @State expense: number = 0;
@@ -507,67 +507,6 @@ struct AccountBook {
       .layoutWeight(1)
       .padding({ left: 16, right: 16 })
       .lanes(this.currentBreakpoint === 'sm' ? 1 : 2)
-
-      // 底部操作栏
-      Row() {
-        Button() {
-          Column() {
-            Image($r('app.media.ic_statistics_cartoon_new'))
-              .width(24)
-              .height(24)
-              .margin({ bottom: 4 })
-            Text($r('app.string.statistics'))
-              .fontSize(12)
-              .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
-          }
-        }
-        .backgroundColor(Color.Transparent)
-        .width(80)
-        .height(80)
-        .onClick(() => {
-          this.goToStatistics();
-        })
-
-        Button() {
-          Column() {
-            Image($r('app.media.ic_add_cartoon_new'))
-              .width(50)
-              .height(50)
-            Text($r('app.string.add_record'))
-              .fontSize(12)
-              .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
-              .margin({ top: 4 })
-          }
-        }
-        .backgroundColor(Color.Transparent)
-        .width(80)
-        .height(80)
-        .onClick(() => {
-          this.goToAddRecord();
-        })
-
-        Button() {
-          Column() {
-            Image($r('app.media.ic_profile_cartoon'))
-              .width(24)
-              .height(24)
-              .margin({ bottom: 4 })
-            Text($r('app.string.mine'))
-              .fontSize(12)
-              .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
-          }
-        }
-        .backgroundColor(Color.Transparent)
-        .width(80)
-        .height(80)
-        .onClick(() => {
-          this.goToMine();
-        })
-      }
-      .width('100%')
-      .backgroundColor($r('app.color.BG_COLOR'))
-      .justifyContent(FlexAlign.SpaceAround)
-      .shadow({ radius: 5, color: '#0D000000', offsetY: -2 })
 
       // 账本选择器
       if (this.showAccountSelector) {

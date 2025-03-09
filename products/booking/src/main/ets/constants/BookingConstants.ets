@@ -20,6 +20,7 @@ export class BookingConstants {
   /**
    * 主路由路径
    */
+  static readonly HOME_PAGE_ROUTE: string = 'pages/HomePage';
   static readonly ACCOUNT_BOOK_ROUTE: string = 'pages/AccountBook';
   static readonly ADD_RECORD_ROUTE: string = 'pages/AddRecord';
   static readonly STATISTICS_ROUTE: string = 'pages/Statistics';

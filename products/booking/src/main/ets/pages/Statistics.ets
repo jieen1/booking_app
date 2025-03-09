@@ -31,7 +31,7 @@ interface SectorInfo {
 
 @Entry
 @Component
-struct Statistics {
+export default struct Statistics {
   @State selectedType: number = BookingConstants.EXPENSE_TYPE;
   @State isLoading: boolean = false;
   @State currentTab: number = 0; // 0: 月度, 1: 年度

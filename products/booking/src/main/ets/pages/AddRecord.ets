@@ -13,7 +13,7 @@ import { AccountBookModel } from '../model/AccountBookModel';
 
 @Entry
 @Component
-struct AddRecord {
+export default struct AddRecord {
   @State selectedType: number = BookingConstants.EXPENSE_TYPE;
   @State categories: CategoryModel[] = [];
   @State selectedCategory: CategoryModel | null = null;

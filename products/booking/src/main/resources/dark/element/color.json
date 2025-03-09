@@ -14,11 +14,11 @@
     },
     {
       "name": "TEXT_PRIMARY_COLOR",
-      "value": "#E0E0E0"
+      "value": "#ffffff"
     },
     {
       "name": "TEXT_SECONDARY_COLOR",
-      "value": "#B0B0B0"
+      "value": "#808080"
     },
     {
       "name": "TEXT_HINT_COLOR",
@@ -47,6 +47,10 @@
     {
       "name": "BG_COLOR",
       "value": "#121212"
+    },
+    {
+      "name": "BG_COLOR_TAB",
+      "value": "#222222"
     },
     {
       "name": "BG_COLOR_SECONDARY",

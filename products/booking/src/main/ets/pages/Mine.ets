@@ -13,7 +13,7 @@ interface MenuItem {
 
 @Entry
 @Component
-struct Mine {
+export default struct Mine {
   @State userName: string = '用户名';
   @State userAvatar: Resource = $r('app.media.ic_user_cartoon_new'); 
   @State themeCallbackId: number = -1;

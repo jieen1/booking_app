@@ -46,19 +46,23 @@
     },
     {
       "name": "BG_COLOR",
-      "value": "#e5f7f5"
+      "value": "#ffffff"
+    },
+    {
+      "name": "BG_COLOR_TAB",
+      "value": "#F1F3F5"
     },
     {
       "name": "BG_COLOR_SECONDARY",
-      "value": "#a5c7c5"
+      "value": "#ffffff"
     },
     {
       "name": "BG_INCOME_COLOR",
-      "value": "#c0ecfe"
+      "value": "#ffffff"
     },
     {
       "name": "BG_EXPENSE_COLOR",
-      "value": "#FFF8F5"
+      "value": "#ffffff"
     },
     {
       "name": "SUCCESS_COLOR",

@@ -107,6 +107,26 @@
     {
       "name": "edit_record",
       "value": "编辑记录"
+    },
+    {
+      "name": "tab_bar1",
+      "value": "主页"
+    },
+    {
+      "name": "tab_bar2",
+      "value": "账单"
+    },
+    {
+      "name": "tab_bar3",
+      "value": "记账"
+    },
+    {
+      "name": "tab_bar4",
+      "value": "统计"
+    },
+    {
+      "name": "tab_bar5",
+      "value": "我的"
     }
   ]
 }
