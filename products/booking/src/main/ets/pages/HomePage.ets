@@ -8,6 +8,7 @@ import { CategoryDBHelper } from '../database/CategoryDBHelper';
 import { CategoryModel } from '../model/CategoryModel';
 import { IconUtils } from '../utils/IconUtils';
 import { RecordModel } from '../model/RecordModel';
+import { AccountBookModel } from '../model/AccountBookModel';
 
 interface GeneratedTypeLiteralInterface_1 {
   x: string;
@@ -36,6 +37,7 @@ export default struct HomePage {
   @State selectedCategory: CategoryModel | null = null;
   @State selectedAccountId: number = 1;
   @State selectedAccountName: string = '';
+  @State accountBooks: AccountBookModel[] = [];
   @State assetTrendData: Array<GeneratedTypeLiteralInterface_1> = [];
   @State assetDistribution: Array<GeneratedTypeLiteralInterface_2> = [
     {name: '现金账户', value: 35, color: '#4080FF'},
@@ -149,6 +151,24 @@ export default struct HomePage {
 
       // 生成资产趋势数据（示例数据）
       this.generateAssetTrendData();
+
+      // 加载账本列表
+      try {
+        this.accountBooks = await this.bookDBHelper.getAllAccountBooks();
+        if (this.accountBooks.length > 0) {
+          // 默认选择默认账本
+          const defaultAccount = this.accountBooks.find(account => account.isDefault === BookingConstants.ACCOUNT_IS_DEFAULT);
+          if (defaultAccount && defaultAccount.id !== undefined) {
+            this.selectedAccountId = defaultAccount.id;
+            this.selectedAccountName = defaultAccount.name;
+          } else if (this.accountBooks[0].id !== undefined) {
+            this.selectedAccountId = this.accountBooks[0].id;
+            this.selectedAccountName = this.accountBooks[0].name;
+          }
+        }
+      } catch (error) {
+        console.error('[aboutToAppear] 加载账本失败：', error);
+      }
 
       // 加载分类
       try {
@@ -374,6 +394,12 @@ export default struct HomePage {
           .fontSize(16)
           .fontWeight(FontWeight.Medium)
           .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
+
+        Blank()
+
+        Text(`${this.selectedAccountName}`)
+          .fontSize(14)
+          .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
       }
       .width('100%')
       .padding({ left: 16, right: 16, top: 8, bottom: 8 })
@@ -430,8 +456,8 @@ export default struct HomePage {
           .textAlign(TextAlign.Center)
           .border({width: 1, color: $r('app.color.BORDER_COLOR')})
           .width('90%')
-          .height(60)
-          .margin({ bottom: 16 })
+          .height(50)
+          .margin({ bottom: 4 })
           .onChange((value) => {
             this.amount = value;
           })
@@ -455,7 +481,7 @@ export default struct HomePage {
               }
               .width(60)
               .height(70)
-              .margin(8)
+              .margin({ right: 8, bottom: 4, left: 8, top: 4})
               .padding(4)
               .borderRadius(8)
               .backgroundColor(this.selectedCategory?.id === category.id ?
@@ -482,8 +508,8 @@ export default struct HomePage {
           .fontSize(18)
           .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
           .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
-          .backgroundColor($r('app.color.BG_COLOR_SECONDARY'))
-          .margin({ top: 20, bottom: 16 })
+          .backgroundColor($r('app.color.SUCCESS_COLOR'))
+          .margin({ top: 10, bottom: 8 })
           .borderRadius(25)
           .onClick(() => {
             this.saveRecord();

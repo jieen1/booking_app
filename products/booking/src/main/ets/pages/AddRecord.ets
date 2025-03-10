@@ -285,7 +285,7 @@ export default struct AddRecord {
           }
           .width('100%')
           .justifyContent(FlexAlign.Center)
-          .padding({ top: 20, bottom: 20, left: 20 })
+          .padding({ top: 20, bottom: 10, left: 20 })
           .backgroundColor($r('app.color.BG_COLOR'))
           .margin({ left: 16, right: 16 })
           .borderRadius(8)
@@ -320,7 +320,7 @@ export default struct AddRecord {
           .width('100%')
           .padding(16)
           .backgroundColor($r('app.color.BG_COLOR'))
-          .margin({ left: 16, right: 16, top: 16 })
+          .margin({ left: 16, right: 16, top: 10 })
           .borderRadius(8)
           .onClick(() => {
             // 显示账本选择弹窗
@@ -504,7 +504,7 @@ export default struct AddRecord {
               .fontSize(18)
               .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
               .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
-              .backgroundColor($r('app.color.BG_COLOR_SECONDARY'))
+              .backgroundColor($r('app.color.SUCCESS_COLOR'))
               .margin({ top: 20, bottom: 16 })
               .borderRadius(25)
               .onClick(() => {

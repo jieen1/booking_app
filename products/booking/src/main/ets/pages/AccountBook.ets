@@ -492,6 +492,7 @@ export default struct AccountBook {
               })
               .margin({ bottom: 6 })
             }
+            .margin({right: this.currentBreakpoint === 'sm' ? 0 : 16})
             .swipeAction({
               end: {
                 builder: this.itemEnd(record),

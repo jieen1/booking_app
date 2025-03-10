@@ -34,7 +34,7 @@
     },
     {
       "name": "BORDER_COLOR",
-      "value": "#3E3E3E"
+      "value": "#8f8f8f"
     },
     {
       "name": "BORDER_INCOME_COLOR",
@@ -58,11 +58,11 @@
     },
     {
       "name": "BG_INCOME_COLOR",
-      "value": "#636363"
+      "value": "#323232"
     },
     {
       "name": "BG_EXPENSE_COLOR",
-      "value": "#aa6f40"
+      "value": "#323232"
     },
     {
       "name": "SUCCESS_COLOR",
