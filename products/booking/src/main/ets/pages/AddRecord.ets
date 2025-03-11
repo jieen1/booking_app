@@ -428,7 +428,7 @@ export default struct AddRecord {
                 .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
                 .width(80)
 
-              Text(DateUtils.formatDate(this.recordDate, 'yyyy-MM-dd'))
+              Text(DateUtils.formatDate(this.recordDate, 'YYYY-MM-DD'))
                 .fontSize(16)
                 .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
                 .layoutWeight(1)
@@ -587,8 +587,6 @@ export default struct AddRecord {
       .height('100%')
       .backgroundColor($r('app.color.BG_COLOR'))
       .scrollBar(BarState.Off)
-      .width('100%')
-      .height('100%')
 
       Row()
         .height(15)

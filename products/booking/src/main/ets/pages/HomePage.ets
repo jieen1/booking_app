@@ -279,573 +279,435 @@ export default struct HomePage {
   }
 
   build() {
-    Column() {
-      Row()
-        .height(20)
-
-      // 顶部标题栏
-      Row() {
-        Text('总资产')
-          .fontSize(16)
-          .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
-
-        Blank()
-
-        Text(`${this.currentMonth}`)
-          .fontSize(14)
-          .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
-      }
-      .width('100%')
-      .padding({ left: 16, right: 16, top: 16 })
-
-      Row() {
-        // 总资产显示
-        Column() {
-          Text(`¥${this.totalAssets.toFixed(2)}`)
-            .fontSize(28)
-            .fontWeight(FontWeight.Bold)
-            .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
-            .margin({ top: 8, bottom: 8 })
-
-          Row() {
-            Image($r('app.media.ic_arrow_up'))
-              .width(16)
-              .height(16)
-              .margin({ right: 4 })
-
-            Text(`较上月 +${this.growthRate}%`)
-              .fontSize(14)
-              .fontColor('#4CAF50')
-          }
-
-          // 月收支信息
-          Row() {
-            Column() {
-              Text($r('app.string.income'))
-                .fontSize(14)
-                .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
-
-                .margin({ bottom: 4 })
-
-              Text(`¥${this.monthlyIncome.toFixed(2)}`)
-                .fontSize(20)
-                .fontWeight(FontWeight.Medium)
-                .fontColor($r('app.color.TEXT_INCOME_COLOR'))
-            }
-            .layoutWeight(1)
-            .alignItems(HorizontalAlign.Center)
-
-            Divider()
-              .vertical(true)
-              .height(40)
-              .color($r('sys.color.ohos_id_color_list_separator'))
-
-            Column() {
-              Text($r('app.string.expense'))
-                .fontSize(14)
-                .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
-                .margin({ bottom: 4 })
-
-              Text(`¥${this.monthlyExpense.toFixed(2)}`)
-                .fontSize(20)
-                .fontWeight(FontWeight.Medium)
-                .fontColor($r('app.color.TEXT_EXPENSE_COLOR'))
-            }
-            .layoutWeight(1)
-            .alignItems(HorizontalAlign.Center)
-
-            Divider()
-              .vertical(true)
-              .height(40)
-              .color($r('sys.color.ohos_id_color_list_separator'))
-
-            Column() {
-              Text($r('app.string.balance'))
-                .fontSize(14)
-                .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
-                .margin({ bottom: 4 })
-
-              Text(`¥${this.monthlyBalance.toFixed(2)}`)
-                .fontSize(20)
-                .fontWeight(FontWeight.Medium)
-                .fontColor(this.monthlyBalance >= 0 ? $r('app.color.TEXT_INCOME_COLOR') : $r('app.color.TEXT_EXPENSE_COLOR'))
-            }
-            .layoutWeight(1)
-            .alignItems(HorizontalAlign.Center)
-          }
-          .width('100%')
-          .padding({ top: 16, bottom: 16 })
-        }
-        .alignItems(HorizontalAlign.Start)
-        .width('100%')
-        // .padding({ left: 16, right: 16 })
-      }
-      .height(150)
-      .width('95%')
-      .borderRadius(16)
-      .backgroundColor($r('app.color.BG_COLOR_SECONDARY'))
-      .padding(10)
-      .margin({ bottom: 16 })
-      .shadow(ShadowStyle.OUTER_DEFAULT_SM)
-
-
-      // 快速记账区域
-      Row() {
-        Text('快速记账')
-          .fontSize(16)
-          .fontWeight(FontWeight.Medium)
-          .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
-
-        Blank()
-
-        Text(`${this.selectedAccountName}`)
-          .fontSize(14)
-          .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
-      }
-      .width('100%')
-      .padding({ left: 16, right: 16, top: 8, bottom: 8 })
+    Scroll() {
       Column() {
+        Row()
+          .height(20)
 
-        // 收入/支出切换
+        // 顶部标题栏
         Row() {
-          Row() {
-            Button('支出')
-              .onClick(() => {
-                this.switchType(BookingConstants.EXPENSE_TYPE);
-              })
-              .width(80)
-              .height(36)
-              .fontSize(16)
-              .fontWeight(this.selectedType === BookingConstants.EXPENSE_TYPE ?
-              BookingConstants.FONT_WEIGHT_MEDIUM : BookingConstants.FONT_WEIGHT_NORMAL)
-              .fontColor(this.selectedType === BookingConstants.EXPENSE_TYPE ?
-              $r('app.color.BG_COLOR') : $r('app.color.TEXT_PRIMARY_COLOR'))
-              .backgroundColor(this.selectedType === BookingConstants.EXPENSE_TYPE ?
-              $r('app.color.PRIMARY_COLOR') : $r('app.color.BG_COLOR'))
-              .borderRadius(18)
-              .margin({ right: 16 })
+          Text('总资产')
+            .fontSize(16)
+            .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
 
-            Button('收入')
-              .onClick(() => {
-                this.switchType(BookingConstants.INCOME_TYPE);
-              })
-              .width(80)
-              .height(36)
-              .fontSize(16)
-              .fontWeight(this.selectedType === BookingConstants.INCOME_TYPE ?
-              BookingConstants.FONT_WEIGHT_MEDIUM : BookingConstants.FONT_WEIGHT_NORMAL)
-              .fontColor(this.selectedType === BookingConstants.INCOME_TYPE ?
-              $r('app.color.BG_COLOR') : $r('app.color.TEXT_PRIMARY_COLOR'))
-              .backgroundColor(this.selectedType === BookingConstants.INCOME_TYPE ?
-              $r('app.color.SUCCESS_COLOR') : $r('app.color.BG_COLOR'))
-              .borderRadius(18)
-          }
-          .width('100%')
-          .justifyContent(FlexAlign.Center)
-          .padding({ top: 8, bottom: 16 })
+          Blank()
+
+          Text(`${this.currentMonth}`)
+            .fontSize(14)
+            .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
         }
         .width('100%')
-
-        // 金额输入框
-        TextInput({ placeholder: '0.00' })
-          .type(InputType.NUMBER_DECIMAL)
-          .placeholderColor($r('app.color.TEXT_SECONDARY_COLOR'))
-          .placeholderFont({ size: 24 })
-          .fontSize(24)
-          .fontWeight(FontWeight.Medium)
-          .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
-          .textAlign(TextAlign.Center)
-          .border({width: 1, color: $r('app.color.BORDER_COLOR')})
-          .width('90%')
-          .height(50)
-          .margin({ bottom: 4 })
-          .onChange((value) => {
-            this.amount = value;
-          })
+        .padding({ left: 16, right: 16, top: 16 })
 
         Row() {
-
-          Button('当天')
-            .onClick(() => {
-              this.recordDate = new Date();
-            })
-            .width(60)
-            .height(40)
-            .fontSize(14)
-            .margin(10)
-            .backgroundColor(DateUtils.getDateStr(this.recordDate.getTime()) == DateUtils.getDateStr(new Date().getTime()) ? $r('app.color.SUCCESS_COLOR') : $r('app.color.BG_COLOR'))
-
-          Button('昨天')
-            .onClick(() => {
-              this.recordDate = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
-            })
-            .width(60)
-            .height(40)
-            .fontSize(14)
-            .margin(10)
-            .backgroundColor(DateUtils.getDateStr(this.recordDate.getTime()) == DateUtils.getDateStr(new Date().getTime() - 24 * 60 * 60 * 1000) ? $r('app.color.SUCCESS_COLOR') : $r('app.color.BG_COLOR'))
-
-          Button('前天')
-            .onClick(() => {
-              this.recordDate = new Date(new Date().getTime() - 24 * 60 * 60 * 2 * 1000);
-            })
-            .width(60)
-            .height(40)
-            .fontSize(14)
-            .margin(10)
-            .backgroundColor(DateUtils.getDateStr(this.recordDate.getTime()) == DateUtils.getDateStr(new Date().getTime() - 24 * 60 * 60 * 1000 * 2) ? $r('app.color.SUCCESS_COLOR') : $r('app.color.BG_COLOR'))
-
-        }
-
-        // 平铺显示分类
-        Scroll() {
-          Flex({ wrap: FlexWrap.Wrap, justifyContent: FlexAlign.Start }) {
-            ForEach(this.categories, (category: CategoryModel) => {
-              Column() {
-                Image(IconUtils.getCategoryIcon(category.icon))
-                  .width(40)
-                  .height(40)
-                  .margin({ bottom: 2 })
-
-                Text(category.name)
-                  .fontSize(12)
-                  .fontColor(this.selectedCategory?.id === category.id ?
-                  $r('app.color.TEXT_PRIMARY_COLOR') : $r('app.color.TEXT_SECONDARY_COLOR'))
-                  .maxLines(1)
-                  .textOverflow({ overflow: TextOverflow.Ellipsis })
-              }
-              .width(60)
-              .height(60)
-              .margin(4)
-              .padding(2)
-              .borderRadius(8)
-              .backgroundColor(this.selectedCategory?.id === category.id ?
-              $r('app.color.BG_COLOR_SECONDARY') : Color.Transparent)
-              .border({
-                width: this.selectedCategory?.id === category.id ? 1 : 0,
-                color: $r('app.color.BORDER_COLOR')
-              })
-              .onClick(() => {
-                this.selectedCategory = category;
-                console.info(`选择分类: ${category.name}, ID: ${category.id}`);
-              })
-            })
-          }
-          .padding(8)
-        }
-        .height(160)
-        .scrollBar(BarState.Off)
-
-        // 保存按钮
-        Button('保存')
-          .width('90%')
-          .height(50)
-          .fontSize(18)
-          .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
-          .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
-          .backgroundColor($r('app.color.SUCCESS_COLOR'))
-          .margin({ top: 10, bottom: 8 })
-          .borderRadius(25)
-          .onClick(() => {
-            this.saveRecord();
-          })
-      }
-      .width('95%')
-      .borderRadius(16)
-      .backgroundColor($r('app.color.BG_COLOR_SECONDARY'))
-      .padding({ bottom: 16 })
-      .shadow(ShadowStyle.OUTER_DEFAULT_SM)
-
-      // 财务概览标题
-      Row() {
-        Text('财务概览')
-          .fontSize(16)
-          .fontWeight(FontWeight.Medium)
-          .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
-
-        Blank()
-
-        Text('查看全部 >')
-          .fontSize(14)
-          .fontColor('#2196F3')
-      }
-      .width('100%')
-      .padding({ left: 16, right: 16, top: 16, bottom: 8 })
-
-      // 图表区域（水平滚动）
-      Swiper() {
-        // 资产趋势图
-        Column() {
-          Row() {
-            Text('资产趋势')
-              .fontSize(16)
+          // 总资产显示
+          Column() {
+            Text(`¥${this.totalAssets.toFixed(2)}`)
+              .fontSize(28)
+              .fontWeight(FontWeight.Bold)
               .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
+              .margin({ top: 8, bottom: 8 })
 
-            Blank()
-
-            Image($r('app.media.ic_fullscreen'))
-              .width(20)
-              .height(20)
-          }
-          .width('100%')
-          .padding({ bottom: 8 })
-
-          // 趋势图（简化版）
-          Stack() {
-            Polyline()
-              .width('100%')
-              .height('100%')
-              .points(this.assetTrendData.map((item, index) => {
-                let a: GeneratedTypeLiteralInterface_1 = {
-                  x: (index * (300 / (this.assetTrendData.length - 1))) + "",
-                  y: 150 - (item.y - 110000) / 200
-                };
-                return a;
-              }))
-              .stroke('#2196F3')
-              .strokeWidth(2)
-              .fillOpacity(0.1)
-              .fill('#E3F2FD')
-
-            // X轴标签
             Row() {
-              ForEach(this.assetTrendData, (item: GeneratedTypeLiteralInterface_1) => {
-                Text(item.x)
-                  .fontSize(12)
+              Image($r('app.media.ic_arrow_up'))
+                .width(16)
+                .height(16)
+                .margin({ right: 4 })
+
+              Text(`较上月 +${this.growthRate}%`)
+                .fontSize(14)
+                .fontColor('#4CAF50')
+            }
+
+            // 月收支信息
+            Row() {
+              Column() {
+                Text($r('app.string.income'))
+                  .fontSize(14)
                   .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
-                  .layoutWeight(1)
-                  .textAlign(TextAlign.Center)
-              })
+
+                  .margin({ bottom: 4 })
+
+                Text(`¥${this.monthlyIncome.toFixed(2)}`)
+                  .fontSize(20)
+                  .fontWeight(FontWeight.Medium)
+                  .fontColor($r('app.color.TEXT_INCOME_COLOR'))
+              }
+              .layoutWeight(1)
+              .alignItems(HorizontalAlign.Center)
+
+              Divider()
+                .vertical(true)
+                .height(40)
+                .color($r('sys.color.ohos_id_color_list_separator'))
+
+              Column() {
+                Text($r('app.string.expense'))
+                  .fontSize(14)
+                  .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
+                  .margin({ bottom: 4 })
+
+                Text(`¥${this.monthlyExpense.toFixed(2)}`)
+                  .fontSize(20)
+                  .fontWeight(FontWeight.Medium)
+                  .fontColor($r('app.color.TEXT_EXPENSE_COLOR'))
+              }
+              .layoutWeight(1)
+              .alignItems(HorizontalAlign.Center)
+
+              Divider()
+                .vertical(true)
+                .height(40)
+                .color($r('sys.color.ohos_id_color_list_separator'))
+
+              Column() {
+                Text($r('app.string.balance'))
+                  .fontSize(14)
+                  .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
+                  .margin({ bottom: 4 })
+
+                Text(`¥${this.monthlyBalance.toFixed(2)}`)
+                  .fontSize(20)
+                  .fontWeight(FontWeight.Medium)
+                  .fontColor(this.monthlyBalance >= 0 ? $r('app.color.TEXT_INCOME_COLOR') : $r('app.color.TEXT_EXPENSE_COLOR'))
+              }
+              .layoutWeight(1)
+              .alignItems(HorizontalAlign.Center)
             }
             .width('100%')
-            .position({ x: 0, y: '100%' })
+            .padding({ top: 16, bottom: 16 })
           }
+          .alignItems(HorizontalAlign.Start)
           .width('100%')
-          .height(150)
-          .backgroundColor($r('app.color.BG_COLOR'))
-          .padding(16)
+          // .padding({ left: 16, right: 16 })
         }
-        .width('100%')
-        .height(220)
-        .backgroundColor($r('app.color.BG_COLOR_SECONDARY'))
+        .height(150)
+        .width('95%')
         .borderRadius(16)
-        .margin({ left: 16, right: 16 })
+        .backgroundColor($r('app.color.BG_COLOR_SECONDARY'))
+        .padding(10)
+        .margin({ bottom: 16 })
+        .shadow(ShadowStyle.OUTER_DEFAULT_SM)
 
-        // 资产分布图
+
+
         Column() {
+          // 快速记账区域
           Row() {
-            Text('资产分布')
+            Text('快速记账')
               .fontSize(16)
+              .fontWeight(FontWeight.Medium)
               .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
 
             Blank()
 
-            Image($r('app.media.ic_fullscreen'))
-              .width(20)
-              .height(20)
+            Text(`${this.selectedAccountName}`)
+              .fontSize(14)
+              .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
           }
           .width('100%')
-          .padding({ bottom: 8 })
+          .padding({ left: 16, right: 16, top: 8, bottom: 8 })
+          Column() {
 
-          // 饼图（简化版）
-          Row() {
-            // 左侧饼图
-            Stack() {
-              // 简化的饼图表示
-              Circle()
-                .width(120)
-                .height(120)
-                .fill('#4080FF')
-                .opacity(0.8)
+            // 收入/支出切换
+            Row() {
+              Row() {
+                Button('支出')
+                  .onClick(() => {
+                    this.switchType(BookingConstants.EXPENSE_TYPE);
+                  })
+                  .width(80)
+                  .height(36)
+                  .fontSize(16)
+                  .fontWeight(this.selectedType === BookingConstants.EXPENSE_TYPE ?
+                  BookingConstants.FONT_WEIGHT_MEDIUM : BookingConstants.FONT_WEIGHT_NORMAL)
+                  .fontColor(this.selectedType === BookingConstants.EXPENSE_TYPE ?
+                  $r('app.color.BG_COLOR') : $r('app.color.TEXT_PRIMARY_COLOR'))
+                  .backgroundColor(this.selectedType === BookingConstants.EXPENSE_TYPE ?
+                  $r('app.color.PRIMARY_COLOR') : $r('app.color.BG_COLOR'))
+                  .borderRadius(18)
+                  .margin({ right: 16 })
 
-              Circle()
-                .width(120)
-                .height(120)
-                .fill('#00C853')
-                .opacity(0.8)
-                .clip(new Rect({
-                  width: 60, height: 120
-                }))
-
-              Circle()
-                .width(120)
-                .height(120)
-                .fill('#FFA500')
-                .opacity(0.8)
-                .clip(new Rect({
-                  width: 60, height: 60
-                }))
-
-              Circle()
-                .width(120)
-                .height(120)
-                .fill('#9C27B0')
-                .opacity(0.8)
-                .clip(new Rect({
-                  width: 30, height: 60
-                }))
+                Button('收入')
+                  .onClick(() => {
+                    this.switchType(BookingConstants.INCOME_TYPE);
+                  })
+                  .width(80)
+                  .height(36)
+                  .fontSize(16)
+                  .fontWeight(this.selectedType === BookingConstants.INCOME_TYPE ?
+                  BookingConstants.FONT_WEIGHT_MEDIUM : BookingConstants.FONT_WEIGHT_NORMAL)
+                  .fontColor(this.selectedType === BookingConstants.INCOME_TYPE ?
+                  $r('app.color.BG_COLOR') : $r('app.color.TEXT_PRIMARY_COLOR'))
+                  .backgroundColor(this.selectedType === BookingConstants.INCOME_TYPE ?
+                  $r('app.color.SUCCESS_COLOR') : $r('app.color.BG_COLOR'))
+                  .borderRadius(18)
+              }
+              .width('100%')
+              .justifyContent(FlexAlign.Center)
+              .padding({ top: 8, bottom: 16 })
             }
-            .width(120)
-            .height(120)
+            .width('100%')
 
-            // 右侧图例
+            // 金额输入框
+            TextInput({ placeholder: '0.00' })
+              .type(InputType.NUMBER_DECIMAL)
+              .placeholderColor($r('app.color.TEXT_SECONDARY_COLOR'))
+              .placeholderFont({ size: 24 })
+              .fontSize(24)
+              .fontWeight(FontWeight.Medium)
+              .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
+              .textAlign(TextAlign.Center)
+              .border({width: 1, color: $r('app.color.BORDER_COLOR')})
+              .width('90%')
+              .height(50)
+              .margin({ bottom: 4 })
+              .onChange((value) => {
+                this.amount = value;
+              })
+
+            Row() {
+
+              Button('当天')
+                .onClick(() => {
+                  this.recordDate = new Date();
+                })
+                .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
+                .width(60)
+                .height(40)
+                .fontSize(14)
+                .margin(10)
+                .backgroundColor(DateUtils.getDateStr(this.recordDate.getTime()) == DateUtils.getDateStr(new Date().getTime()) ? $r('app.color.SUCCESS_COLOR') : $r('app.color.BG_COLOR'))
+
+              Button('昨天')
+                .onClick(() => {
+                  this.recordDate = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+                })
+                .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
+                .width(60)
+                .height(40)
+                .fontSize(14)
+                .margin(10)
+                .backgroundColor(DateUtils.getDateStr(this.recordDate.getTime()) == DateUtils.getDateStr(new Date().getTime() - 24 * 60 * 60 * 1000) ? $r('app.color.SUCCESS_COLOR') : $r('app.color.BG_COLOR'))
+
+              Button('前天')
+                .onClick(() => {
+                  this.recordDate = new Date(new Date().getTime() - 24 * 60 * 60 * 2 * 1000);
+                })
+                .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
+                .width(60)
+                .height(40)
+                .fontSize(14)
+                .margin(10)
+                .backgroundColor(DateUtils.getDateStr(this.recordDate.getTime()) == DateUtils.getDateStr(new Date().getTime() - 24 * 60 * 60 * 1000 * 2) ? $r('app.color.SUCCESS_COLOR') : $r('app.color.BG_COLOR'))
+
+            }
+
+            // 平铺显示分类
+            Flex({ wrap: FlexWrap.Wrap, justifyContent: FlexAlign.Start }) {
+              ForEach(this.categories, (category: CategoryModel) => {
+                Column() {
+                  Image(IconUtils.getCategoryIcon(category.icon))
+                    .width(40)
+                    .height(40)
+                    .margin({ bottom: 2 })
+
+                  Text(category.name)
+                    .fontSize(12)
+                    .fontColor(this.selectedCategory?.id === category.id ?
+                    $r('app.color.TEXT_PRIMARY_COLOR') : $r('app.color.TEXT_SECONDARY_COLOR'))
+                    .maxLines(1)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
+                }
+                .width(60)
+                .height(60)
+                .margin(4)
+                .padding(2)
+                .borderRadius(8)
+                .backgroundColor(this.selectedCategory?.id === category.id ?
+                $r('app.color.BG_COLOR_SECONDARY') : Color.Transparent)
+                .border({
+                  width: this.selectedCategory?.id === category.id ? 1 : 0,
+                  color: $r('app.color.BORDER_COLOR')
+                })
+                .onClick(() => {
+                  this.selectedCategory = category;
+                  console.info(`选择分类: ${category.name}, ID: ${category.id}`);
+                })
+              })
+            }
+            .padding(8)
+
+            // 保存按钮
+            Button('保存')
+              .width('90%')
+              .height(50)
+              .fontSize(18)
+              .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
+              .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
+              .backgroundColor($r('app.color.SUCCESS_COLOR'))
+              .margin({ top: 10, bottom: 8 })
+              .borderRadius(25)
+              .onClick(() => {
+                this.saveRecord();
+              })
+          }
+          .width('95%')
+          .borderRadius(16)
+          .backgroundColor($r('app.color.BG_COLOR_SECONDARY'))
+          .padding({ bottom: 16 })
+          .shadow(ShadowStyle.OUTER_DEFAULT_SM)
+
+          // 财务概览标题
+          Row() {
+            Text('财务概览')
+              .fontSize(16)
+              .fontWeight(FontWeight.Medium)
+              .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
+
+            Blank()
+
+            Text('查看全部 >')
+              .fontSize(14)
+              .fontColor('#2196F3')
+          }
+          .width('100%')
+          .padding({ left: 16, right: 16, top: 16, bottom: 8 })
+
+          // 图表区域（水平滚动）
+          Swiper() {
+            // 支出分类
             Column() {
-              ForEach(this.assetDistribution, (item: GeneratedTypeLiteralInterface_2) => {
-                Row() {
-                  Circle()
-                    .width(10)
-                    .height(10)
-                    .fill(item.color)
+              Row() {
+                Text('支出分类')
+                  .fontSize(16)
+                  .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
+                  .margin({ left: 16 })
+
+                Blank()
+
+                Image($r('app.media.ic_fullscreen'))
+                  .width(20)
+                  .height(20)
+              }
+              .width('100%')
+              .padding({ bottom: 8 })
+
+              // 分类标签
+              Row() {
+                ForEach(['餐饮', '购物', '交通', '居住'], (item: string) => {
+                  Text(item)
+                    .fontSize(14)
+                    .fontColor(item === '餐饮' ? '#FFFFFF' : $r('app.color.TEXT_PRIMARY_COLOR'))
+                    .backgroundColor(item === '餐饮' ? '#2196F3' : '#F5F5F5')
+                    .borderRadius(16)
+                    .padding({ left: 12, right: 12, top: 6, bottom: 6 })
                     .margin({ right: 8 })
+                })
+              }
+              .width('100%')
+              .padding({ bottom: 16 })
 
-                  Text(item.name)
-                    .fontSize(14)
-                    .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
-                    .layoutWeight(1)
+              // 简化的柱状图
+              Column() {
+                Row() {
+                  Column()
+                    .width(30)
+                    .height(80)
+                    .backgroundColor('#F44336')
+                    .borderRadius({ topLeft: 4, topRight: 4 })
 
-                  Text(`${item.value}%`)
-                    .fontSize(14)
-                    .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
+                  Column()
+                    .width(30)
+                    .height(60)
+                    .backgroundColor('#4CAF50')
+                    .borderRadius({ topLeft: 4, topRight: 4 })
+                    .margin({ left: 16 })
+
+                  Column()
+                    .width(30)
+                    .height(40)
+                    .backgroundColor('#2196F3')
+                    .borderRadius({ topLeft: 4, topRight: 4 })
+                    .margin({ left: 16 })
+
+                  Column()
+                    .width(30)
+                    .height(20)
+                    .backgroundColor('#FFC107')
+                    .borderRadius({ topLeft: 4, topRight: 4 })
+                    .margin({ left: 16 })
                 }
                 .width('100%')
-                .margin({ bottom: 8 })
-              })
+                .alignItems(VerticalAlign.Bottom)
+
+                Row() {
+                  Text('餐饮')
+                    .fontSize(12)
+                    .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
+                    .width(30)
+                    .textAlign(TextAlign.Center)
+                    .margin({ left: 16 })
+
+                  Text('购物')
+                    .fontSize(12)
+                    .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
+                    .width(30)
+                    .textAlign(TextAlign.Center)
+                    .margin({ left: 16 })
+
+                  Text('交通')
+                    .fontSize(12)
+                    .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
+                    .width(30)
+                    .textAlign(TextAlign.Center)
+                    .margin({ left: 16 })
+
+                  Text('居住')
+                    .fontSize(12)
+                    .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
+                    .width(30)
+                    .textAlign(TextAlign.Center)
+                    .margin({ left: 16 })
+                }
+                .width('100%')
+                .margin(8)
+              }
+              .width('100%')
+              .padding(16)
             }
-            .layoutWeight(1)
-            .margin({ left: 16 })
-            .alignItems(HorizontalAlign.Start)
+            .width('100%')
+            .height(220)
+            .backgroundColor($r('app.color.BG_COLOR'))
+            .borderRadius(16)
+            .margin({ left: 10, right: 10 })
           }
-          .width('100%')
-          .padding(16)
-        }
-        .width('100%')
-        .height(220)
-        .backgroundColor($r('app.color.BG_COLOR_SECONDARY'))
-        .borderRadius(16)
-        .margin({ left: 16, right: 16 })
-
-        // 支出分类
-        Column() {
-          Row() {
-            Text('支出分类')
-              .fontSize(16)
-              .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
-
-            Blank()
-
-            Image($r('app.media.ic_fullscreen'))
-              .width(20)
-              .height(20)
-          }
-          .width('100%')
-          .padding({ bottom: 8 })
-
-          // 分类标签
-          Row() {
-            ForEach(['餐饮', '购物', '交通', '居住'], (item: string) => {
-              Text(item)
-                .fontSize(14)
-                .fontColor(item === '餐饮' ? '#FFFFFF' : $r('app.color.TEXT_PRIMARY_COLOR'))
-                .backgroundColor(item === '餐饮' ? '#2196F3' : '#F5F5F5')
-                .borderRadius(16)
-                .padding({ left: 12, right: 12, top: 6, bottom: 6 })
-                .margin({ right: 8 })
-            })
-          }
-          .width('100%')
+          .indicator(true)
+          .indicatorStyle({
+            selectedColor: '#2196F3',
+            color: '#BDBDBD',
+            size: 8,
+            mask: true
+          })
+          .loop(true)
+          .height(220)
+          .margin({ bottom: 16 })
+          .width('95%')
+          .borderRadius(16)
+          .backgroundColor($r('app.color.BG_COLOR_SECONDARY'))
           .padding({ bottom: 16 })
-
-          // 简化的柱状图
-          Column() {
-            Row() {
-              Column()
-                .width(30)
-                .height(80)
-                .backgroundColor('#F44336')
-                .borderRadius({ topLeft: 4, topRight: 4 })
-
-              Column()
-                .width(30)
-                .height(60)
-                .backgroundColor('#4CAF50')
-                .borderRadius({ topLeft: 4, topRight: 4 })
-                .margin({ left: 16 })
-
-              Column()
-                .width(30)
-                .height(40)
-                .backgroundColor('#2196F3')
-                .borderRadius({ topLeft: 4, topRight: 4 })
-                .margin({ left: 16 })
-
-              Column()
-                .width(30)
-                .height(20)
-                .backgroundColor('#FFC107')
-                .borderRadius({ topLeft: 4, topRight: 4 })
-                .margin({ left: 16 })
-            }
-            .width('100%')
-            .alignItems(VerticalAlign.Bottom)
-
-            Row() {
-              Text('餐饮')
-                .fontSize(12)
-                .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
-                .width(30)
-                .textAlign(TextAlign.Center)
-
-              Text('购物')
-                .fontSize(12)
-                .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
-                .width(30)
-                .textAlign(TextAlign.Center)
-                .margin({ left: 16 })
-
-              Text('交通')
-                .fontSize(12)
-                .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
-                .width(30)
-                .textAlign(TextAlign.Center)
-                .margin({ left: 16 })
-
-              Text('居住')
-                .fontSize(12)
-                .fontColor($r('app.color.TEXT_SECONDARY_COLOR'))
-                .width(30)
-                .textAlign(TextAlign.Center)
-                .margin({ left: 16 })
-            }
-            .width('100%')
-            .margin({ top: 8 })
-          }
-          .width('100%')
-          .padding(16)
+          .shadow(ShadowStyle.OUTER_DEFAULT_SM)
         }
         .width('100%')
-        .height(220)
-        .backgroundColor($r('app.color.BG_COLOR'))
-        .borderRadius(16)
-        .margin({ left: 16, right: 16 })
+
+        Row()
+          .height(65)
       }
-      .indicator(true)
-      .indicatorStyle({
-        selectedColor: '#2196F3',
-        color: '#BDBDBD',
-        size: 8,
-        mask: true
-      })
-      .loop(true)
-      .height(220)
-      .margin({ bottom: 16 })
-      .width('95%')
-      .borderRadius(16)
-      .backgroundColor($r('app.color.BG_COLOR_SECONDARY'))
-      .padding({ bottom: 16 })
-      .shadow(ShadowStyle.OUTER_DEFAULT_SM)
+      .width('100%')
+      .backgroundColor($r('app.color.BG_COLOR'))
     }
-    .width('100%')
-    .height('100%')
-    .backgroundColor($r('app.color.BG_COLOR'))
+    .scrollBar(BarState.Off)
+    .scrollable(ScrollDirection.Vertical) // 显式设置滚动方向
+    .edgeEffect(EdgeEffect.Spring) // 添加边缘效果增强滚动反馈
   }
 }

@@ -561,7 +561,7 @@ export default struct AccountBook {
       }
 
       Row()
-        .height(15)
+        .height(65)
     }
     .width('100%')
     .height('100%')

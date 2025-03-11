@@ -1,4 +1,3 @@
-import TabBarItem from '../common/TabBarItem';
 import { CommonConstants } from '../constants/CommonConstants';
 import HomePage from '../pages/HomePage';
 import AccountBook from '../pages/AccountBook';
@@ -7,71 +6,108 @@ import Statistics from '../pages/Statistics';
 import Mine from '../pages/Mine';
 
 /**
- * 应用入口页面，直接跳转到记账本页面
+ * 应用入口页面
  */
 @Entry
 @Component
 struct Index {
-  @State currentIndex: number = 0
+  @State currentIndex: number = 0;
   @StorageLink('mainBreakpoint') currentBreakpoint: string = CommonConstants.BREAKPOINTS_INITIALIZE_NAME;
-  private onTabChange = (index: number) => {
-    this.currentIndex = index
-  }
+  private pathStack: NavPathStack = new NavPathStack();
 
-  aboutToAppear() {
+  @Builder
+  CustomBottomBar() {
+    Row() {
+      ForEach([0, 1, 2, 3, 4], (index: number) => {
+        Column() {
+          if (index === 0) {
+            this.TabBuilder(index, $r('app.string.tab_bar1'), $r('app.media.ic_home'), $r('app.media.ic_home_active'));
+          } else if (index === 1) {
+            this.TabBuilder(index, $r('app.string.tab_bar2'), $r('app.media.ic_bill'), $r('app.media.ic_bill_active'));
+          } else if (index === 2) {
+            this.TabBuilder(index, $r('app.string.tab_bar3'), $r('app.media.ic_add'), $r('app.media.ic_add_active'));
+          } else if (index === 3) {
+            this.TabBuilder(index, $r('app.string.tab_bar4'), $r('app.media.ic_statistics'), $r('app.media.ic_statistics_active'));
+          } else if (index === 4) {
+            this.TabBuilder(index, $r('app.string.tab_bar5'), $r('app.media.ic_profile'), $r('app.media.ic_profile_active'));
+          }
+        }
+        .width(70)
+        .height(56)
+        .backgroundColor($r('app.color.BG_COLOR_TAB'))
+        .onClick(() => {
+          this.currentIndex = index;
+        })
+      })
+    }
+    .width('100%')
+    .height(56)
+    .justifyContent(FlexAlign.SpaceAround)
+    .backgroundColor($r('app.color.BG_COLOR_TAB'))
+    .padding({bottom: 20})
   }
 
   @Builder
-  tabItem(index: number, title: Resource, icon: Resource, iconSelected: Resource) {
-    TabBarItem({
-      index: index,
-      currentIndex: this.currentIndex,
-      title: title,
-      icon: icon,
-      iconSelected: iconSelected
-    })
+  TabBuilder(index: number, title: Resource, icon: Resource, iconSelected: Resource) {
+    Column() {
+      Image(this.currentIndex === index ? iconSelected : icon)
+        .width(24)
+        .height(24)
+        .margin(5)
+        .objectFit(ImageFit.Contain);
+      Text(title)
+        .fontColor(this.currentIndex === index ? $r('app.color.TEXT_PRIMARY_COLOR') : $r('app.color.TEXT_SECONDARY_COLOR'))
+        .fontSize(12)
+        .fontWeight(500);
+    }
+    .width('100%')
+    .height('100%')
+    .justifyContent(FlexAlign.Center);
+  }
+
+  aboutToAppear() {
+    // 全局设置 NavPathStack 以便子页面使用
+    AppStorage.setOrCreate('PathStack', this.pathStack);
   }
 
   build() {
-    // 设置TabBar在主轴方向起始或结尾位置
-    Tabs({ barPosition: this.currentBreakpoint === "lg" ? BarPosition.Start : BarPosition.End }) {
-      // 首页
-      TabContent() {
-        HomePage()
+    Column() {
+      Stack({ alignContent: Alignment.Bottom }) {
+        // 内容区域
+        Navigation(this.pathStack) {
+          NavDestination() {
+            if (this.currentIndex === 0) {
+              HomePage();
+            } else if (this.currentIndex === 1) {
+              AccountBook();
+            } else if (this.currentIndex === 2) {
+              AddRecord();
+            } else if (this.currentIndex === 3) {
+              Statistics();
+            } else if (this.currentIndex === 4) {
+              Mine();
+            }
+          }
+          .hideTitleBar(true)
+        }
+        .hideTitleBar(true)
+        .mode(NavigationMode.Stack)
+        .width('100%')
+        .height('100%')
+        
+        // 自定义底部导航栏
+        Column() {
+          this.CustomBottomBar();
+        }
+        .width('100%')
+        .alignItems(HorizontalAlign.Center)
       }
-      .tabBar(this.tabItem(0, $r('app.string.tab_bar1'), $r('app.media.ic_home'),
-        $r('app.media.ic_home_active')))
+      .width('100%')
+      .height('100%')
 
-
-      TabContent() {
-        AccountBook()
-      }.tabBar(this.tabItem(1, $r('app.string.tab_bar2'), $r('app.media.ic_bill'), $r('app.media.ic_bill_active')))
-
-      TabContent() {
-        AddRecord()
-      }
-      .tabBar(this.tabItem(2, $r('app.string.tab_bar3'), $r('app.media.ic_add'),
-        $r('app.media.ic_add_active')))
-
-      TabContent() {
-        Statistics()
-      }
-      .tabBar(this.tabItem(3, $r('app.string.tab_bar4'), $r('app.media.ic_statistics'),
-        $r('app.media.ic_statistics_active')))
-
-      TabContent() {
-        Mine()
-      }
-      .tabBar(this.tabItem(4, $r('app.string.tab_bar5'), $r('app.media.ic_profile'),
-        $r('app.media.ic_profile_active')))
     }
     .backgroundColor($r('app.color.BG_COLOR_TAB'))
-    .barMode(BarMode.Fixed)
-    .barWidth(this.currentBreakpoint === "lg" ? 96 : '100%')
-    .barHeight(this.currentBreakpoint === "lg" ? '60%' : 56)
-    // 设置TabBar放置在水平或垂直方向
-    .vertical(this.currentBreakpoint === "lg")
-    .onChange(this.onTabChange)
-    .padding({ bottom: 15 })
+    .width('100%')
+    .height('100%')
   }
 }
