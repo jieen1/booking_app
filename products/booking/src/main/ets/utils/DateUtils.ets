@@ -158,17 +158,7 @@ export class DateUtils {
     const date = new Date(timestamp);
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-    const yesterday = today - 86400000;
-    
-    const dateTime = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
-    
-    if (dateTime === today) {
-      return '今天';
-    } else if (dateTime === yesterday) {
-      return '昨天';
-    } else {
-      return DateUtils.formatDate(timestamp, 'MM-dd');
-    }
+    return DateUtils.formatDate(timestamp, 'yyyy-MM-dd');
   }
 
   /**

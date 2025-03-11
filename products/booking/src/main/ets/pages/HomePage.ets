@@ -30,6 +30,7 @@ export default struct HomePage {
   @State amount: string = '';
   @State monthlyBalance: number = 0;
   @State growthRate: number = 0;
+  @State recordDate: Date = new Date();
   @State currentMonth: string = DateUtils.getCurrentMonthStr();
   @State recentRecords: RecordWithCategory[] = [];
   @State selectedType: number = BookingConstants.EXPENSE_TYPE;
@@ -101,7 +102,7 @@ export default struct HomePage {
       this.selectedCategory.id!,
       parseFloat(this.amount),
       '',
-      new Date().getTime(),
+      this.recordDate.getTime(),
       this.selectedAccountId
     );
 
@@ -462,6 +463,40 @@ export default struct HomePage {
             this.amount = value;
           })
 
+        Row() {
+
+          Button('当天')
+            .onClick(() => {
+              this.recordDate = new Date();
+            })
+            .width(60)
+            .height(40)
+            .fontSize(14)
+            .margin(10)
+            .backgroundColor(DateUtils.getDateStr(this.recordDate.getTime()) == DateUtils.getDateStr(new Date().getTime()) ? $r('app.color.SUCCESS_COLOR') : $r('app.color.BG_COLOR'))
+
+          Button('昨天')
+            .onClick(() => {
+              this.recordDate = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+            })
+            .width(60)
+            .height(40)
+            .fontSize(14)
+            .margin(10)
+            .backgroundColor(DateUtils.getDateStr(this.recordDate.getTime()) == DateUtils.getDateStr(new Date().getTime() - 24 * 60 * 60 * 1000) ? $r('app.color.SUCCESS_COLOR') : $r('app.color.BG_COLOR'))
+
+          Button('前天')
+            .onClick(() => {
+              this.recordDate = new Date(new Date().getTime() - 24 * 60 * 60 * 2 * 1000);
+            })
+            .width(60)
+            .height(40)
+            .fontSize(14)
+            .margin(10)
+            .backgroundColor(DateUtils.getDateStr(this.recordDate.getTime()) == DateUtils.getDateStr(new Date().getTime() - 24 * 60 * 60 * 1000 * 2) ? $r('app.color.SUCCESS_COLOR') : $r('app.color.BG_COLOR'))
+
+        }
+
         // 平铺显示分类
         Scroll() {
           Flex({ wrap: FlexWrap.Wrap, justifyContent: FlexAlign.Start }) {
@@ -470,7 +505,7 @@ export default struct HomePage {
                 Image(IconUtils.getCategoryIcon(category.icon))
                   .width(40)
                   .height(40)
-                  .margin({ bottom: 4 })
+                  .margin({ bottom: 2 })
 
                 Text(category.name)
                   .fontSize(12)
@@ -480,9 +515,9 @@ export default struct HomePage {
                   .textOverflow({ overflow: TextOverflow.Ellipsis })
               }
               .width(60)
-              .height(70)
-              .margin({ right: 8, bottom: 4, left: 8, top: 4})
-              .padding(4)
+              .height(60)
+              .margin(4)
+              .padding(2)
               .borderRadius(8)
               .backgroundColor(this.selectedCategory?.id === category.id ?
               $r('app.color.BG_COLOR_SECONDARY') : Color.Transparent)
@@ -498,7 +533,7 @@ export default struct HomePage {
           }
           .padding(8)
         }
-        .height(170)
+        .height(160)
         .scrollBar(BarState.Off)
 
         // 保存按钮

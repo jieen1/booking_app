@@ -66,13 +66,6 @@ export default struct AddRecord {
     }
   }
 
-  // 控制返回按钮行为
-  onBackPress() {
-    // 返回到记账本页面
-    router.back();
-    return true;
-  }
-
   async switchType(type: number) {
     if (this.selectedType === type) {
       return; // 防止重复切换
@@ -163,9 +156,6 @@ export default struct AddRecord {
       } else {
         await this.bookDBHelper.updateAccountBalance(this.selectedAccountId, -amount);
       }
-      
-      // 保存成功，返回上一页
-      router.back();
     } else {
       AlertDialog.show({
         title: '错误',
@@ -195,15 +185,6 @@ export default struct AddRecord {
 
       // 顶部标题栏
       Row() {
-        Button() {
-          Image($r('app.media.ic_left_cartoon_new'))
-            .width(30)
-            .height(30)
-        }
-        .backgroundColor(Color.Transparent)
-        .onClick(() => {
-          router.back();
-        })
 
         Text('添加记录')
           .fontSize(18)

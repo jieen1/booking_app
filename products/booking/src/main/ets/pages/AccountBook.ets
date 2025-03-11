@@ -1,4 +1,3 @@
-import { router } from '@kit.ArkUI';
 import prompt from '@ohos.promptAction';
 import { BookingConstants } from '../constants/BookingConstants';
 import { DateUtils } from '../utils/DateUtils';
@@ -154,30 +153,6 @@ export default struct AccountBook {
     });
     
     this.balance = this.income - this.expense;
-  }
-
-  goToAddRecord() {
-    router.pushUrl({
-      url: BookingConstants.ADD_RECORD_ROUTE
-    });
-  }
-
-  goToStatistics() {
-    router.pushUrl({
-      url: BookingConstants.STATISTICS_ROUTE
-    });
-  }
-
-  goToMine() {
-    router.pushUrl({
-      url: BookingConstants.MINE_ROUTE
-    });
-  }
-
-  goToAccountBookList() {
-    router.pushUrl({
-      url: BookingConstants.ACCOUNT_BOOK_LIST_ROUTE
-    });
   }
 
   async deleteRecord(record: RecordWithCategory) {
