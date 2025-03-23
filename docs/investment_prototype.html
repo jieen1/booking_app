@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鸿蒙Next记账APP - 投资账本功能原型</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: HarmonyOS Sans SC, sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 28px;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eaeaea;
+            margin-bottom: 30px;
+        }
+        h2 {
+            font-size: 24px;
+            margin-top: 40px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        h3 {
+            font-size: 20px;
+            margin-top: 30px;
+            color: #5ca366;
+        }
+        p {
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+        .prototype-section {
+            margin-bottom: 40px;
+        }
+        .prototype-images {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        .prototype-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            width: 300px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .prototype-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+        .prototype-img {
+            width: 100%;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .prototype-info {
+            padding: 15px;
+        }
+        .prototype-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+        .prototype-desc {
+            font-size: 14px;
+            color: #5f6368;
+        }
+        .flow-chart {
+            width: 100%;
+            max-width: 900px;
+            margin: 30px auto;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .tab-container {
+            margin-top: 30px;
+        }
+        .tabs {
+            display: flex;
+            background-color: #f0f4f8;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+            flex: 1;
+            font-size: 16px;
+            font-weight: 500;
+            color: #5f6368;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .tab.active {
+            background-color: #5ca366;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .color-palette {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .color-item {
+            text-align: center;
+            width: 120px;
+        }
+        .color-box {
+            width: 100%;
+            height: 60px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        .color-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .color-code {
+            font-size: 12px;
+            color: #666;
+        }
+        .primary {
+            background-color: #5ca366;
+        }
+        .secondary {
+            background-color: #ff9500;
+        }
+        .background {
+            background-color: #f5f7fa;
+        }
+        .card-bg {
+            background-color: #ffffff;
+        }
+        .text-primary {
+            background-color: #2c3e50;
+        }
+        .text-secondary {
+            background-color: #5f6368;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>鸿蒙Next记账APP - 投资账本功能原型设计</h1>
+        
+        <div class="tab-container">
+            <div class="tabs">
+                <button class="tab active" onclick="openTab(event, 'prototype')">原型图</button>
+                <button class="tab" onclick="openTab(event, 'interaction')">交互流程</button>
+                <button class="tab" onclick="openTab(event, 'design')">设计规范</button>
+            </div>
+            
+            <!-- 原型图标签内容 -->
+            <div id="prototype" class="tab-content active">
+                <div class="prototype-section">
+                    <h2>投资账本功能主要界面</h2>
+                    
+                    <h3>1. 投资账本概览</h3>
+                    <p>展示投资总体情况，包括投资账本列表、总资产、收益情况等</p>
+                    <div class="prototype-images">
+                        <div class="prototype-card">
+                            <img src="investment_overview.png" alt="投资账本概览" class="prototype-img">
+                            <div class="prototype-info">
+                                <div class="prototype-title">投资账本概览</div>
+                                <div class="prototype-desc">显示所有投资账本及总资产情况</div>
+                            </div>
+                        </div>
+                        <div class="prototype-card">
+                            <img src="investment_portfolio.png" alt="投资组合分析" class="prototype-img">
+                            <div class="prototype-info">
+                                <div class="prototype-title">投资组合分析</div>
+                                <div class="prototype-desc">展示资产分布和收益率情况</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3>2. 投资账本详情</h3>
+                    <p>展示单个投资账本内的投资品种和收益情况</p>
+                    <div class="prototype-images">
+                        <div class="prototype-card">
+                            <img src="investment_book_detail.png" alt="投资账本详情" class="prototype-img">
+                            <div class="prototype-info">
+                                <div class="prototype-title">投资账本详情</div>
+                                <div class="prototype-desc">显示账本内的投资品种列表</div>
+                            </div>
+                        </div>
+                        <div class="prototype-card">
+                            <img src="investment_asset_list.png" alt="投资品种列表" class="prototype-img">
+                            <div class="prototype-info">
+                                <div class="prototype-title">投资品种列表</div>
+                                <div class="prototype-desc">账本内的所有投资品种</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3>3. 投资交易操作</h3>
+                    <p>买入、卖出投资品种的操作界面</p>
+                    <div class="prototype-images">
+                        <div class="prototype-card">
+                            <img src="investment_buy.png" alt="买入操作" class="prototype-img">
+                            <div class="prototype-info">
+                                <div class="prototype-title">买入操作</div>
+                                <div class="prototype-desc">记录投资品种买入信息</div>
+                            </div>
+                        </div>
+                        <div class="prototype-card">
+                            <img src="investment_sell.png" alt="卖出操作" class="prototype-img">
+                            <div class="prototype-info">
+                                <div class="prototype-title">卖出操作</div>
+                                <div class="prototype-desc">记录投资品种卖出信息</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3>4. 投资品种详情</h3>
+                    <p>查看单个投资品种的详细信息和行情</p>
+                    <div class="prototype-images">
+                        <div class="prototype-card">
+                            <img src="asset_detail.png" alt="投资品种详情" class="prototype-img">
+                            <div class="prototype-info">
+                                <div class="prototype-title">投资品种详情</div>
+                                <div class="prototype-desc">显示持仓信息和收益情况</div>
+                            </div>
+                        </div>
+                        <div class="prototype-card">
+                            <img src="market_quote.png" alt="市场行情" class="prototype-img">
+                            <div class="prototype-info">
+                                <div class="prototype-title">市场行情</div>
+                                <div class="prototype-desc">价格走势图和实时行情</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3>5. 账本间转账</h3>
+                    <p>普通账本和投资账本之间的资金转移</p>
+                    <div class="prototype-images">
+                        <div class="prototype-card">
+                            <img src="transfer_to_investment.png" alt="转入投资账本" class="prototype-img">
+                            <div class="prototype-info">
+                                <div class="prototype-title">转入投资账本</div>
+                                <div class="prototype-desc">从普通账本转入资金</div>
+                            </div>
+                        </div>
+                        <div class="prototype-card">
+                            <img src="transfer_from_investment.png" alt="从投资账本转出" class="prototype-img">
+                            <div class="prototype-info">
+                                <div class="prototype-title">从投资账本转出</div>
+                                <div class="prototype-desc">将资金转出至普通账本</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 交互流程标签内容 -->
+            <div id="interaction" class="tab-content">
+                <div class="prototype-section">
+                    <h2>用户交互流程图</h2>
+                    
+                    <h3>1. 创建投资账本流程</h3>
+                    <img src="create_investment_flow.png" alt="创建投资账本流程" class="flow-chart">
+                    <p>用户创建新投资账本的完整流程，包括设置投资类型、初始资金等信息。</p>
+                    
+                    <h3>2. 买入投资品种流程</h3>
+                    <img src="buy_investment_flow.png" alt="买入投资品种流程" class="flow-chart">
+                    <p>用户买入新投资品种或增加现有持仓的操作流程，包括资金来源选择。</p>
+                    
+                    <h3>3. 卖出投资品种流程</h3>
+                    <img src="sell_investment_flow.png" alt="卖出投资品种流程" class="flow-chart">
+                    <p>用户卖出投资品种全部或部分持仓的操作流程，包括资金去向选择。</p>
+                    
+                    <h3>4. 账本间转账流程</h3>
+                    <img src="transfer_accounts_flow.png" alt="账本间转账流程" class="flow-chart">
+                    <p>普通账本和投资账本之间进行资金转移的操作流程。</p>
+                    
+                    <h3>5. 查看收益分析流程</h3>
+                    <img src="view_profit_flow.png" alt="查看收益分析流程" class="flow-chart">
+                    <p>用户查看和分析投资收益的操作流程。</p>
+                </div>
+            </div>
+            
+            <!-- 设计规范标签内容 -->
+            <div id="design" class="tab-content">
+                <div class="prototype-section">
+                    <h2>设计规范</h2>
+                    
+                    <h3>色彩规范</h3>
+                    <p>应用的主要配色方案，保持与现有应用的一致性</p>
+                    <div class="color-palette">
+                        <div class="color-item">
+                            <div class="color-box primary"></div>
+                            <div class="color-name">主题色</div>
+                            <div class="color-code">#5CA366</div>
+                        </div>
+                        <div class="color-item">
+                            <div class="color-box secondary"></div>
+                            <div class="color-name">强调色</div>
+                            <div class="color-code">#FF9500</div>
+                        </div>
+                        <div class="color-item">
+                            <div class="color-box background"></div>
+                            <div class="color-name">背景色</div>
+                            <div class="color-code">#F5F7FA</div>
+                        </div>
+                        <div class="color-item">
+                            <div class="color-box card-bg"></div>
+                            <div class="color-name">卡片背景</div>
+                            <div class="color-code">#FFFFFF</div>
+                        </div>
+                        <div class="color-item">
+                            <div class="color-box text-primary"></div>
+                            <div class="color-name">主文本色</div>
+                            <div class="color-code">#2C3E50</div>
+                        </div>
+                        <div class="color-item">
+                            <div class="color-box text-secondary"></div>
+                            <div class="color-name">次文本色</div>
+                            <div class="color-code">#5F6368</div>
+                        </div>
+                    </div>
+                    
+                    <h3>字体规范</h3>
+                    <p>无衬线字体清晰简洁，便于识别，字体通过大小、颜色、字重加深对比，信息层级清晰。</p>
+                    <p>主标题：20sp, 粗体<br>
+                       次标题：18sp, 中等粗体<br>
+                       正文：16sp, 常规<br>
+                       辅助文字：14sp, 常规<br>
+                       小字文本：12sp, 常规</p>
+                    
+                    <h3>布局规范</h3>
+                    <p>卡片式布局，构图大量留白，给人一种舒适透气的感觉，整体构图简洁高级。</p>
+                    <p>- 卡片圆角：16px<br>
+                       - 内边距：16px (小卡片), 20px (大卡片)<br>
+                       - 元素间距：12px (紧凑), 16px (标准), 24px (宽松)<br>
+                       - 列表项高度：56px</p>
+                    
+                    <h3>交互规范</h3>
+                    <p>交互动画使用Hvigor进行优化，实现更好的交互感。</p>
+                    <p>- 点击反馈：轻微缩放+高亮效果<br>
+                       - 页面切换：自然的滑动过渡<br>
+                       - 卡片展开/折叠：平滑的伸缩动画<br>
+                       - 数据刷新：渐变式更新，避免突兀变化</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            
+            // 隐藏所有标签内容
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].className = tabcontent[i].className.replace(" active", "");
+            }
+            
+            // 移除所有标签按钮的活动状态
+            tablinks = document.getElementsByClassName("tab");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            
+            // 显示当前标签内容并设置活动状态
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).className += " active";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+</body>
+</html>

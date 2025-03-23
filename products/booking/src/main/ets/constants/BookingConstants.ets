@@ -89,6 +89,12 @@ export class BookingConstants {
   static readonly ACCOUNT_TYPE_OTHER: number = 999;     // 其他
   
   /**
+   * 账本业务类型
+   */
+  static readonly ACCOUNT_BOOK_TYPE_DEFAULT: number = 0;  // 普通账本
+  static readonly ACCOUNT_BOOK_TYPE_INVESTMENT: number = 1;  // 投资账本
+
+  /**
    * 账本状态
    */
   static readonly ACCOUNT_NOT_DEFAULT: number = 0;  // 非默认账本
@@ -130,15 +136,5 @@ export class BookingConstants {
    * 下拉图标
    */
   static readonly ICON_DOWN: string = 'app.media.ic_down_cartoon_new';
-
-  /**
-   * 账本类型
-   */
-  static readonly ACCOUNT_BOOK_TYPE_DEFAULT: number = 0;  // 默认账本
-  static readonly ACCOUNT_BOOK_TYPE_CASH: number = 1;     // 现金
-  static readonly ACCOUNT_BOOK_TYPE_BANK: number = 2;     // 银行卡
-  static readonly ACCOUNT_BOOK_TYPE_ALIPAY: number = 3;   // 支付宝
-  static readonly ACCOUNT_BOOK_TYPE_WECHAT: number = 4;   // 微信
-  static readonly ACCOUNT_BOOK_TYPE_OTHER: number = 99;   // 其他
 
 }

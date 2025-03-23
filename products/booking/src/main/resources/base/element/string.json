@@ -127,6 +127,26 @@
     {
       "name": "tab_bar5",
       "value": "我的"
+    },
+    {
+      "name": "tab_bar6",
+      "value": "投资"
+    },
+    {
+      "name": "investment",
+      "value": "投资"
+    },
+    {
+      "name": "investment_overview",
+      "value": "投资概览"
+    },
+    {
+      "name": "total_assets",
+      "value": "总资产"
+    },
+    {
+      "name": "total_profit",
+      "value": "总收益"
     }
   ]
 }

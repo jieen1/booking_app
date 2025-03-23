@@ -89,7 +89,7 @@ export class BookDBHelper {
       // 插入默认账本
       const defaultAccountBook = new AccountBookModel(
         '默认账本',
-        BookingConstants.ACCOUNT_BOOK_TYPE_DEFAULT,
+        BookingConstants.ACCOUNT_TYPE_CASH,
         0,
         IconUtils.getResourceByKey(BookingConstants.ICON_ACCOUNT_BOOK_DEFAULT),
         1,

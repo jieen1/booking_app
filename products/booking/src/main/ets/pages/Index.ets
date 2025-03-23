@@ -4,6 +4,7 @@ import AccountBook from '../pages/AccountBook';
 import AddRecord from '../pages/AddRecord';
 import Statistics from '../pages/Statistics';
 import Mine from '../pages/Mine';
+import { InvestmentOverviewPage } from '../pages/InvestmentOverviewPage';
 
 /**
  * 应用入口页面
@@ -18,7 +19,7 @@ struct Index {
   @Builder
   CustomBottomBar() {
     Row() {
-      ForEach([0, 1, 2, 3, 4], (index: number) => {
+      ForEach([0, 1, 2, 3, 4, 5], (index: number) => {
         Column() {
           if (index === 0) {
             this.TabBuilder(index, $r('app.string.tab_bar1'), $r('app.media.ic_home'), $r('app.media.ic_home_active'));
@@ -30,9 +31,11 @@ struct Index {
             this.TabBuilder(index, $r('app.string.tab_bar4'), $r('app.media.ic_statistics'), $r('app.media.ic_statistics_active'));
           } else if (index === 4) {
             this.TabBuilder(index, $r('app.string.tab_bar5'), $r('app.media.ic_profile'), $r('app.media.ic_profile_active'));
+          } else if (index === 5) {
+            this.TabBuilder(index, $r('app.string.tab_bar6'), $r('app.media.ic_investment'), $r('app.media.ic_investment_active'));
           }
         }
-        .width(70)
+        .width(60)
         .height(56)
         .backgroundColor($r('app.color.BG_COLOR_TAB'))
         .onClick(() => {
@@ -41,7 +44,7 @@ struct Index {
       })
     }
     .width('100%')
-    .height(56)
+    .height(80)
     .justifyContent(FlexAlign.SpaceAround)
     .backgroundColor($r('app.color.BG_COLOR_TAB'))
     .padding({bottom: 20})
@@ -86,6 +89,8 @@ struct Index {
               Statistics();
             } else if (this.currentIndex === 4) {
               Mine();
+            } else if (this.currentIndex === 5) {
+              InvestmentOverviewPage();
             }
           }
           .hideTitleBar(true)

@@ -10,6 +10,11 @@
     "pages/AccountBookListPage",
     "pages/AccountBookEditPage",
     "pages/AccountBookDetailPage",
-    "pages/TransferPage"
+    "pages/TransferPage",
+    "pages/InvestmentOverviewPage",
+    "pages/InvestmentTransactionPage",
+    "pages/InvestmentBookDetailPage",
+    "pages/investment/InvestmentTradePage",
+    "pages/investment/InvestmentTransferPage"
   ]
 }

@@ -30,6 +30,11 @@ export default struct Mine {
       route: BookingConstants.STATISTICS_ROUTE
     },
     {
+      title: '投资管理',
+      icon: $r('app.media.ic_investment'),
+      route: '/pages/InvestmentOverviewPage'
+    },
+    {
       title: '预算设置',
       icon: $r('app.media.ic_budget_cartoon_new'),
       route: ''

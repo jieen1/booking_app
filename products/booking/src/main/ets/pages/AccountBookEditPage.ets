@@ -20,13 +20,14 @@ struct AccountBookEditPage {
   @State isNewAccount: boolean = true;
   @State isLoading: boolean = false;
   @State accountTypes: Array<AccountTypeItem> = [
-    { type: BookingConstants.ACCOUNT_BOOK_TYPE_CASH, name: '现金', icon: $r('app.media.ic_cash') },
-    { type: BookingConstants.ACCOUNT_BOOK_TYPE_BANK, name: '银行卡', icon: $r('app.media.ic_bank') },
-    { type: BookingConstants.ACCOUNT_BOOK_TYPE_ALIPAY, name: '支付宝', icon: $r('app.media.ic_alipay') },
-    { type: BookingConstants.ACCOUNT_BOOK_TYPE_WECHAT, name: '微信', icon: $r('app.media.ic_wechat') },
-    { type: BookingConstants.ACCOUNT_BOOK_TYPE_OTHER, name: '其他', icon: $r('app.media.ic_other') }
+    { type: BookingConstants.ACCOUNT_TYPE_CASH, name: '现金', icon: $r('app.media.ic_cash') },
+    { type: BookingConstants.ACCOUNT_TYPE_BANK_CARD, name: '银行卡', icon: $r('app.media.ic_bank') },
+    { type: BookingConstants.ACCOUNT_TYPE_ALIPAY, name: '支付宝', icon: $r('app.media.ic_alipay') },
+    { type: BookingConstants.ACCOUNT_TYPE_WECHAT, name: '微信', icon: $r('app.media.ic_wechat') },
+    { type: BookingConstants.ACCOUNT_TYPE_STOCK, name: '股票', icon: $r('app.media.ic_other_cartoon_new') },
+    { type: BookingConstants.ACCOUNT_TYPE_OTHER, name: '其他', icon: $r('app.media.ic_other') }
   ];
-  @State selectedType: number = BookingConstants.ACCOUNT_BOOK_TYPE_CASH;
+  @State selectedType: number = BookingConstants.ACCOUNT_TYPE_CASH;
   private dbHelper: BookDBHelper = BookDBHelper.getInstance();
   
   aboutToAppear() {
@@ -41,11 +42,11 @@ struct AccountBookEditPage {
       // 初始化新账本
       this.accountBook = new AccountBookModel(
         '',
-        BookingConstants.ACCOUNT_BOOK_TYPE_CASH,
+        BookingConstants.ACCOUNT_TYPE_CASH,
         0,
         this.accountTypes[0].icon
       );
-      this.selectedType = BookingConstants.ACCOUNT_BOOK_TYPE_CASH;
+      this.selectedType = BookingConstants.ACCOUNT_TYPE_CASH;
     }
   }
   

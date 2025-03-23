@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>投资图标-激活状态</title>
+    <g id="投资图标-激活状态" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M3,2 L21,2 C21.5523,2 22,2.44772 22,3 L22,17 C22,17.5523 21.5523,18 21,18 L3,18 C2.44772,18 2,17.5523 2,17 L2,3 C2,2.44772 2.44772,2 3,2 Z" id="矩形" stroke="#4fc08d" stroke-width="2" fill="#4fc08d" fill-rule="nonzero"></path>
+        <path d="M12.8731,7.7547 L16.3683,11.25 L14.9541,12.6642 L12.8731,10.5832 L8.3731,15.0832 L6.95889,13.669 L12.8731,7.7547 Z" id="路径" fill="#FFFFFF" fill-rule="nonzero"></path>
+        <path d="M15.5,8 L17,8 L17,11 L15.5,11 L15.5,8 Z" id="矩形" fill="#FFFFFF"></path>
+        <path d="M6,20 L18,20 C18.5523,20 19,20.4477 19,21 C19,21.5523 18.5523,22 18,22 L6,22 C5.44772,22 5,21.5523 5,21 C5,20.4477 5.44772,20 6,20 Z" id="矩形" fill="#4fc08d"></path>
+    </g>
+</svg>

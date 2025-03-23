@@ -9,6 +9,7 @@ import { CategoryModel } from '../model/CategoryModel';
 import { IconUtils } from '../utils/IconUtils';
 import { RecordModel } from '../model/RecordModel';
 import { AccountBookModel } from '../model/AccountBookModel';
+import { HomeInvestmentSummaryCard } from '../components/investment/HomeInvestmentSummaryCard';
 
 interface GeneratedTypeLiteralInterface_1 {
   x: string;
@@ -389,7 +390,8 @@ export default struct HomePage {
         .margin({ bottom: 16 })
         .shadow(ShadowStyle.OUTER_DEFAULT_SM)
 
-
+        // 投资摘要卡片
+        HomeInvestmentSummaryCard()
 
         Column() {
           // 快速记账区域
