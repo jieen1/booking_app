@@ -32,22 +32,6 @@ export interface IInvestmentTransactionRecord {
 }
 
 /**
- * 投资交易记录模型参数接口
- */
-export interface ITransactionParam {
-  bookId: number;
-  assetId: number;
-  type: TransactionType;
-  price: number;
-  quantity: number;
-  amount: number;
-  fee: number;
-  relatedAccountId: number;
-  remarks: string;
-  createTime: number;
-}
-
-/**
  * 投资交易记录模型
  */
 export class InvestmentTransactionModel {

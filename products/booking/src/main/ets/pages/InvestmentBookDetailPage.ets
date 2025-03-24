@@ -2,13 +2,13 @@
  * 投资账本详情页面
  */
 import router from '@ohos.router';
-import prompt from '@ohos.prompt';
 import { InvestmentBookModel, InvestmentType } from '../model/InvestmentBookModel';
 import { InvestmentAssetModel } from '../model/InvestmentAssetModel';
 import { InvestmentBookDBHelper } from '../database/InvestmentBookDBHelper';
 import { InvestmentAssetDBHelper } from '../database/InvestmentAssetDBHelper';
 import { InvestmentAssetList } from '../components/investment/InvestmentAssetList';
 import { InvestmentProfitComponent } from '../components/investment/InvestmentProfitComponent';
+import promptAction from '@ohos.promptAction';
 
 @Entry
 @Component
@@ -26,7 +26,7 @@ export struct InvestmentBookDetailPage {
       this.bookId = params.bookId;
       this.loadBookData();
     } else {
-      prompt.showToast({
+      promptAction.showToast({
         message: '账本ID无效',
         duration: 2000
       });
@@ -51,7 +51,7 @@ export struct InvestmentBookDetailPage {
         this.assets = assets;
         this.isEmpty = assets.length === 0;
       } else {
-        prompt.showToast({
+        promptAction.showToast({
           message: '账本不存在',
           duration: 2000
         });
@@ -59,7 +59,7 @@ export struct InvestmentBookDetailPage {
       }
     } catch (error) {
       console.error('加载投资账本详情失败', error);
-      prompt.showToast({
+      promptAction.showToast({
         message: '加载失败',
         duration: 2000
       });
@@ -70,6 +70,9 @@ export struct InvestmentBookDetailPage {
   
   build() {
     Column() {
+      Row()
+        .height(20)
+
       // 顶部导航栏
       Row() {
         Button({
@@ -86,9 +89,8 @@ export struct InvestmentBookDetailPage {
         .onClick(() => {
           router.back();
         })
-        
         Blank()
-        
+
         Button({
           type: ButtonType.Circle,
           stateEffect: true
@@ -116,9 +118,9 @@ export struct InvestmentBookDetailPage {
       // 账本基本信息
       Row() {
         Image(this.book.icon || $r('app.media.ic_investment'))
-          .width(60)
-          .height(60)
-          .borderRadius(30)
+          .width(30)
+          .height(30)
+          .borderRadius(15)
         
         Column() {
           Text(this.book.name)
@@ -139,107 +141,7 @@ export struct InvestmentBookDetailPage {
       })
       .margin({ left: 16, right: 16, bottom: 16 })
       
-      // 操作按钮
-      Row() {
-        Button({
-          type: ButtonType.Capsule
-        }) {
-          Row() {
-            Image($r('app.media.ic_buy'))
-              .width(20)
-              .height(20)
-              .margin({ right: 8 })
-            
-            Text('买入')
-              .fontSize(16)
-              .fontColor(Color.White)
-          }
-          .width('100%')
-          .height('100%')
-          .justifyContent(FlexAlign.Center)
-        }
-        .height(44)
-        .backgroundColor('#ff9800')
-        .layoutWeight(1)
-        .onClick(() => {
-          router.pushUrl({
-            url: 'pages/investment/InvestmentTradePage',
-            params: {
-              bookId: this.bookId,
-              tradeType: 'buy'
-            }
-          });
-        })
-        
-        Blank()
-          .width(12)
-        
-        Button({
-          type: ButtonType.Capsule
-        }) {
-          Row() {
-            Image($r('app.media.ic_sell'))
-              .width(20)
-              .height(20)
-              .margin({ right: 8 })
-            
-            Text('卖出')
-              .fontSize(16)
-              .fontColor(Color.White)
-          }
-          .width('100%')
-          .height('100%')
-          .justifyContent(FlexAlign.Center)
-        }
-        .height(44)
-        .backgroundColor('#4caf50')
-        .layoutWeight(1)
-        .onClick(() => {
-          router.pushUrl({
-            url: 'pages/investment/InvestmentTradePage',
-            params: {
-              bookId: this.bookId,
-              tradeType: 'sell'
-            }
-          });
-        })
-        
-        Blank()
-          .width(12)
-        
-        Button({
-          type: ButtonType.Capsule
-        }) {
-          Row() {
-            Image($r('app.media.ic_add_asset'))
-              .width(20)
-              .height(20)
-              .margin({ right: 8 })
-            
-            Text('添加品种')
-              .fontSize(16)
-              .fontColor(Color.White)
-          }
-          .width('100%')
-          .height('100%')
-          .justifyContent(FlexAlign.Center)
-        }
-        .height(44)
-        .backgroundColor('#2196f3')
-        .layoutWeight(1)
-        .onClick(() => {
-          router.pushUrl({
-            url: 'pages/InvestmentAssetEditPage',
-            params: {
-              bookId: this.bookId
-            }
-          });
-        })
-      }
-      .width('100%')
-      .padding({ left: 16, right: 16, bottom: 16 })
-      
-      // 投资品种列表
+      // 持仓列表
       if (this.isLoading) {
         Column() {
           LoadingProgress()
@@ -262,24 +164,10 @@ export struct InvestmentBookDetailPage {
             .height(100)
             .opacity(0.6)
           
-          Text('暂无投资品种')
+          Text('暂无持仓')
             .fontSize(16)
             .fontColor('#999999')
             .margin({ top: 16 })
-          
-          Button('添加投资品种')
-            .backgroundColor('#4fc08d')
-            .fontColor(Color.White)
-            .borderRadius(20)
-            .margin({ top: 16 })
-            .onClick(() => {
-              router.pushUrl({
-                url: 'pages/InvestmentAssetEditPage',
-                params: {
-                  bookId: this.bookId
-                }
-              });
-            })
         }
         .width('100%')
         .layoutWeight(1)
@@ -288,24 +176,15 @@ export struct InvestmentBookDetailPage {
         Column() {
           // 投资品种列表标题
           Row() {
-            Text('投资品种')
+            Text('持仓列表')
               .fontSize(18)
               .fontWeight(FontWeight.Bold)
               .fontColor('#333333')
-            
-            Blank()
-            
-            Text('查看全部')
-              .fontSize(14)
-              .fontColor('#4fc08d')
-              .onClick(() => {
-                // 可以跳转到一个专门的品种列表页面
-              })
           }
           .width('100%')
           .padding({ left: 16, right: 16, top: 8, bottom: 8 })
           
-          // 投资品种列表
+          // 持仓列表
           InvestmentAssetList({
             assets: this.assets,
             bookId: this.bookId,

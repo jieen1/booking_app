@@ -58,15 +58,6 @@ export struct InvestmentAssetList {
             this.sortOrder = 'desc';
           }
         })
-        
-        Blank()
-        
-        Image(this.sortOrder === 'desc' ? $r('app.media.ic_other') : $r('app.media.ic_other'))
-          .width(20)
-          .height(20)
-          .onClick(() => {
-            this.sortOrder = this.sortOrder === 'desc' ? 'asc' : 'desc';
-          })
       }
       .width('100%')
       .padding({ left: 16, right: 16, top: 8, bottom: 8 })
@@ -91,12 +82,6 @@ export struct InvestmentAssetList {
       }
       .width('100%')
       .layoutWeight(1)
-      .divider({
-        strokeWidth: 1,
-        color: '#f5f5f5',
-        startMargin: 16,
-        endMargin: 16
-      })
     }
     .width('100%')
     .height('100%')
@@ -144,7 +129,7 @@ export struct InvestmentAssetList {
         }
         .width('100%')
         
-        Text(`持有 ${asset.quantity} 股 | 价格 ¥${asset.currentPrice.toFixed(2)}`)
+        Text(`持有 ${asset.quantity} 股 | 现价 ¥${asset.currentPrice.toFixed(2)} | 成本 ¥${asset.purchasePrice.toFixed(2)}`)
           .fontSize(12)
           .fontColor('#666666')
           .margin({ top: 4 })

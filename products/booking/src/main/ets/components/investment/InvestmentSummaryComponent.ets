@@ -13,7 +13,8 @@ export struct InvestmentSummaryComponent {
   onBuyClick?: () => void;
   onSellClick?: () => void;
   onTransferClick?: () => void;
-  
+  onAddInstrument?: () => void;
+
   build() {
     Column() {
       // 总资产
@@ -135,6 +136,29 @@ export struct InvestmentSummaryComponent {
       .width('100%')
       .justifyContent(FlexAlign.Start)
       .padding({ top: 8, bottom: 8 })
+
+      Button({ type: ButtonType.Capsule }) {
+        Row() {
+          Text('新增标的')
+            .fontSize(14)
+            .fontColor('#ffffff')
+        }
+      }
+      .backgroundColor('#ff9800')
+      .height(36)
+      .width(50)
+      .margin({ right: 6 })
+      .onClick(() => {
+        if (this.onAddInstrument) {
+          this.onAddInstrument();
+        }
+      })
+      .animation({
+        duration: 200,
+        curve: Curve.EaseOut,
+        iterations: 1,
+        playMode: PlayMode.Normal
+      })
     }
     .width('100%')
     .padding(16)

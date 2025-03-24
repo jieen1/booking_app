@@ -14,7 +14,7 @@
     "pages/InvestmentOverviewPage",
     "pages/InvestmentTransactionPage",
     "pages/InvestmentBookDetailPage",
-    "pages/investment/InvestmentTradePage",
-    "pages/investment/InvestmentTransferPage"
+    "pages/investment/InvestmentTransferPage",
+    "pages/investment/InvestmentTradePage"
   ]
 }

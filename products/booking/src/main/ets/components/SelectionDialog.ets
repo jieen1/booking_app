@@ -1,11 +1,11 @@
 /**
- * u81eau5b9au4e49u9009u62e9u5bf9u8bddu6846u7ec4u4ef6
- * u7528u4e8eu663eu793au5c5eu6027u9009u62e9u5217u8868
+ * 自定义选择对话框组件
+ * 用于显示属性选择列表
  */
 import { BookingConstants } from '../constants/BookingConstants';
 
 /**
- * u9009u9879u5b9au4e49u63a5u53e3
+ * 选项定义接口
  */
 export interface SelectOption {
   value: string;
@@ -13,7 +13,7 @@ export interface SelectOption {
 }
 
 /**
- * u9009u62e9u5bf9u8bddu6846u53c2u6570u63a5u53e3
+ * 选择对话框参数接口
  */
 export interface SelectionDialogParams {
   options: SelectOption[];
@@ -23,24 +23,24 @@ export interface SelectionDialogParams {
 }
 
 /**
- * u9009u62e9u5bf9u8bddu6846u7ec4u4ef6
+ * 选择对话框组件
  */
 @CustomDialog
 export struct SelectionDialog {
-  // u5bf9u8bddu6846u63a7u5236u5668
+  // 对话框控制器
   controller: CustomDialogController;
-  // u6807u9898
+  // 标题
   title: string = '';
-  // u5bf9u8bddu6846u6570u636e
+  // 对话框数据
   options: SelectOption[] = [];
-  // u9009u62e9u56deu8c03
+  // 选择回调
   onSelect: (value: string) => void = () => {};
-  // u53d6u6d88u56deu8c03
+  // 取消回调
   onCancel: () => void = () => {};
 
   build() {
     Column() {
-      // u6807u9898
+      // 标题
       if (this.title) {
         Text(this.title)
           .fontSize(18)
@@ -50,7 +50,7 @@ export struct SelectionDialog {
           .textAlign(TextAlign.Center)
       }
       
-      // u5217u8868u663eu793a
+      // 列表显示
       Column() {
         ForEach(this.options, (option: SelectOption) => {
           Row() {
@@ -72,8 +72,8 @@ export struct SelectionDialog {
       .width('100%')
       .padding({ top: 10, bottom: 10 })
       
-      // u53d6u6d88u6309u94ae
-      Button('\u53d6\u6d88')
+      // 取消按钮
+      Button('取消')
         .width('90%')
         .height(44)
         .fontSize(16)
@@ -92,14 +92,14 @@ export struct SelectionDialog {
   }
 
   /**
-   * u521bu5efau9009u62e9u6846
-   * @param params u9009u62e9u6846u53c2u6570
+   * 创建选择框
+   * @param params 选择框参数
    * @returns CustomDialogController
    */
   static create(params: SelectionDialogParams): CustomDialogController {
     const dialogController = new CustomDialogController({
       builder: SelectionDialog({
-        title: params.title || 'u8bf7u9009u62e9',
+        title: params.title || '请选择',
         options: params.options,
         onSelect: params.onSelect,
         onCancel: params.onCancel || (() => {})
@@ -112,8 +112,8 @@ export struct SelectionDialog {
   }
 
   /**
-   * u663eu793au9009u62e9u6846
-   * @param params u9009u62e9u6846u53c2u6570
+   * 显示选择框
+   * @param params 选择框参数
    */
   static show(params: SelectionDialogParams): void {
     const dialogController = SelectionDialog.create(params);

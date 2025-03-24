@@ -97,7 +97,6 @@ export struct AssetSelector {
           endMargin: 8
         })
         .margin({ top: 16 })
-        .height(300)
       } else if (this.searchText) {
         // 无搜索结果
         Column() {
@@ -112,7 +111,6 @@ export struct AssetSelector {
             .margin({ top: 16 })
         }
         .width('100%')
-        .height(200)
         .justifyContent(FlexAlign.Center)
       } else if (this.assets.length === 0) {
         // 无资产
@@ -126,32 +124,31 @@ export struct AssetSelector {
             .fontSize(16)
             .fontColor('#999999')
             .margin({ top: 16 })
-          
-          Button('添加资产')
-            .width(160)
-            .height(40)
-            .borderRadius(20)
-            .backgroundColor('#4fc08d')
-            .fontColor(Color.White)
-            .margin({ top: 16 })
-            .onClick(() => {
-              router.pushUrl({
-                url: 'pages/AddAssetPage',
-                params: {
-                  bookId: this.bookId,
-                  callback: () => {
-                    // 跳转后需要刷新数据
-                  }
-                }
-              });
-            })
+
         }
         .width('100%')
-        .height(280)
         .justifyContent(FlexAlign.Center)
       }
+
+      Button('添加资产')
+        .width(160)
+        .height(40)
+        .borderRadius(20)
+        .backgroundColor('#4fc08d')
+        .fontColor(Color.White)
+        .margin({ top: 16 })
+        .onClick(() => {
+          router.pushUrl({
+            url: 'pages/AddAssetPage',
+            params: {
+              bookId: this.bookId,
+              callback: () => {
+                // 跳转后需要刷新数据
+              }
+            }
+          });
+        })
     }
     .width('100%')
-    .height(350)
   }
 }

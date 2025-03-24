@@ -127,11 +127,10 @@ export struct InvestmentBookCard {
     }
     .width('100%')
     .height(140)
-    .margin({ bottom: 12 })
     .onClick(() => {
       if (!this.isDeleting && this.book.id) {
         router.pushUrl({
-          url: 'pages/InvestmentDetailPage',
+          url: 'pages/InvestmentBookDetailPage',
           params: {
             bookId: this.book.id
           }

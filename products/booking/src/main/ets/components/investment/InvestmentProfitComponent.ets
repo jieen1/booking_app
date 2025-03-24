@@ -113,10 +113,10 @@ export struct InvestmentProfitComponent {
       .width('100%')
       .padding({ top: 8, bottom: 8 })
       
-      // 收益率和成本
+      // 收益率和市值
       Row() {
         Column() {
-          Text('总成本(元)')
+          Text('总市值(元)')
             .fontSize(14)
             .fontColor('#666666')
           

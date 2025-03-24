@@ -4,10 +4,8 @@
 import router from '@ohos.router';
 import { InvestmentBookModel } from '../model/InvestmentBookModel';
 import { InvestmentBookDBHelper } from '../database/InvestmentBookDBHelper';
-import { InvestmentAssetDBHelper } from '../database/InvestmentAssetDBHelper';
 import { InvestmentSummaryComponent } from '../components/investment/InvestmentSummaryComponent';
 import { InvestmentBookCard } from '../components/investment/InvestmentBookCard';
-import promptAction from '@ohos.prompt';
 
 // 添加路由参数类型
 interface RouterParams {
@@ -69,15 +67,9 @@ export struct InvestmentOverviewPage {
   }
   
   handleBuyClick(): void {
-    // 买入按钮点击事件处理
-    promptAction.showToast({
-      message: '正在跳转到买入页面',
-      duration: 2000
-    });
-    
     // 跳转到统一的交易页面，并指定为买入模式
     router.pushUrl({
-      url: 'pages/investment/InvestmentTradePage',
+      url: 'pages/InvestmentTransactionPage',
       params: {
         bookId: this.currentInvestmentBook?.id || -1,
         bookName: this.currentInvestmentBook?.name || '投资账本',
@@ -87,15 +79,9 @@ export struct InvestmentOverviewPage {
   }
   
   handleSellClick(): void {
-    // 卖出按钮点击事件处理
-    promptAction.showToast({
-      message: '正在跳转到卖出页面',
-      duration: 2000
-    });
-    
     // 跳转到统一的交易页面，并指定为卖出模式
     router.pushUrl({
-      url: 'pages/investment/InvestmentTradePage',
+      url: 'pages/InvestmentTransactionPage',
       params: {
         bookId: this.currentInvestmentBook?.id || -1,
         bookName: this.currentInvestmentBook?.name || '投资账本',
@@ -105,12 +91,6 @@ export struct InvestmentOverviewPage {
   }
   
   handleTransferClick(): void {
-    // 转账按钮点击事件处理
-    promptAction.showToast({
-      message: '正在跳转到转账页面',
-      duration: 2000
-    });
-    
     // 跳转到转账页面
     router.pushUrl({
       url: 'pages/investment/InvestmentTransferPage',
@@ -123,7 +103,11 @@ export struct InvestmentOverviewPage {
   
   build() {
     Stack({ alignContent: Alignment.TopStart }) {
+
       Column() {
+        Row()
+          .height(20)
+
         // 页面标题
         Row() {
           Text('投资账本')
@@ -197,7 +181,18 @@ export struct InvestmentOverviewPage {
             totalProfitRate: this.totalProfitRate,
             onBuyClick: () => this.handleBuyClick(),
             onSellClick: () => this.handleSellClick(),
-            onTransferClick: () => this.handleTransferClick()
+            onTransferClick: () => this.handleTransferClick(),
+            onAddInstrument: () => {
+              // 跳转到统一的交易页面，并指定为买入模式
+              router.pushUrl({
+                url: 'pages/investment/InvestmentTradePage',
+                params: {
+                  bookId: this.currentInvestmentBook?.id || -1,
+                  bookName: this.currentInvestmentBook?.name || '投资账本',
+                  tradeType: 'buy'
+                } as RouterParams
+              });
+            }
           })
           .margin({ top: 16, left: 16, right: 16 })
           
@@ -206,26 +201,17 @@ export struct InvestmentOverviewPage {
             ForEach(this.investmentBooks, (book: InvestmentBookModel) => {
               ListItem() {
                 InvestmentBookCard({ book: book })
-                  .onClick(() => {
-                    router.pushUrl({
-                      url: 'pages/InvestmentBookDetailPage',
-                      params: { bookId: book.id }
-                    });
-                  })
               }
-              .padding({ left: 16, right: 16, top: 8, bottom: 8 })
+              .padding({ left: 16, right: 16})
             })
           }
           .width('100%')
           .layoutWeight(1)
           .margin({ top: 16 })
-          .divider({
-            strokeWidth: 1,
-            color: '#f5f5f5',
-            startMargin: 16,
-            endMargin: 16
-          })
         }
+
+        Row()
+          .height(65)
       }
       .width('100%')
       .height('100%')

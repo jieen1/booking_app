@@ -105,49 +105,23 @@ export class InvestmentTransactionDBHelper {
     }
     
     try {
-      const sql = `
-        INSERT INTO ${InvestmentTransactionDBHelper.TABLE_INVESTMENT_TRANSACTION} (
-          bookId, assetId, transactionType, price, quantity, amount, fee, 
-          transactionTime, relatedAccountId, remarks, createTime
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `;
+
+      const valuesBucket: dataRdb.ValuesBucket = {
+        bookId: transaction.bookId,
+        assetId: transaction.assetId,
+        transactionType: transaction.type,
+        price: transaction.price,
+        quantity: transaction.quantity,
+        amount: transaction.amount,
+        fee: transaction.fee,
+        transactionTime: transaction.transactionTime,
+        relatedAccountId: transaction.relatedAccountId,
+        remarks: transaction.remarks,
+        createTime: transaction.createTime || new Date().getTime()
+      };
       
-      const bindParams: ValueType[] = [
-        transaction.bookId,
-        transaction.assetId,
-        transaction.type,
-        transaction.price,
-        transaction.quantity,
-        transaction.amount,
-        transaction.fee,
-        transaction.transactionTime,
-        transaction.relatedAccountId,
-        transaction.remarks,
-        transaction.createTime || new Date().getTime()
-      ];
-      
-      await this.connection.executeSql(sql, bindParams);
-      // 获取最后插入的ID
-      let id = 0;
-      try {
-        // 执行查询最后插入的ID的SQL
-        const queryLastInsertIdResult = await this.connection.querySql('SELECT last_insert_rowid() AS lastId', []);
-        if (queryLastInsertIdResult) {
-          // 检查是否有数据
-          if (queryLastInsertIdResult.goToFirstRow()) {
-            // 获取ID值
-            id = queryLastInsertIdResult.getLong(queryLastInsertIdResult.getColumnIndex('lastId'));
-          }
-          // 关闭结果集
-          queryLastInsertIdResult.close();
-        }
-      } catch (error) {
-        console.error('获取最后插入的ID失败', error);
-      }
-      
-      console.info(`创建投资交易记录成功，交易ID: ${id}`);
-      
-      return id;
+      const rowId = await this.connection.insert(InvestmentTransactionDBHelper.TABLE_INVESTMENT_TRANSACTION, valuesBucket);
+      return rowId ?? -1;
     } catch (error) {
       console.error('创建投资交易记录失败', error);
       throw new Error(`创建投资交易记录失败: ${error.message}`);

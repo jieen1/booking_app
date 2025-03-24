@@ -55,7 +55,11 @@ export class InvestmentAssetDBHelper {
   
   /** 数据库连接 */
   private connection: DBConnectionHolder | null = null;
-  
+
+  constructor() {
+    this.initialize()
+  }
+
   /**
    * 获取实例
    * @returns InvestmentAssetDBHelper实例
@@ -455,7 +459,7 @@ export class InvestmentAssetDBHelper {
       throw new DatabaseError('搜索投资资产失败', '搜索资产', 9002);
     }
   }
-  
+
   /**
    * 获取或创建资产
    * @param bookId 账本ID

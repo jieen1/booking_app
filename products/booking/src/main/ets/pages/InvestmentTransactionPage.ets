@@ -3,7 +3,6 @@
  * 实现买入和卖出投资品种的操作
  */
 import router from '@ohos.router';
-import prompt from '@ohos.prompt';
 import { InvestmentBookModel } from '../model/InvestmentBookModel';
 import { InvestmentAssetModel } from '../model/InvestmentAssetModel';
 import { InvestmentTransactionModel, TransactionType } from '../model/InvestmentTransactionModel';
@@ -12,6 +11,7 @@ import { InvestmentTransactionDBHelper } from '../database/InvestmentTransaction
 import { InvestmentAssetDBHelper } from '../database/InvestmentAssetDBHelper';
 import { AssetSelector } from '../components/investment/AssetSelector';
 import { TransactionConfirmDialog } from '../components/investment/TransactionConfirmDialog';
+import promptAction from '@ohos.promptAction';
 
 /**
  * 路由参数接口
@@ -20,12 +20,14 @@ interface RouteParams {
   bookId: number;
   type: string;
   assetId?: number;
+  bookName?: string;
 }
 
 @Entry
 @Component
 export struct InvestmentTransactionPage {
   @State bookId: number = 0;
+  @State bookName: string = '';
   @State book: InvestmentBookModel | null = null;
   @State transactionType: string = 'buy'; // buy 或 sell
   @State selectedAsset: InvestmentAssetModel | null = null;
@@ -62,6 +64,10 @@ export struct InvestmentTransactionPage {
       if (params.type) {
         this.transactionType = params.type;
       }
+
+      if (params.bookName) {
+        this.bookName = params.bookName;
+      }
       
       // 如果指定了资产ID，则直接加载该资产
       if (params.assetId !== undefined) {
@@ -82,7 +88,7 @@ export struct InvestmentTransactionPage {
         this.book = book;
         await this.loadAssets();
       } else {
-        prompt.showToast({
+        promptAction.showToast({
           message: '账本不存在',
           duration: 2000
         });
@@ -175,7 +181,7 @@ export struct InvestmentTransactionPage {
   validateTransaction(): boolean {
     // 检查必填信息
     if (!this.selectedAsset) {
-      prompt.showToast({
+      promptAction.showToast({
         message: '请选择投资品种',
         duration: 2000
       });
@@ -183,7 +189,7 @@ export struct InvestmentTransactionPage {
     }
     
     if (this.price <= 0) {
-      prompt.showToast({
+      promptAction.showToast({
         message: '请输入有效的价格',
         duration: 2000
       });
@@ -191,7 +197,7 @@ export struct InvestmentTransactionPage {
     }
     
     if (this.quantity <= 0) {
-      prompt.showToast({
+      promptAction.showToast({
         message: '请输入有效的数量',
         duration: 2000
       });
@@ -200,7 +206,7 @@ export struct InvestmentTransactionPage {
     
     // 如果是卖出操作，检查持仓数量
     if (this.transactionType === 'sell' && this.selectedAsset && this.quantity > this.selectedAsset.quantity) {
-      prompt.showToast({
+      promptAction.showToast({
         message: '卖出数量不能超过持仓数量',
         duration: 2000
       });
@@ -263,7 +269,7 @@ export struct InvestmentTransactionPage {
       const transactionId = await transactionHelper.createTransaction(transaction);
       
       if (transactionId <= 0) {
-        prompt.showToast({
+        promptAction.showToast({
           message: '保存交易记录失败',
           duration: 2000
         });
@@ -274,19 +280,20 @@ export struct InvestmentTransactionPage {
       const assetHelper = InvestmentAssetDBHelper.getInstance();
       if (this.selectedAsset) {
         const asset = this.selectedAsset;
-        if (this.transactionType === 'buy') {
-          // 买入操作，增加持仓数量
-          asset.quantity += this.quantity;
-        } else {
-          // 卖出操作，减少持仓数量
-          asset.quantity -= this.quantity;
-        }
+        const factor = this.transactionType === 'buy' ? 1 : -1;
+        // 买入操作，增加持仓数量
+        asset.quantity += factor * this.quantity;
+        asset.purchasePrice = (asset.purchasePrice * asset.quantity + this.price * this.quantity * factor) / (asset.quantity + factor * this.quantity);
+        asset.cost = asset.cost + factor * this.calculateTotal();
+        asset.marketValue = asset.marketValue + factor * asset.currentPrice * this.quantity;
+        asset.profit = asset.marketValue - asset.cost + asset.profit;
+        asset.profitRate = asset.profit / asset.cost;
 
         await assetHelper.updateInvestmentAsset(asset);
       }
       
       // 显示交易成功提示
-      prompt.showToast({
+      promptAction.showToast({
         message: '交易已完成',
         duration: 2000
       });
@@ -295,7 +302,7 @@ export struct InvestmentTransactionPage {
       router.back();
     } catch (error) {
       console.error('保存交易记录失败', error);
-      prompt.showToast({
+      promptAction.showToast({
         message: `保存失败: ${error.message}`,
         duration: 3000
       });
@@ -304,6 +311,9 @@ export struct InvestmentTransactionPage {
   
   build() {
     Column() {
+      Row()
+        .height(20)
+
       // 顶部导航栏
       Row() {
         Button({ type: ButtonType.Circle }) {
@@ -358,6 +368,23 @@ export struct InvestmentTransactionPage {
       
       Scroll() {
         Column() {
+          // 账本信息
+          Row() {
+            Text('交易账本:')
+              .fontSize(16)
+              .fontColor('#666666')
+              .width('30%')
+            Text(this.bookName)
+              .fontSize(16)
+              .fontColor('#333333')
+              .width('70%')
+          }
+          .width('100%')
+          .padding(12)
+          .backgroundColor('#F5F5F5')
+          .borderRadius(8)
+          .margin({ bottom: 12 })
+
           // 选择投资品种
           Column() {
             Text('选择品种')
@@ -430,7 +457,7 @@ export struct InvestmentTransactionPage {
                 .width(80)
               
               TextInput({ text: this.price.toString() })
-                .type(InputType.Number)
+                .type(InputType.NUMBER_DECIMAL)
                 .layoutWeight(1)
                 .height(48)
                 .backgroundColor('#f5f5f5')
@@ -470,7 +497,7 @@ export struct InvestmentTransactionPage {
                 .width(80)
               
               TextInput({ text: this.fee > 0 ? this.fee.toString() : '' })
-                .type(InputType.Number)
+                .type(InputType.NUMBER_DECIMAL)
                 .layoutWeight(1)
                 .height(48)
                 .backgroundColor('#f5f5f5')
@@ -490,7 +517,7 @@ export struct InvestmentTransactionPage {
                 .width(80)
               
               TextInput({ text: this.tax > 0 ? this.tax.toString() : '' })
-                .type(InputType.Number)
+                .type(InputType.NUMBER_DECIMAL)
                 .layoutWeight(1)
                 .height(48)
                 .backgroundColor('#f5f5f5')
@@ -625,6 +652,7 @@ export struct InvestmentTransactionPage {
       .onClick(() => {
         this.showConfirmDialog();
       })
+
     }
     .width('100%')
     .height('100%')

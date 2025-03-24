@@ -47,6 +47,10 @@ export struct InvestmentTradePage {
     if (params.bookId) {
       this.bookId = params.bookId;
     }
+
+    if (params.bookName) {
+      this.bookName = params.bookName;
+    }
     
     if (params.tradeType) {
       this.tradeType = params.tradeType;
@@ -103,7 +107,7 @@ export struct InvestmentTradePage {
         this.assetType,     // 资产类型
         this.price,         // 购入价格
         this.price,         // 当前价格（交易时与购入价格相同）
-        this.amount / this.price  // 数量（金额除以价格）
+        this.amount  // 数量（金额除以价格）
       );
       
       // 创建交易记录
@@ -334,7 +338,7 @@ export struct InvestmentTradePage {
                 .fontSize(16)
                 .width('70%')
                 .backgroundColor('#00000000')
-                .type(InputType.Number)
+                .type(InputType.NUMBER_DECIMAL)
                 .onChange((value: string) => {
                   this.price = parseFloat(value) || 0;
                 })
@@ -355,7 +359,7 @@ export struct InvestmentTradePage {
                 .fontSize(16)
                 .width('70%')
                 .backgroundColor('#00000000')
-                .type(InputType.Number)
+                .type(InputType.NUMBER_DECIMAL)
                 .onChange((value: string) => {
                   this.fee = parseFloat(value) || 0;
                 })

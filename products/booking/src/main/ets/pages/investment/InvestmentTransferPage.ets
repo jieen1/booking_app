@@ -2,11 +2,11 @@
  * 投资账本转账页面
  */
 import router from '@ohos.router';
-import promptAction from '@ohos.prompt';
 import { InvestmentBookModel } from '../../model/InvestmentBookModel';
 import { InvestmentBookDBHelper } from '../../database/InvestmentBookDBHelper';
 import { InvestmentTransactionDBHelper } from '../../database/InvestmentTransactionDBHelper';
-import { TransactionType, InvestmentTransactionModel, ITransactionParam } from '../../model/InvestmentTransactionModel';
+import { TransactionType, InvestmentTransactionModel } from '../../model/InvestmentTransactionModel';
+import promptAction from '@ohos.promptAction';
 
 /**
  * 下拉框选项接口
@@ -107,8 +107,7 @@ export struct InvestmentTransferPage {
       
       // 创建两笔转账记录
       const transactionHelper = InvestmentTransactionDBHelper.getInstance();
-      const bookHelper = InvestmentBookDBHelper.getInstance();
-      
+
       // 转账日期
       const transferDate = new Date(this.date).getTime();
       
