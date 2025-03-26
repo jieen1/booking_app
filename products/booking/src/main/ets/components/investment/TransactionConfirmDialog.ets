@@ -4,17 +4,6 @@
 import { InvestmentBookModel } from '../../model/InvestmentBookModel';
 import { InvestmentAssetModel } from '../../model/InvestmentAssetModel';
 
-// 组件参数接口
-interface TransactionConfirmDialogParams {
-  book: InvestmentBookModel | null;
-  asset: InvestmentAssetModel | null;
-  transactionType: string;
-  price: number;
-  quantity: number;
-  fee: number;
-  tax: number;
-  onConfirm?: () => void;
-}
 
 @CustomDialog
 export struct TransactionConfirmDialog {

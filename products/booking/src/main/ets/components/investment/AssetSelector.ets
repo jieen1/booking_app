@@ -3,7 +3,6 @@
  */
 import router from '@ohos.router';
 import { InvestmentAssetModel } from '../../model/InvestmentAssetModel';
-import { InvestmentAssetDBHelper } from '../../database/InvestmentAssetDBHelper';
 
 @Component
 export struct AssetSelector {
@@ -12,6 +11,7 @@ export struct AssetSelector {
   @State searchText: string = '';
   @State filteredAssets: InvestmentAssetModel[] = [];
   onSelect?: (asset: InvestmentAssetModel) => void;
+  onUpdate?: () => void;
   
   aboutToAppear() {
     this.updateFilteredAssets();
@@ -33,7 +33,7 @@ export struct AssetSelector {
   build() {
     Column() {
       // 搜索框
-      TextInput({ placeholder: '搜索资产名称或代码', text: this.searchText })
+      TextInput({ placeholder: '搜索标的名称或代码', text: this.searchText })
         .width('100%')
         .height(48)
         .backgroundColor('#f5f5f5')
@@ -105,7 +105,7 @@ export struct AssetSelector {
             .height(100)
             .margin({ top: 30 })
           
-          Text('没有找到相关资产')
+          Text('没有找到相关标的')
             .fontSize(16)
             .fontColor('#999999')
             .margin({ top: 16 })
@@ -120,7 +120,7 @@ export struct AssetSelector {
             .height(100)
             .margin({ top: 30 })
           
-          Text('暂无资产，点击添加新资产')
+          Text('暂无资产，点击添加新标的')
             .fontSize(16)
             .fontColor('#999999')
             .margin({ top: 16 })
@@ -130,7 +130,7 @@ export struct AssetSelector {
         .justifyContent(FlexAlign.Center)
       }
 
-      Button('添加资产')
+      Button('添加标的')
         .width(160)
         .height(40)
         .borderRadius(20)
@@ -139,12 +139,10 @@ export struct AssetSelector {
         .margin({ top: 16 })
         .onClick(() => {
           router.pushUrl({
-            url: 'pages/AddAssetPage',
+            url: 'pages/investment/AddAssetPage',
             params: {
               bookId: this.bookId,
-              callback: () => {
-                // 跳转后需要刷新数据
-              }
+              onUpdate: this.onUpdate
             }
           });
         })

@@ -42,36 +42,6 @@ export class InvestmentBookDBHelper {
     this.bookDBHelper = BookDBHelper.getInstance();
     await this.connection.initDB();
   }
-
-  /**
-   * 创建投资账本
-   * @param book 投资账本模型
-   * @returns 创建结果ID
-   */
-  public async createInvestmentBook(book: InvestmentBookModel): Promise<number> {
-    try {
-      if (!this.connection) {
-        throw new DatabaseError('数据库连接未初始化', '创建账本', 1001);
-      }
-      
-      // 创建一个AccountBookModel对象
-      const accountBook = new AccountBookModel(
-        book.name,
-        BookingConstants.ACCOUNT_TYPE_STOCK, // 设置类型为股票账本
-        book.balance,
-        book.icon,
-        0 // 非默认账本
-      );
-      
-      // 使用已有的BookDBHelper插入账本数据
-      const bookId = await this.bookDBHelper?.insertAccountBook(accountBook);
-      
-      return bookId ?? -1;
-    } catch (error) {
-      console.error('创建投资账本失败', error);
-      throw new DatabaseError('创建投资账本失败', '创建账本', 1002);
-    }
-  }
   
   /**
    * 获取所有投资账本
@@ -205,8 +175,7 @@ export class InvestmentBookDBHelper {
     const name: string = resultSet.getString(resultSet.getColumnIndex('name'));
     const balance: number = resultSet.getDouble(resultSet.getColumnIndex('balance'));
     const iconStr: string = resultSet.getString(resultSet.getColumnIndex('icon'));
-    const createTime: number = resultSet.getLong(resultSet.getColumnIndex('createTime'));
-    
+
     // 使用IconUtils将字符串转换为Resource类型
     const book = new InvestmentBookModel(
       name,

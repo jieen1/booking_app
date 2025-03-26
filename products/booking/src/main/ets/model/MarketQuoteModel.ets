@@ -73,7 +73,7 @@ export class MarketQuoteModel {
   updateTime: number;
   
   /**
-   * 数據來源
+   * 数据来源
    */
   source: string;
   

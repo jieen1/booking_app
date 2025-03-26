@@ -13,7 +13,7 @@ export struct InvestmentSummaryComponent {
   onBuyClick?: () => void;
   onSellClick?: () => void;
   onTransferClick?: () => void;
-  onAddInstrument?: () => void;
+  onMarketQuoteClick?: () => void; // 添加行情录入回调
 
   build() {
     Column() {
@@ -121,9 +121,33 @@ export struct InvestmentSummaryComponent {
         .backgroundColor('#2196f3')
         .height(36)
         .width(50)
+        .margin({ right: 6 }) // 添加右边距
         .onClick(() => {
           if (this.onTransferClick) {
             this.onTransferClick();
+          }
+        })
+        .animation({
+          duration: 200,
+          curve: Curve.EaseOut,
+          iterations: 1,
+          playMode: PlayMode.Normal
+        })
+        
+        // 添加行情录入按钮
+        Button({ type: ButtonType.Capsule }) {
+          Row() {
+            Text('行情')
+              .fontSize(14)
+              .fontColor('#ffffff')
+          }
+        }
+        .backgroundColor('#9c27b0')
+        .height(36)
+        .width(50)
+        .onClick(() => {
+          if (this.onMarketQuoteClick) {
+            this.onMarketQuoteClick();
           }
         })
         .animation({
@@ -136,29 +160,6 @@ export struct InvestmentSummaryComponent {
       .width('100%')
       .justifyContent(FlexAlign.Start)
       .padding({ top: 8, bottom: 8 })
-
-      Button({ type: ButtonType.Capsule }) {
-        Row() {
-          Text('新增标的')
-            .fontSize(14)
-            .fontColor('#ffffff')
-        }
-      }
-      .backgroundColor('#ff9800')
-      .height(36)
-      .width(50)
-      .margin({ right: 6 })
-      .onClick(() => {
-        if (this.onAddInstrument) {
-          this.onAddInstrument();
-        }
-      })
-      .animation({
-        duration: 200,
-        curve: Curve.EaseOut,
-        iterations: 1,
-        playMode: PlayMode.Normal
-      })
     }
     .width('100%')
     .padding(16)

@@ -27,8 +27,6 @@ export class BookingConstants {
   static readonly MINE_ROUTE: string = 'pages/Mine';
   static readonly ACCOUNT_BOOK_LIST_ROUTE: string = 'pages/AccountBookListPage';
   static readonly ACCOUNT_BOOK_EDIT_ROUTE: string = 'pages/AccountBookEditPage';
-  static readonly ACCOUNT_BOOK_DETAIL_ROUTE: string = 'pages/AccountBookDetailPage';
-  static readonly TRANSFER_ROUTE: string = 'pages/TransferPage';
 
   /**
    * 收入类型
@@ -41,11 +39,6 @@ export class BookingConstants {
    */
   static readonly EXPENSE_TYPE: number = 2;
   static readonly RECORD_TYPE_EXPENSE: number = 2;
-
-  /**
-   * 转账类型
-   */
-  static readonly TRANSFER_TYPE: number = 3;
 
   /**
    * 账本类型
@@ -74,11 +67,6 @@ export class BookingConstants {
   static readonly TABLE_ACCOUNT_BOOK: string = 'account_book';
   
   /**
-   * 转账记录表名
-   */
-  static readonly TABLE_TRANSFER: string = 'transfer';
-  
-  /**
    * 账本类型
    */
   static readonly ACCOUNT_TYPE_CASH: number = 1;      // 现金
@@ -87,12 +75,6 @@ export class BookingConstants {
   static readonly ACCOUNT_TYPE_WECHAT: number = 4;    // 微信
   static readonly ACCOUNT_TYPE_STOCK: number = 5;    // 股票
   static readonly ACCOUNT_TYPE_OTHER: number = 999;     // 其他
-  
-  /**
-   * 账本业务类型
-   */
-  static readonly ACCOUNT_BOOK_TYPE_DEFAULT: number = 0;  // 普通账本
-  static readonly ACCOUNT_BOOK_TYPE_INVESTMENT: number = 1;  // 投资账本
 
   /**
    * 账本状态
@@ -131,10 +113,5 @@ export class BookingConstants {
 
   static readonly CARTOON_NEW_SUFFIX: string = '_cartoon_new'; // 新版轻卡通风格图标后缀
   static readonly EMPTY_ICON: string = 'app.media.ic_empty' + BookingConstants.CARTOON_NEW_SUFFIX; // 空图标资源
-
-  /**
-   * 下拉图标
-   */
-  static readonly ICON_DOWN: string = 'app.media.ic_down_cartoon_new';
 
 }

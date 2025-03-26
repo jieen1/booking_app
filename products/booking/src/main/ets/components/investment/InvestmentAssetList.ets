@@ -3,7 +3,8 @@
  */
 import router from '@ohos.router';
 import { InvestmentAssetModel } from '../../model/InvestmentAssetModel';
-import { MarketQuoteDBHelper } from '../../database/MarketQuoteDBHelper';
+import { CustomAlertDialog } from '../CustomDialog';
+import { InvestmentAssetDBHelper } from '../../database/InvestmentAssetDBHelper';
 
 @Component
 export struct InvestmentAssetList {
@@ -12,6 +13,39 @@ export struct InvestmentAssetList {
   onRefresh?: () => void;
   @State sortBy: string = 'profit';
   @State sortOrder: string = 'desc';
+  @State currentAssetId: number = -1;
+  private assetHelper = InvestmentAssetDBHelper.getInstance();
+
+
+  // 自定义对话框控制器
+  private deleteDialogController: CustomDialogController = new CustomDialogController({
+    builder: CustomAlertDialog({
+      title: '确认删除',
+      message: '确定要删除这条记录吗？',
+      cancelText: '取消',
+      confirmText: '删除',
+      onCancel: () => {
+        console.info('取消删除');
+      },
+      onConfirm: async () => {
+        if (this.currentAssetId != -1) {
+          await this.deleteAsset(this.currentAssetId);
+        }
+      }
+    }),
+    alignment: DialogAlignment.Center,
+    autoCancel: true,
+    customStyle: true
+  });
+
+  async deleteAsset(currentAssetId: number) {
+      try {
+        await this.assetHelper.deleteAsset(currentAssetId);
+        this.onRefresh?.();
+      } catch (error) {
+        console.error(`删除记录失败: ${error}`);
+      }
+  }
   
   build() {
     Column() {
@@ -71,12 +105,21 @@ export struct InvestmentAssetList {
           .onClick(() => {
             // 跳转到投资品种详情页
             router.pushUrl({
-              url: 'pages/AssetDetailPage',
+              url: 'pages/investment/AssetDetailPage',
               params: {
                 bookId: this.bookId,
                 assetId: asset.id
               }
             });
+          })
+          .swipeAction({
+            end: {
+              builder: this.itemEnd(asset),
+              onAction: () => {
+                // 删除该操作，使用按钮点击触发相应功能
+              },
+              actionAreaDistance: 120
+            }
           })
         })
       }
@@ -110,6 +153,34 @@ export struct InvestmentAssetList {
         return compareValueA - compareValueB;
       }
     });
+  }
+
+  @Builder itemEnd(asset: InvestmentAssetModel) {
+    Row() {
+      Column() {
+        Image($r('app.media.ic_delete_cartoon_new'))
+          .width(28)
+          .height(28)
+        Text('删除')
+          .fontSize(12)
+          .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
+      }
+      .width(56)
+      .height(60)
+      .borderRadius(12)
+      .backgroundColor($r('app.color.BG_COLOR_SECONDARY'))
+      .justifyContent(FlexAlign.Center)
+      .onClick(() => {
+        // 设置当前记录
+        this.currentAssetId = asset.id??-1;
+        // 显示删除确认对话框
+        this.deleteDialogController.open();
+      })
+    }
+    .width(120)
+    .height(200)
+    .justifyContent(FlexAlign.SpaceEvenly)
+    .margin({bottom: 8})
   }
   
   @Builder

@@ -2,10 +2,10 @@
  * 投资账本卡片组件
  * 显示投资账本的基本信息、余额和收益率
  */
-import prompt from '@ohos.prompt';
 import router from '@ohos.router';
 import { InvestmentBookModel } from '../../model/InvestmentBookModel';
 import { InvestmentBookDBHelper } from '../../database/InvestmentBookDBHelper';
+import promptAction from '@ohos.promptAction';
 
 @Component
 export struct InvestmentBookCard {
@@ -37,7 +37,7 @@ export struct InvestmentBookCard {
       
       await bookHelper.deleteInvestmentBook(this.book.id);
       
-      prompt.showToast({
+      promptAction.showToast({
         message: '删除成功',
         duration: 2000
       });
@@ -49,7 +49,7 @@ export struct InvestmentBookCard {
       }, 100);
     } catch (error) {
       console.error('删除投资账本失败', error);
-      prompt.showToast({
+      promptAction.showToast({
         message: '删除失败',
         duration: 2000
       });

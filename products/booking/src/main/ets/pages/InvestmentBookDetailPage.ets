@@ -89,28 +89,6 @@ export struct InvestmentBookDetailPage {
         .onClick(() => {
           router.back();
         })
-        Blank()
-
-        Button({
-          type: ButtonType.Circle,
-          stateEffect: true
-        }) {
-          Image($r('app.media.ic_edit_cartoon_new'))
-            .width(20)
-            .height(20)
-        }
-        .width(36)
-        .height(36)
-        .backgroundColor('rgba(255, 255, 255, 0.6)')
-        .onClick(() => {
-          router.pushUrl({
-            url: 'pages/AccountBookEditPage',
-            params: {
-              isInvestment: true,
-              bookId: this.bookId
-            }
-          });
-        })
       }
       .width('100%')
       .padding({ left: 16, right: 16, top: 16, bottom: 8 })
@@ -137,7 +115,7 @@ export struct InvestmentBookDetailPage {
       // 收益信息组件
       InvestmentProfitComponent({
         book: this.book,
-        assets: this.assets
+        assets: this.assets,
       })
       .margin({ left: 16, right: 16, bottom: 16 })
       

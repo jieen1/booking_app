@@ -9,12 +9,11 @@
     "pages/Mine",
     "pages/AccountBookListPage",
     "pages/AccountBookEditPage",
-    "pages/AccountBookDetailPage",
-    "pages/TransferPage",
     "pages/InvestmentOverviewPage",
     "pages/InvestmentTransactionPage",
     "pages/InvestmentBookDetailPage",
     "pages/investment/InvestmentTransferPage",
-    "pages/investment/InvestmentTradePage"
+    "pages/investment/AddAssetPage",
+    "pages/investment/MarketQuotePage"
   ]
 }

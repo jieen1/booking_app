@@ -13,16 +13,6 @@ export interface SelectOption {
 }
 
 /**
- * 选择对话框参数接口
- */
-export interface SelectionDialogParams {
-  options: SelectOption[];
-  title?: string;
-  onSelect: (value: string) => void;
-  onCancel?: () => void;
-}
-
-/**
  * 选择对话框组件
  */
 @CustomDialog
@@ -30,93 +20,61 @@ export struct SelectionDialog {
   // 对话框控制器
   controller: CustomDialogController;
   // 标题
-  title: string = '';
+  title: string = '请选择';
   // 对话框数据
   options: SelectOption[] = [];
   // 选择回调
-  onSelect: (value: string) => void = () => {};
-  // 取消回调
-  onCancel: () => void = () => {};
+  onSelect: (value: string) => void = () => {
+  };
 
   build() {
     Column() {
       // 标题
       if (this.title) {
-        Text(this.title)
-          .fontSize(18)
-          .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
-          .margin({ top: 20, bottom: 10 })
-          .width('90%')
-          .textAlign(TextAlign.Center)
+        Row() {
+          Text(this.title)
+            .fontSize(18)
+            .fontWeight(BookingConstants.FONT_WEIGHT_MEDIUM)
+            .margin({ top: 10, bottom: 10 })
+            .width('90%')
+            .textAlign(TextAlign.Center)
+            .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
+        }
+        .width('100%')
+        .justifyContent(FlexAlign.Center)
+        .padding({ top: 16, bottom: 16 })
       }
-      
-      // 列表显示
-      Column() {
+
+      List() {
         ForEach(this.options, (option: SelectOption) => {
-          Row() {
-            Text(option.text)
-              .fontSize(16)
-              .padding(12)
-              .width('100%')
-              .fontColor('#333333')
-              .textAlign(TextAlign.Center)
-              .onClick(() => {
-                this.onSelect(option.value);
-                this.controller.close();
-              })
+          ListItem() {
+            Row() {
+              Text(option.text)
+                .fontSize(16)
+                .padding(12)
+                .fontColor($r('app.color.TEXT_PRIMARY_COLOR'))
+                .layoutWeight(1)
+            }
+            .width('100%')
+            .padding(16)
+            .onClick(() => {
+              this.onSelect(option.value);
+            })
           }
-          .width('100%')
-          Divider().width('90%').height(1).color('#EEEEEE')
         })
       }
-      .width('100%')
-      .padding({ top: 10, bottom: 10 })
-      
-      // 取消按钮
-      Button('取消')
-        .width('90%')
-        .height(44)
-        .fontSize(16)
-        .fontColor('#333333')
-        .backgroundColor('#F5F5F5')
-        .margin({ top: 10, bottom: 16 })
-        .onClick(() => {
-          this.onCancel();
-          this.controller.close();
-        })
+      .divider({
+        strokeWidth: 1,
+        color: $r('app.color.BORDER_COLOR'),
+        startMargin: 16,
+        endMargin: 16
+      })
+      .layoutWeight(1)
     }
-    .width('90%')
-    .backgroundColor('#FFFFFF')
+    .width('85%')
+    .height(400)
+    .backgroundColor($r('app.color.BG_COLOR'))
     .borderRadius(12)
     .padding({ top: 8, bottom: 0 })
-  }
-
-  /**
-   * 创建选择框
-   * @param params 选择框参数
-   * @returns CustomDialogController
-   */
-  static create(params: SelectionDialogParams): CustomDialogController {
-    const dialogController = new CustomDialogController({
-      builder: SelectionDialog({
-        title: params.title || '请选择',
-        options: params.options,
-        onSelect: params.onSelect,
-        onCancel: params.onCancel || (() => {})
-      }),
-      cancel: params.onCancel,
-      autoCancel: true
-    });
-    
-    return dialogController;
-  }
-
-  /**
-   * 显示选择框
-   * @param params 选择框参数
-   */
-  static show(params: SelectionDialogParams): void {
-    const dialogController = SelectionDialog.create(params);
-    dialogController.open();
   }
 }

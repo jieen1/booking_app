@@ -100,7 +100,6 @@ export struct CustomAlertDialog {
  */
 @CustomDialog
 export struct EditRecordDialog {
-  // 对话框控制器
   controller: CustomDialogController;
   // 金额
   @Link editAmount: string;

@@ -101,6 +101,17 @@ export struct InvestmentOverviewPage {
     });
   }
   
+  handleMarketQuoteClick(): void {
+    // 跳转到行情页面
+    router.pushUrl({
+      url: 'pages/investment/MarketQuotePage',
+      params: {
+        bookId: this.currentInvestmentBook?.id || -1,
+        bookName: this.currentInvestmentBook?.name || '投资账本'
+      } as RouterParams
+    });
+  }
+  
   build() {
     Stack({ alignContent: Alignment.TopStart }) {
 
@@ -114,21 +125,6 @@ export struct InvestmentOverviewPage {
             .fontSize(24)
             .fontWeight(FontWeight.Bold)
             .padding({ left: 16 })
-          
-          Blank()
-          
-          Button({ type: ButtonType.Circle }) {
-            Image($r('app.media.ic_add'))
-              .width(24)
-              .height(24)
-          }
-          .width(40)
-          .height(40)
-          .margin({ right: 16 })
-          .onClick(() => {
-            // 跳转到添加投资账本页面
-            router.pushUrl({ url: 'pages/AccountBookEditPage', params: { isInvestment: true } });
-          })
         }
         .width('100%')
         .height(60)
@@ -182,17 +178,7 @@ export struct InvestmentOverviewPage {
             onBuyClick: () => this.handleBuyClick(),
             onSellClick: () => this.handleSellClick(),
             onTransferClick: () => this.handleTransferClick(),
-            onAddInstrument: () => {
-              // 跳转到统一的交易页面，并指定为买入模式
-              router.pushUrl({
-                url: 'pages/investment/InvestmentTradePage',
-                params: {
-                  bookId: this.currentInvestmentBook?.id || -1,
-                  bookName: this.currentInvestmentBook?.name || '投资账本',
-                  tradeType: 'buy'
-                } as RouterParams
-              });
-            }
+            onMarketQuoteClick: () => this.handleMarketQuoteClick(),
           })
           .margin({ top: 16, left: 16, right: 16 })
           

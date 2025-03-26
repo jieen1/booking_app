@@ -15,10 +15,6 @@ interface ProfitTimeRange {
 export struct InvestmentProfitComponent {
   @ObjectLink book: InvestmentBookModel;
   @Prop assets: InvestmentAssetModel[] = [];
-  @State totalValue: number = 0;
-  @State totalCost: number = 0;
-  @State totalProfit: number = 0;
-  @State profitRate: number = 0;
   @State timeRanges: ProfitTimeRange[] = [
     { label: '今日', days: 1, active: true },
     { label: '本周', days: 7, active: false },
@@ -26,25 +22,46 @@ export struct InvestmentProfitComponent {
     { label: '今年', days: 365, active: false },
     { label: '全部', days: 0, active: false }
   ];
-  
-  aboutToAppear() {
-    this.calculateProfits();
-  }
-  
-  calculateProfits() {
+
+  calculateTotalValue() {
     let totalValue = 0;
-    let totalCost = 0;
-    
-    // 计算总资产和总成本
+
+    // 计算总资产
     for (const asset of this.assets) {
       totalValue += asset.getCurrentValue();
+    }
+
+    return totalValue;
+  }
+
+  getTotalCost() {
+    let totalCost = 0;
+
+    // 计算总成本
+    for (const asset of this.assets) {
       totalCost += asset.getCost();
     }
-    
-    this.totalValue = totalValue;
-    this.totalCost = totalCost;
-    this.totalProfit = totalValue - totalCost;
-    this.profitRate = totalCost > 0 ? (this.totalProfit / totalCost) * 100 : 0;
+
+    return totalCost;
+  }
+
+  getTotalProfit() {
+    let totalProfit = 0;
+
+    // 计算总收益
+    for (const asset of this.assets) {
+      totalProfit += asset.getProfit();
+    }
+
+    return totalProfit;
+  }
+
+  getProfitRate() {
+    if (this.getTotalCost() === 0) {
+      return 0;
+    }
+
+    return (this.getTotalProfit() / this.getTotalCost()) * 100;
   }
   
   switchTimeRange(index: number) {
@@ -85,7 +102,7 @@ export struct InvestmentProfitComponent {
             .fontSize(14)
             .fontColor('#666666')
           
-          Text(this.totalValue.toFixed(2))
+          Text(this.calculateTotalValue().toFixed(2))
             .fontSize(24)
             .fontWeight(FontWeight.Bold)
             .fontColor('#333333')
@@ -100,10 +117,10 @@ export struct InvestmentProfitComponent {
             .fontColor('#666666')
           
           Row() {
-            Text(`${this.totalProfit >= 0 ? '+' : ''}${this.totalProfit.toFixed(2)}`)
+            Text(`${this.getTotalProfit() >= 0 ? '+' : ''}${this.getTotalProfit().toFixed(2)}`)
               .fontSize(20)
               .fontWeight(FontWeight.Bold)
-              .fontColor(this.totalProfit >= 0 ? '#ff5722' : '#4caf50')
+              .fontColor(this.getTotalProfit() >= 0 ? '#ff5722' : '#4caf50')
           }
           .margin({ top: 8 })
         }
@@ -120,7 +137,7 @@ export struct InvestmentProfitComponent {
             .fontSize(14)
             .fontColor('#666666')
           
-          Text(this.totalCost.toFixed(2))
+          Text(this.getTotalCost().toFixed(2))
             .fontSize(16)
             .fontColor('#333333')
             .margin({ top: 8 })
@@ -134,10 +151,10 @@ export struct InvestmentProfitComponent {
             .fontColor('#666666')
           
           Row() {
-            Text(`${this.profitRate >= 0 ? '+' : ''}${this.profitRate.toFixed(2)}%`)
+            Text(`${this.getProfitRate() >= 0 ? '+' : ''}${this.getProfitRate().toFixed(2)}%`)
               .fontSize(16)
               .fontWeight(FontWeight.Bold)
-              .fontColor(this.profitRate >= 0 ? '#ff5722' : '#4caf50')
+              .fontColor(this.getProfitRate() >= 0 ? '#ff5722' : '#4caf50')
           }
           .margin({ top: 8 })
         }
@@ -147,23 +164,7 @@ export struct InvestmentProfitComponent {
       .width('100%')
       .padding({ top: 8, bottom: 8 })
       
-      // 收益趋势略图
-      Row() {
-        // 这里应该显示收益趋势图
-        // 默认显示一个提示图形
-        Column() {
-          Text('收益趋势图开发中')
-            .fontSize(14)
-            .fontColor('#999999')
-        }
-        .width('100%')
-        .height(120)
-        .justifyContent(FlexAlign.Center)
-        .backgroundColor('rgba(0, 0, 0, 0.03)')
-        .borderRadius(8)
-      }
-      .width('100%')
-      .margin({ top: 16 })
+      // 收益趋势略图 TODO
     }
     .width('100%')
     .padding(16)

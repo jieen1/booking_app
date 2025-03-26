@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>记账应用数据库设计</title>
+    <style>
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e7f2ed;
+        }
+        h2 {
+            color: #16a085;
+            margin-top: 30px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e7f2ed;
+        }
+        h3 {
+            color: #2980b9;
+            margin-top: 25px;
+        }
+        .table-container {
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background-color: #e7f2ed;
+            color: #16a085;
+            text-align: left;
+            padding: 12px 15px;
+        }
+        td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .description {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .relationship {
+            margin: 30px 0;
+        }
+        .relationship-diagram {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-top: 15px;
+        }
+        .note {
+            background-color: #e7f2ed;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .note h4 {
+            margin-top: 0;
+            color: #16a085;
+        }
+        .primary-key {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        .foreign-key {
+            font-weight: bold;
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <h1>记账应用数据库设计文档</h1>
+    
+    <div class="description">
+        <p>本文档详细描述了记账应用的数据库设计，包括表结构、字段说明、关系模型以及索引设计等内容。该应用采用关系型数据库存储用户的账本、记录、分类以及投资相关数据。</p>
+    </div>
+
+    <h2>1. 数据库概览</h2>
+    <p>记账应用数据库主要包含以下几个部分：</p>
+    <ul>
+        <li>基础记账模块：账本管理、收支记录、分类管理、转账记录</li>
+        <li>投资管理模块：投资账本、投资资产、投资交易记录、市场行情数据</li>
+    </ul>
+
+    <h2>2. 表结构设计</h2>
+
+    <h3>2.1 账本表 (account_book)</h3>
+    <div class="description">
+        <p>存储用户创建的所有账本信息，包括普通账本和投资账本。</p>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>字段名</th>
+                    <th>数据类型</th>
+                    <th>约束</th>
+                    <th>说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>INTEGER</td>
+                    <td>PRIMARY KEY AUTOINCREMENT</td>
+                    <td>账本ID，自增主键</td>
+                </tr>
+                <tr>
+                    <td>name</td>
+                    <td>TEXT</td>
+                    <td>NOT NULL</td>
+                    <td>账本名称</td>
+                </tr>
+                <tr>
+                    <td>type</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>账本类型（1:现金账本, 2:股票账本等）</td>
+                </tr>
+                <tr>
+                    <td>balance</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>账本余额</td>
+                </tr>
+                <tr>
+                    <td>isDefault</td>
+                    <td>INTEGER</td>
+                    <td>DEFAULT 0</td>
+                    <td>是否为默认账本（0:否, 1:是）</td>
+                </tr>
+                <tr>
+                    <td>icon</td>
+                    <td>TEXT</td>
+                    <td></td>
+                    <td>账本图标</td>
+                </tr>
+                <tr>
+                    <td>createTime</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>创建时间（时间戳）</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>2.2 分类表 (category)</h3>
+    <div class="description">
+        <p>存储收支类别信息，用于对记录进行分类。</p>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>字段名</th>
+                    <th>数据类型</th>
+                    <th>约束</th>
+                    <th>说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>INTEGER</td>
+                    <td>PRIMARY KEY AUTOINCREMENT</td>
+                    <td>分类ID，自增主键</td>
+                </tr>
+                <tr>
+                    <td>type</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>分类类型（1:收入, 2:支出）</td>
+                </tr>
+                <tr>
+                    <td>name</td>
+                    <td>TEXT</td>
+                    <td>NOT NULL</td>
+                    <td>分类名称</td>
+                </tr>
+                <tr>
+                    <td>icon</td>
+                    <td>TEXT</td>
+                    <td></td>
+                    <td>分类图标</td>
+                </tr>
+                <tr>
+                    <td>createTime</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>创建时间（时间戳）</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>2.3 记录表 (record)</h3>
+    <div class="description">
+        <p>存储用户的收支记录信息。</p>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>字段名</th>
+                    <th>数据类型</th>
+                    <th>约束</th>
+                    <th>说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>INTEGER</td>
+                    <td>PRIMARY KEY AUTOINCREMENT</td>
+                    <td>记录ID，自增主键</td>
+                </tr>
+                <tr>
+                    <td>type</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>记录类型（1:收入, 2:支出）</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">categoryId</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>分类ID，关联category表的id</td>
+                </tr>
+                <tr>
+                    <td>amount</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>金额</td>
+                </tr>
+                <tr>
+                    <td>description</td>
+                    <td>TEXT</td>
+                    <td></td>
+                    <td>描述</td>
+                </tr>
+                <tr>
+                    <td>recordTime</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>记录时间（时间戳）</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">accountBookId</td>
+                    <td>INTEGER</td>
+                    <td>DEFAULT 1</td>
+                    <td>账本ID，关联account_book表的id</td>
+                </tr>
+                <tr>
+                    <td>createTime</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>创建时间（时间戳）</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>2.4 转账表 (transfer)</h3>
+    <div class="description">
+        <p>存储账本之间的转账记录。</p>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>字段名</th>
+                    <th>数据类型</th>
+                    <th>约束</th>
+                    <th>说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>INTEGER</td>
+                    <td>PRIMARY KEY AUTOINCREMENT</td>
+                    <td>转账记录ID，自增主键</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">fromAccountId</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>转出账本ID，关联account_book表的id</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">toAccountId</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>转入账本ID，关联account_book表的id</td>
+                </tr>
+                <tr>
+                    <td>amount</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>转账金额</td>
+                </tr>
+                <tr>
+                    <td>description</td>
+                    <td>TEXT</td>
+                    <td></td>
+                    <td>转账描述</td>
+                </tr>
+                <tr>
+                    <td>relatedId</td>
+                    <td>INTEGER</td>
+                    <td></td>
+                    <td>关联记录ID</td>
+                </tr>
+                <tr>
+                    <td>transferTime</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>转账时间（时间戳）</td>
+                </tr>
+                <tr>
+                    <td>createTime</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>创建时间（时间戳）</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>2.5 投资资产表 (investment_asset)</h3>
+    <div class="description">
+        <p>存储用户的投资资产信息，如股票、基金等。</p>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>字段名</th>
+                    <th>数据类型</th>
+                    <th>约束</th>
+                    <th>说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>INTEGER</td>
+                    <td>PRIMARY KEY AUTOINCREMENT</td>
+                    <td>资产ID，自增主键</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">bookId</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>所属投资账本ID，关联account_book表的id</td>
+                </tr>
+                <tr>
+                    <td>code</td>
+                    <td>TEXT</td>
+                    <td>NOT NULL</td>
+                    <td>股票/基金代码</td>
+                </tr>
+                <tr>
+                    <td>name</td>
+                    <td>TEXT</td>
+                    <td>NOT NULL</td>
+                    <td>股票/基金名称</td>
+                </tr>
+                <tr>
+                    <td>assetType</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>资产类型（1:股票, 2:基金等）</td>
+                </tr>
+                <tr>
+                    <td>purchasePrice</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>购入价格</td>
+                </tr>
+                <tr>
+                    <td>currentPrice</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>当前价格</td>
+                </tr>
+                <tr>
+                    <td>quantity</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>持有数量</td>
+                </tr>
+                <tr>
+                    <td>cost</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>持仓成本</td>
+                </tr>
+                <tr>
+                    <td>marketValue</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>当前市值</td>
+                </tr>
+                <tr>
+                    <td>profit</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>收益金额</td>
+                </tr>
+                <tr>
+                    <td>profitRate</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>收益率</td>
+                </tr>
+                <tr>
+                    <td>purchaseDate</td>
+                    <td>INTEGER</td>
+                    <td></td>
+                    <td>购买日期（时间戳）</td>
+                </tr>
+                <tr>
+                    <td>notes</td>
+                    <td>TEXT</td>
+                    <td></td>
+                    <td>备注</td>
+                </tr>
+                <tr>
+                    <td>updateTime</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>更新时间（时间戳）</td>
+                </tr>
+                <tr>
+                    <td>createTime</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>创建时间（时间戳）</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>2.6 投资交易记录表 (investment_transaction)</h3>
+    <div class="description">
+        <p>存储用户的投资交易记录，如买入、卖出等操作。</p>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>字段名</th>
+                    <th>数据类型</th>
+                    <th>约束</th>
+                    <th>说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>INTEGER</td>
+                    <td>PRIMARY KEY AUTOINCREMENT</td>
+                    <td>交易记录ID，自增主键</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">bookId</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>投资账本ID，关联account_book表的id</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">assetId</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>资产ID，关联investment_asset表的id</td>
+                </tr>
+                <tr>
+                    <td>transactionType</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>交易类型（1:买入, 2:卖出, 3:分红等）</td>
+                </tr>
+                <tr>
+                    <td>price</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>交易价格</td>
+                </tr>
+                <tr>
+                    <td>quantity</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>交易数量</td>
+                </tr>
+                <tr>
+                    <td>amount</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>交易金额</td>
+                </tr>
+                <tr>
+                    <td>fee</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>手续费</td>
+                </tr>
+                <tr>
+                    <td>transactionTime</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>交易时间（时间戳）</td>
+                </tr>
+                <tr>
+                    <td class="foreign-key">relatedAccountId</td>
+                    <td>INTEGER</td>
+                    <td></td>
+                    <td>关联账本ID，用于资金转入/转出</td>
+                </tr>
+                <tr>
+                    <td>remarks</td>
+                    <td>TEXT</td>
+                    <td></td>
+                    <td>备注</td>
+                </tr>
+                <tr>
+                    <td>createTime</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>创建时间（时间戳）</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>2.7 市场行情表 (market_quote)</h3>
+    <div class="description">
+        <p>存储市场行情数据，用于更新投资资产的当前价格和市值。</p>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>字段名</th>
+                    <th>数据类型</th>
+                    <th>约束</th>
+                    <th>说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="primary-key">id</td>
+                    <td>INTEGER</td>
+                    <td>PRIMARY KEY AUTOINCREMENT</td>
+                    <td>行情ID，自增主键</td>
+                </tr>
+                <tr>
+                    <td>code</td>
+                    <td>TEXT</td>
+                    <td>NOT NULL</td>
+                    <td>股票/基金代码</td>
+                </tr>
+                <tr>
+                    <td>name</td>
+                    <td>TEXT</td>
+                    <td>NOT NULL</td>
+                    <td>股票/基金名称</td>
+                </tr>
+                <tr>
+                    <td>currentPrice</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>当前价格</td>
+                </tr>
+                <tr>
+                    <td>changeAmount</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>涨跌额</td>
+                </tr>
+                <tr>
+                    <td>changePercent</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>涨跌幅</td>
+                </tr>
+                <tr>
+                    <td>openPrice</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>开盘价</td>
+                </tr>
+                <tr>
+                    <td>highPrice</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>最高价</td>
+                </tr>
+                <tr>
+                    <td>lowPrice</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>最低价</td>
+                </tr>
+                <tr>
+                    <td>closePrice</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>收盘价</td>
+                </tr>
+                <tr>
+                    <td>volume</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>成交量</td>
+                </tr>
+                <tr>
+                    <td>turnover</td>
+                    <td>REAL</td>
+                    <td>NOT NULL</td>
+                    <td>成交额</td>
+                </tr>
+                <tr>
+                    <td>updateTime</td>
+                    <td>INTEGER</td>
+                    <td>NOT NULL</td>
+                    <td>更新时间（时间戳）</td>
+                </tr>
+                <tr>
+                    <td>source</td>
+                    <td>TEXT</td>
+                    <td>NOT NULL</td>
+                    <td>数据来源</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>3. 索引设计</h2>
+    <div class="description">
+        <p>为提高查询性能，数据库设计了以下索引：</p>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>索引名称</th>
+                    <th>表名</th>
+                    <th>字段</th>
+                    <th>索引类型</th>
+                    <th>说明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>idx_market_quote_code</td>
+                    <td>market_quote</td>
+                    <td>code</td>
+                    <td>普通索引</td>
+                    <td>加速根据股票代码查询行情数据</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>4. 表关系图</h2>
+    <div class="relationship">
+        <p>数据库表之间的关系如下：</p>
+        <div class="relationship-diagram">
+            <ul>
+                <li><strong>account_book</strong> 与 <strong>record</strong>: 一对多关系，一个账本可以有多条记录</li>
+                <li><strong>category</strong> 与 <strong>record</strong>: 一对多关系，一个分类可以对应多条记录</li>
+                <li><strong>account_book</strong> 与 <strong>transfer</strong>: 一对多关系，一个账本可以有多条转账记录</li>
+                <li><strong>account_book</strong> 与 <strong>investment_asset</strong>: 一对多关系，一个投资账本可以有多个投资资产</li>
+                <li><strong>investment_asset</strong> 与 <strong>investment_transaction</strong>: 一对多关系，一个投资资产可以有多条交易记录</li>
+                <li><strong>market_quote</strong> 与 <strong>investment_asset</strong>: 一对多关系，一条行情数据可以关联多个投资资产</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>5. 数据库初始化</h2>
+    <div class="description">
+        <p>应用首次启动时，数据库会执行以下初始化操作：</p>
+        <ol>
+            <li>创建所有必要的表</li>
+            <li>创建默认账本（现金账本）</li>
+            <li>创建默认分类（收入分类：工资、奖金、兼职、投资、其他；支出分类：餐饮、购物、交通、住房、娱乐、医疗、教育、其他）</li>
+            <li>创建必要的索引</li>
+        </ol>
+    </div>
+
+    <div class="note">
+        <h4>注意事项</h4>
+        <ul>
+            <li>所有时间字段均使用时间戳（毫秒）存储</li>
+            <li>金额字段使用REAL类型，保证精度</li>
+            <li>投资账本使用现有的账本表(account_book)，通过type字段区分普通账本和投资账本</li>
+            <li>数据库操作均通过DBConnectionHolder单例类进行，确保连接的唯一性</li>
+        </ul>
+    </div>
+</body>
+</html>

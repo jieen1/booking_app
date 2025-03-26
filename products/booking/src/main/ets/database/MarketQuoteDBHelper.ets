@@ -2,7 +2,6 @@
  * 市场行情数据库帮助类
  * 用于管理市场行情数据的缓存和查询
  */
-import dataRdb from '@ohos.data.relationalStore';
 import { MarketQuoteModel } from '../model/MarketQuoteModel';
 import { DBConnectionHolder } from './DBConnectionHolder';
 import { ValueType } from '@kit.ArkData';
@@ -179,8 +178,8 @@ export class MarketQuoteDBHelper {
         quote.updateTime || now,
         quote.source || ''
       ];
-      
-      const result = await this.connection.executeSql(sql, bindParams);
+      // FIXME
+      await this.connection.executeSql(sql, bindParams);
       
       // 获取最后插入的ID
       let id = 0;
@@ -261,38 +260,12 @@ export class MarketQuoteDBHelper {
   }
   
   /**
-   * 批量保存市场行情数据
-   * @param quotes 市场行情数据数组
-   * @returns 是否全部保存成功
-   */
-  public async batchSaveQuotes(quotes: MarketQuoteModel[]): Promise<boolean> {
-    if (!this.connection) {
-      return false;
-    }
-    
-    try {
-      // 使用事务进行批量操作，提高性能
-      await this.connection.beginTransaction();
-      
-      for (const quote of quotes) {
-        await this.saveOrUpdateQuote(quote);
-      }
-      
-      await this.connection.commit();
-      return true;
-    } catch (error) {
-      console.error('批量保存市场行情数据失败', error);
-      await this.connection.rollBack();
-      return false;
-    }
-  }
-  
-  /**
    * 根据代码获取市场行情数据
    * @param code 股票/基金代码
    * @returns 市场行情数据
    */
   public async getQuoteByCode(code: string): Promise<MarketQuoteModel | null> {
+    // FIXME
     try {
       const sql = `
         SELECT * FROM ${MarketQuoteDBHelper.TABLE_MARKET_QUOTE}
@@ -347,76 +320,6 @@ export class MarketQuoteDBHelper {
     } catch (error) {
       console.error(`获取市场行情数据失败，代码: ${code}`, error);
       return null;
-    }
-  }
-  
-  /**
-   * 根据代码列表批量获取市场行情数据
-   * @param codes 股票/基金代码列表
-   * @returns 市场行情数据列表
-   */
-  public async getQuotesByCodes(codes: string[]): Promise<MarketQuoteModel[]> {
-    if (codes.length === 0) {
-      return [];
-    }
-    
-    try {
-      // 构建IN查询参数
-      const placeholders = codes.map(() => '?').join(',');
-      const sql = `
-        SELECT * FROM ${MarketQuoteDBHelper.TABLE_MARKET_QUOTE}
-        WHERE code IN (${placeholders})
-        ORDER BY code
-      `;
-      
-      if (!this.connection) {
-        return [];
-      }
-      
-      const resultSet = await this.connection.querySql(sql, codes);
-      const quotes: MarketQuoteModel[] = [];
-      
-      while (resultSet?.goToNextRow()) {
-        const id = resultSet.getLong(resultSet.getColumnIndex('id'));
-        const code = resultSet.getString(resultSet.getColumnIndex('code'));
-        const name = resultSet.getString(resultSet.getColumnIndex('name'));
-        const currentPrice = resultSet.getDouble(resultSet.getColumnIndex('currentPrice'));
-        const changeAmount = resultSet.getDouble(resultSet.getColumnIndex('changeAmount'));
-        const changePercent = resultSet.getDouble(resultSet.getColumnIndex('changePercent'));
-        const openPrice = resultSet.getDouble(resultSet.getColumnIndex('openPrice'));
-        const highPrice = resultSet.getDouble(resultSet.getColumnIndex('highPrice'));
-        const lowPrice = resultSet.getDouble(resultSet.getColumnIndex('lowPrice'));
-        const closePrice = resultSet.getDouble(resultSet.getColumnIndex('closePrice'));
-        const volume = resultSet.getDouble(resultSet.getColumnIndex('volume'));
-        const turnover = resultSet.getDouble(resultSet.getColumnIndex('turnover'));
-        const updateTime = resultSet.getLong(resultSet.getColumnIndex('updateTime'));
-        const source = resultSet.getString(resultSet.getColumnIndex('source'));
-        
-        const quote = new MarketQuoteModel(
-          code,
-          name,
-          currentPrice,
-          changeAmount,
-          changePercent,
-          openPrice,
-          highPrice,
-          lowPrice,
-          closePrice,
-          volume,
-          turnover,
-          source,
-          id
-        );
-        
-        quote.updateTime = updateTime;
-        quotes.push(quote);
-      }
-      
-      resultSet?.close();
-      return quotes;
-    } catch (error) {
-      console.error('批量获取市场行情数据失败', error);
-      return [];
     }
   }
   
@@ -479,72 +382,6 @@ export class MarketQuoteDBHelper {
     } catch (error) {
       console.error('获取所有市场行情数据失败', error);
       return [];
-    }
-  }
-  
-  /**
-   * 删除过期的市场行情数据
-   * @param maxAgeMs 最大缓存时间（毫秒）
-   * @returns 是否删除成功
-   */
-  public async deleteExpiredQuotes(maxAgeMs: number): Promise<boolean> {
-    if (!this.connection) {
-      return false;
-    }
-    
-    try {
-      const now = new Date().getTime();
-      const expireTime = now - maxAgeMs;
-      
-      const sql = `DELETE FROM ${MarketQuoteDBHelper.TABLE_MARKET_QUOTE} WHERE updateTime < ?`;
-      
-      await this.connection.executeSql(sql, [expireTime]);
-      return true;
-    } catch (error) {
-      console.error('删除过期市场行情数据失败', error);
-      return false;
-    }
-  }
-  
-  /**
-   * 清空所有市场行情数据
-   * @returns 是否清空成功
-   */
-  public async clearAllQuotes(): Promise<boolean> {
-    if (!this.connection) {
-      return false;
-    }
-    
-    try {
-      const sql = `DELETE FROM ${MarketQuoteDBHelper.TABLE_MARKET_QUOTE}`;
-      
-      await this.connection.executeSql(sql);
-      return true;
-    } catch (error) {
-      console.error('清空市场行情数据失败', error);
-      return false;
-    }
-  }
-  
-  /**
-   * 检查市场行情数据是否过期
-   * @param code 股票/基金代码
-   * @param maxAgeMs 最大缓存时间（毫秒）
-   * @returns 是否过期
-   */
-  public async isQuoteExpired(code: string, maxAgeMs: number): Promise<boolean> {
-    try {
-      const quote = await this.getQuoteByCode(code);
-      
-      if (!quote) {
-        return true; // 没有数据视为过期
-      }
-      
-      const now = new Date().getTime();
-      return (now - quote.updateTime) > maxAgeMs;
-    } catch (error) {
-      console.error(`检查市场行情数据是否过期失败，代码: ${code}`, error);
-      return true; // 发生错误时视为过期
     }
   }
 }

@@ -282,12 +282,19 @@ export struct InvestmentTransactionPage {
         const asset = this.selectedAsset;
         const factor = this.transactionType === 'buy' ? 1 : -1;
         // 买入操作，增加持仓数量
-        asset.quantity += factor * this.quantity;
-        asset.purchasePrice = (asset.purchasePrice * asset.quantity + this.price * this.quantity * factor) / (asset.quantity + factor * this.quantity);
-        asset.cost = asset.cost + factor * this.calculateTotal();
-        asset.marketValue = asset.marketValue + factor * asset.currentPrice * this.quantity;
-        asset.profit = asset.marketValue - asset.cost + asset.profit;
-        asset.profitRate = asset.profit / asset.cost;
+        const quantity = asset.quantity + factor * this.quantity;
+        const purchasePrice = (asset.purchasePrice * asset.quantity + this.price * this.quantity * factor) / (asset.quantity + factor * this.quantity);
+        const cost = asset.cost + factor * this.calculateTotal();
+        const marketValue = asset.marketValue + factor * asset.currentPrice * this.quantity;
+        const profit = asset.marketValue - asset.cost + asset.profit;
+        const profitRate = asset.profit / asset.cost;
+
+        asset.quantity = quantity;
+        asset.purchasePrice = purchasePrice;
+        asset.cost = cost;
+        asset.marketValue = marketValue;
+        asset.profit = profit;
+        asset.profitRate = profitRate;
 
         await assetHelper.updateInvestmentAsset(asset);
       }
@@ -385,16 +392,16 @@ export struct InvestmentTransactionPage {
           .borderRadius(8)
           .margin({ bottom: 12 })
 
-          // 选择投资品种
+          // 选择投资标的
           Column() {
-            Text('选择品种')
+            Text('选择标的')
               .fontSize(16)
               .fontWeight(FontWeight.Medium)
               .width('100%')
               .margin({ bottom: 12 })
             
             if (this.selectedAsset) {
-              // 显示已选择的投资品种
+              // 显示已选择的投资标的
               Row() {
                 Column() {
                   Text(this.selectedAsset.name)
@@ -432,7 +439,8 @@ export struct InvestmentTransactionPage {
               AssetSelector({
                 assets: this.assets,
                 bookId: this.bookId,
-                onSelect: (asset) => this.selectAsset(asset)
+                onSelect: (asset) => this.selectAsset(asset),
+                onUpdate: (): Promise<void> => this.loadAssets()
               })
             }
           }

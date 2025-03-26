@@ -4,7 +4,6 @@
  */
 import router from '@ohos.router';
 import { InvestmentBookDBHelper } from '../../database/InvestmentBookDBHelper';
-import { InvestmentAssetDBHelper } from '../../database/InvestmentAssetDBHelper';
 
 interface ISummaryData {
   totalAssets: number;

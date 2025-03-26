@@ -191,6 +191,9 @@ export struct InvestmentTransferPage {
   
   build() {
     Column() {
+      Row()
+        .height(20)
+
       // 标题栏
       Row() {
         Image($r('app.media.ic_back'))
